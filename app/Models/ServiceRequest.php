@@ -12,14 +12,20 @@ class ServiceRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id',
-        'service_id',
         'service_request_date',
-        'service_request_time',
-        'service_end_date',
-        'service_end_time',
-        'service_location',
-        'status',
+        'client_id',
+        'frequency',
         'notes',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function serviceRequestPeriods()
+    {
+        return $this->hasMany(ServiceRequestPeriod::class, 'request_id');
+    }
+
 }

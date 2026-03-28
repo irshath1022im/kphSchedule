@@ -15,4 +15,9 @@ class Service extends Model
         'name',
         'description',
     ];
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
 }

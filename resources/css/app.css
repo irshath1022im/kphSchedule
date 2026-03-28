@@ -64,3 +64,72 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* ============================================================
+   Schedule Summary — Reusable Components
+   ============================================================ */
+@layer components {
+
+    /* --- Page Wrapper --- */
+    .schedule-page        { @apply min-h-screen bg-gray-50 p-6; }
+
+    /* --- Page Header --- */
+    .schedule-header      { @apply mb-6 flex items-center justify-between; }
+    .schedule-title       { @apply text-3xl font-extrabold text-gray-800 tracking-tight; }
+    .schedule-subtitle    { @apply text-sm text-gray-400 mt-1; }
+    .schedule-count-badge { @apply inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow; }
+
+    /* --- Filter Panel --- */
+    .filter-panel         { @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-7; }
+    .filter-btn-group     { @apply flex flex-wrap gap-2 mb-4; }
+    .date-range-row       { @apply flex flex-wrap items-end gap-3; }
+    .date-label           { @apply text-xs font-semibold text-gray-400 uppercase tracking-wide; }
+    .date-input           { @apply px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition; }
+
+    /* --- Filter Buttons (base styles inlined per variant — Tailwind v4 @apply limitation) --- */
+    .btn-filter-primary   { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm; }
+    .btn-filter-secondary { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-slate-100 text-slate-700 hover:bg-slate-200; }
+    .btn-filter-cyan      { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-cyan-100 text-cyan-700 hover:bg-cyan-200; }
+    .btn-filter-violet    { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-violet-100 text-violet-700 hover:bg-violet-200; }
+
+    /* --- Action Buttons (base styles inlined per variant) --- */
+    .btn-search           { @apply px-5 py-2 rounded-xl text-sm font-semibold active:scale-95 transition bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm; }
+    .btn-clear            { @apply px-5 py-2 rounded-xl text-sm font-semibold active:scale-95 transition bg-rose-100 text-rose-600 hover:bg-rose-200; }
+
+    /* --- Cards Grid --- */
+    .schedule-grid        { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5; }
+
+    /* --- Date Card --- */
+    .sched-card           { @apply bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 flex flex-col overflow-hidden hover:shadow-md transition; }
+    .sched-card-header    { @apply px-4 py-3 flex items-start justify-between; }
+    .sched-card-day       { @apply text-xs font-semibold uppercase tracking-widest text-gray-400; }
+    .sched-card-date      { @apply text-base font-bold; }
+    .sched-card-badge     { @apply text-xs font-bold px-2.5 py-1 rounded-full mt-0.5 whitespace-nowrap; }
+    .sched-card-body      { @apply p-4 flex-1 overflow-y-auto max-h-80 space-y-3; }
+
+    /* --- Period Item Card --- */
+    .period-card          { @apply rounded-xl border bg-white p-3 hover:shadow-sm transition; }
+    .period-status-row    { @apply flex items-center justify-between mb-2 gap-1; }
+    .period-status-badge  { @apply text-xs font-bold px-2 py-0.5 rounded-full; }
+    .period-service-name  { @apply text-xs text-gray-400 font-medium truncate max-w-32; }
+    .period-meta-row      { @apply flex items-center gap-1.5 text-xs text-gray-600 mb-1; }
+    .period-meta-row-last { @apply flex items-center gap-1.5 text-xs text-gray-500; }
+    .period-meta-icon     { @apply w-3.5 h-3.5 text-gray-400 shrink-0; }
+
+    /* --- Status colours: border + bg + text --- */
+    .status-in-progress   { @apply bg-blue-100 text-blue-700 border-blue-200; }
+    .status-scheduled     { @apply bg-emerald-100 text-emerald-700 border-emerald-200; }
+    .status-pending       { @apply bg-violet-100 text-violet-700 border-violet-200; }
+    .status-completed     { @apply bg-green-100 text-green-700 border-green-200; }
+    .status-cancelled     { @apply bg-red-100 text-red-700 border-red-200; }
+    .status-default       { @apply bg-gray-100 text-gray-600 border-gray-200; }
+
+    /* --- No-periods placeholder --- */
+    .no-periods-card      { @apply rounded-xl border border-amber-200 bg-amber-50 p-3 text-center; }
+    .no-periods-label     { @apply text-xs font-semibold text-amber-600; }
+
+    /* --- Empty State --- */
+    .empty-state          { @apply flex flex-col items-center justify-center py-24 text-gray-300; }
+    .empty-state-title    { @apply text-xl font-bold text-gray-400; }
+    .empty-state-text     { @apply text-sm mt-1 text-gray-400; }
+}

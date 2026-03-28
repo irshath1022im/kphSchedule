@@ -12,4 +12,9 @@ class Client extends Model
 {
     //
     use HasFactory;
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
 }

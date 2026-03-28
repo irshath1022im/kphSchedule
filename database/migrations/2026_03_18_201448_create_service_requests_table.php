@@ -13,18 +13,12 @@ return new class extends Migration
     {
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('service_id');
             $table->date('service_request_date');
-            $table->time('service_request_time');
-            $table->date('service_end_date')->nullable();
-            $table->time('service_end_time')->nullable();
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->unsignedBigInteger('client_id');
+            $table->enum('frequency', ['one-time','daily', 'weekly', 'monthly'])->default('one-time');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
-            $table->index(['client_id', 'service_id', 'status']);
+            $table->index(['client_id']);
             $table->text('notes')->nullable();
-            $table->string('service_location')->nullable();
             $table->timestamps();
         });
     }

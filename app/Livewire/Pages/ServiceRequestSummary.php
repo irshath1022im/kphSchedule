@@ -2,12 +2,16 @@
 
 namespace App\Livewire\Pages;
 
+use App\Models\ServiceRequest;
 use Livewire\Component;
 
 class ServiceRequestSummary extends Component
 {
     public function render()
     {
-        return view('livewire.pages.service-request-summary')->layout('components.dash-board');
+        $query = ServiceRequest::query()
+                    ->with('serviceRequestPeriods');
+        return view('livewire.pages.service-request-summary',
+        ['serviceRequests' => $query->get()])->layout('components.dash-board');
     }
 }

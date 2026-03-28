@@ -1,89 +1,7 @@
 <div>
-@php
-    $clients = [
-        [
-            'id' => 'CL-001',
-            'name' => 'Maria Santos',
-            'email' => 'maria.santos@email.com',
-            'phone' => '+63 917 111 2233',
-            'location' => 'Makati City, Metro Manila',
-            'address' => 'Unit 18B, Green Residences, Makati',
-            'requested_services' => ['Deep Cleaning', 'Regular Cleaning'],
-            'history_count' => 14,
-            'last_service' => 'Mar 10, 2026',
-            'assigned_maid' => 'Ana Reyes',
-            'maid_status' => 'available',
-            'status' => 'active',
-            'notes' => 'Prefers morning slots and eco-friendly products.',
-        ],
-        [
-            'id' => 'CL-002',
-            'name' => 'John Cruz',
-            'email' => 'john.cruz@email.com',
-            'phone' => '+63 917 444 8899',
-            'location' => 'Taguig City, Metro Manila',
-            'address' => 'Tower 2, BGC Heights, Taguig',
-            'requested_services' => ['Office Cleaning'],
-            'history_count' => 9,
-            'last_service' => 'Mar 11, 2026',
-            'assigned_maid' => 'Ben Torres',
-            'maid_status' => 'busy',
-            'status' => 'active',
-            'notes' => 'Office access available after 6 PM only.',
-        ],
-        [
-            'id' => 'CL-003',
-            'name' => 'Liza Gomez',
-            'email' => 'liza.gomez@email.com',
-            'phone' => '+63 917 900 3377',
-            'location' => 'Pasig City, Metro Manila',
-            'address' => 'Ortigas Center, Pasig',
-            'requested_services' => ['Move-out Cleaning', 'Post-Event Cleaning'],
-            'history_count' => 6,
-            'last_service' => 'Mar 09, 2026',
-            'assigned_maid' => 'Unassigned',
-            'maid_status' => 'unassigned',
-            'status' => 'pending',
-            'notes' => 'Needs urgent booking this weekend.',
-        ],
-        [
-            'id' => 'CL-004',
-            'name' => 'Carlos dela Cruz',
-            'email' => 'carlos.dc@email.com',
-            'phone' => '+63 917 566 0044',
-            'location' => 'Quezon City, Metro Manila',
-            'address' => 'North Avenue, Quezon City',
-            'requested_services' => ['Regular Cleaning'],
-            'history_count' => 21,
-            'last_service' => 'Mar 12, 2026',
-            'assigned_maid' => 'Joy Villanueva',
-            'maid_status' => 'scheduled',
-            'status' => 'active',
-            'notes' => 'VIP recurring client, weekly schedule.',
-        ],
-    ];
 
-    $serviceHistory = [
-        ['date' => 'Mar 12, 2026', 'client' => 'Carlos dela Cruz', 'service' => 'Regular Cleaning', 'hours' => 2.5, 'maid' => 'Joy Villanueva', 'status' => 'Completed'],
-        ['date' => 'Mar 11, 2026', 'client' => 'John Cruz', 'service' => 'Office Cleaning', 'hours' => 3.0, 'maid' => 'Ben Torres', 'status' => 'Completed'],
-        ['date' => 'Mar 10, 2026', 'client' => 'Maria Santos', 'service' => 'Deep Cleaning', 'hours' => 4.0, 'maid' => 'Ana Reyes', 'status' => 'Completed'],
-        ['date' => 'Mar 09, 2026', 'client' => 'Liza Gomez', 'service' => 'Move-out Cleaning', 'hours' => 5.0, 'maid' => 'Unassigned', 'status' => 'Pending'],
-    ];
 
-    $maids = [
-        ['name' => 'Ana Reyes', 'status' => 'available', 'clients' => 8],
-        ['name' => 'Ben Torres', 'status' => 'busy', 'clients' => 6],
-        ['name' => 'Joy Villanueva', 'status' => 'scheduled', 'clients' => 7],
-        ['name' => 'Claire Ong', 'status' => 'available', 'clients' => 5],
-        ['name' => 'Mark Lim', 'status' => 'off', 'clients' => 4],
-    ];
-
-    $activeClients = collect($clients)->where('status', 'active')->count();
-    $pendingClients = collect($clients)->where('status', 'pending')->count();
-    $totalServiceHistoryHours = collect($serviceHistory)->sum('hours');
-@endphp
-
-<div class="space-y-6 p-6" x-data="{ tab: 'profiles' }">
+<div class="space-y-6 p-6" x-data="{ tab: 'history' }">
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
             <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Clients Summary</h1>
@@ -102,15 +20,15 @@
         </div>
         <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-800 dark:bg-emerald-900/20">
             <p class="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-300">Active Clients</p>
-            <p class="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-300">{{ $activeClients }}</p>
+            {{-- <p class="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-300">{{ $activeClients }}</p> --}}
         </div>
         <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
             <p class="text-xs uppercase tracking-wide text-amber-700 dark:text-amber-300">Pending Clients</p>
-            <p class="mt-2 text-3xl font-bold text-amber-700 dark:text-amber-300">{{ $pendingClients }}</p>
+            {{-- <p class="mt-2 text-3xl font-bold text-amber-700 dark:text-amber-300">{{ $pendingClients }}</p> --}}
         </div>
         <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
             <p class="text-xs uppercase tracking-wide text-blue-700 dark:text-blue-300">Service Hours (Recent)</p>
-            <p class="mt-2 text-3xl font-bold text-blue-700 dark:text-blue-300">{{ number_format($totalServiceHistoryHours, 1) }}</p>
+            {{-- <p class="mt-2 text-3xl font-bold text-blue-700 dark:text-blue-300">{{ number_format($totalServiceHistoryHours, 1) }}</p> --}}
         </div>
     </section>
 
@@ -128,6 +46,8 @@
                         $parts = explode(' ', $client['name']);
                         $initials = strtoupper(substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''));
                     @endphp
+
+                      {{-- @dump($client) --}}
                     <article class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
                         <div class="flex items-start justify-between gap-3">
                             <div class="flex items-center gap-3">
@@ -156,8 +76,9 @@
                             <div class="grid grid-cols-[110px_1fr] gap-2">
                                 <dt class="text-zinc-500">Requested</dt>
                                 <dd class="flex flex-wrap gap-1.5">
-                                    @foreach ($client['requested_services'] as $service)
-                                        <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{{ $service }}</span>
+
+                                    @foreach ($client->serviceRequests as $serviceRequest)
+                                        <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{{ $serviceRequest }}</span>
                                     @endforeach
                                 </dd>
                             </div>
@@ -187,22 +108,32 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 dark:divide-zinc-700">
-                        @foreach ($serviceHistory as $row)
+                        @foreach ($clients->pluck('serviceRequests')->flatten() as $row)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-                                <td class="px-3 py-3 text-zinc-600 dark:text-zinc-300">{{ $row['date'] }}</td>
-                                <td class="px-3 py-3 font-medium text-zinc-900 dark:text-zinc-100">{{ $row['client'] }}</td>
-                                <td class="px-3 py-3 text-zinc-700 dark:text-zinc-200">{{ $row['service'] }}</td>
-                                <td class="px-3 py-3">
-                                    <span class="font-semibold text-zinc-900 dark:text-zinc-100">{{ number_format($row['hours'], 1) }} h</span>
+                                <td class="px-3 py-3 text-zinc-600 dark:text-zinc-300">{{ $row->service_request_date }}</td>
+                                <td class="px-3 py-3 font-medium text-zinc-900 dark:text-zinc-100">{{ $row->client->name }}</td>
+                                <td class="px-3 py-3 text-zinc-700 dark:text-zinc-200">{{ $row->frequency }}</td>
+                                {{-- <td class="px-3 py-3">
+
+                                    @php
+                                        $startTime = \Carbon\Carbon::parse($row->start_time);
+                                        $endTime = \Carbon\Carbon::parse($row->end_time);
+                                        $hours = $endTime->diffInMinutes($startTime) / 60;
+                                        $row->hours = $hours;
+
+                                    @endphp
+                                    <span class="font-semibold text-zinc-900 dark:text-zinc-100">{{ number_format($row->hours, 1) }} h</span>
                                 </td>
-                                <td class="px-3 py-3 text-zinc-700 dark:text-zinc-200">{{ $row['maid'] }}</td>
+                                <td class="px-3 py-3 text-zinc-700 dark:text-zinc-200">{{ $row->maid ? $row->maid->name : 'N/A' }}</td>
                                 <td class="px-3 py-3">
-                                    @if ($row['status'] === 'Completed')
+                                    @if ($row->status === 'completed')
                                         <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Completed</span>
-                                    @else
+                                    @elseif ($row->status === 'pending')
                                         <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Pending</span>
+                                    @elseif ($row->status === 'cancelled')
+                                        <span class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700 dark:bg-red-900/30 dark:text-red-300">Cancelled</span>
                                     @endif
-                                </td>
+                                </td> --}}
                             </tr>
                         @endforeach
                     </tbody>

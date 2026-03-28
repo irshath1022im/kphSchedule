@@ -19,15 +19,10 @@ class ServiceRequestFactory extends Factory
     {
         return [
             //
-            'client_id' => \App\Models\Client::factory(),
-            'service_id' => \App\Models\Service::factory(),
             'service_request_date' => $this->faker->dateTimeBetween('-3 month', 'now')->format('Y-m-d'),
-            'service_request_time' => $this->faker->time(),
-            'service_end_date' => $this->faker->dateTimeBetween('-1 month', '+2 month')->format('Y-m-d'),
-            'service_end_time' => $this->faker->time(),
-            'status' => $this->faker->randomElement(['pending', 'completed', 'cancelled']),
+            'client_id' => \App\Models\Client::factory(),
+            'frequency' => $this->faker->randomElement(['one-time','daily', 'weekly', 'monthly']),
             'notes' => $this->faker->paragraph(),
-            'service_location' => $this->faker->address(),
         ];
     }
 }

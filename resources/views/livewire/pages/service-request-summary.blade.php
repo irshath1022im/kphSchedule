@@ -1,93 +1,4 @@
-@php
-    $requests = [
-        [
-            'code' => 'SR-2026-1041',
-            'client' => 'Maria Santos',
-            'service' => 'Deep Cleaning',
-            'requested_on' => 'Mar 10, 2026',
-            'hours' => 3.5,
-            'status' => 'Completed',
-            'review' => 5,
-            'comment' => 'Excellent work, very detailed cleaning.',
-        ],
-        [
-            'code' => 'SR-2026-1042',
-            'client' => 'John Cruz',
-            'service' => 'Regular Cleaning',
-            'requested_on' => 'Mar 11, 2026',
-            'hours' => 2,
-            'status' => 'In Progress',
-            'review' => 0,
-            'comment' => 'Cleaner currently assigned and on-site.',
-        ],
-        [
-            'code' => 'SR-2026-1043',
-            'client' => 'Liza Gomez',
-            'service' => 'Move-out Cleaning',
-            'requested_on' => 'Mar 11, 2026',
-            'hours' => 4,
-            'status' => 'Pending',
-            'review' => 0,
-            'comment' => 'Waiting for cleaner assignment.',
-        ],
-        [
-            'code' => 'SR-2026-1044',
-            'client' => 'Carlos dela Cruz',
-            'service' => 'Office Cleaning',
-            'requested_on' => 'Mar 12, 2026',
-            'hours' => 2.5,
-            'status' => 'Completed',
-            'review' => 4,
-            'comment' => 'Good quality, arrived on time.',
-        ],
-        [
-            'code' => 'SR-2026-1045',
-            'client' => 'Grace Flores',
-            'service' => 'Post-Event Cleaning',
-            'requested_on' => 'Mar 12, 2026',
-            'hours' => 5,
-            'status' => 'Completed',
-            'review' => 5,
-            'comment' => 'Fast turnaround with complete cleanup.',
-        ],
-        [
-            'code' => 'SR-2026-1046',
-            'client' => 'Peter Lim',
-            'service' => 'Regular Cleaning',
-            'requested_on' => 'Mar 12, 2026',
-            'hours' => 2,
-            'status' => 'Cancelled',
-            'review' => 0,
-            'comment' => 'Client requested schedule change.',
-        ],
-    ];
 
-    $history = [
-        ['period' => 'Week 1', 'hours' => 32],
-        ['period' => 'Week 2', 'hours' => 38],
-        ['period' => 'Week 3', 'hours' => 35],
-        ['period' => 'Week 4', 'hours' => 41],
-    ];
-
-    $completedCount = collect($requests)->where('status', 'Completed')->count();
-    $inProgressCount = collect($requests)->where('status', 'In Progress')->count();
-    $pendingCount = collect($requests)->where('status', 'Pending')->count();
-    $cancelledCount = collect($requests)->where('status', 'Cancelled')->count();
-    $totalHours = collect($requests)->sum('hours');
-
-    $reviewed = collect($requests)->where('review', '>', 0);
-    $avgReview = $reviewed->count() > 0 ? round($reviewed->avg('review'), 1) : 0;
-
-    $ratingBreakdown = [
-        5 => $reviewed->where('review', 5)->count(),
-        4 => $reviewed->where('review', 4)->count(),
-        3 => $reviewed->where('review', 3)->count(),
-        2 => $reviewed->where('review', 2)->count(),
-        1 => $reviewed->where('review', 1)->count(),
-    ];
-
-    $maxHistoryHours = collect($history)->max('hours');
-@endphp
 
 <div class="space-y-6 p-6" x-data="{ tab: 'all' }">
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -103,23 +14,23 @@
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <div class="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
             <p class="text-xs font-medium uppercase tracking-wide text-zinc-500">Total Requests</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100">{{ count($requests) }}</p>
+            <p class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100">{{ $serviceRequests->count() }}</p>
         </div>
         <div class="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
             <p class="text-xs font-medium uppercase tracking-wide text-zinc-500">Total Service Hours</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100">{{ number_format($totalHours, 1) }}</p>
+            <p class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100">{{ number_format($serviceRequests->pluck('serviceRequestPeriods')->flatten()->sum('duration_hours'), 1) }}</p>
         </div>
         <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-800 dark:bg-emerald-900/20">
             <p class="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-300">Completed</p>
-            <p class="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-300">{{ $completedCount }}</p>
+            <p class="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-300">{{ $serviceRequests->where('status', 'completed')->count() }}</p>
         </div>
         <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
             <p class="text-xs font-medium uppercase tracking-wide text-blue-700 dark:text-blue-300">In Progress</p>
-            <p class="mt-2 text-3xl font-bold text-blue-700 dark:text-blue-300">{{ $inProgressCount }}</p>
+            <p class="mt-2 text-3xl font-bold text-blue-700 dark:text-blue-300">{{ $serviceRequests->where('status', 'in_progress')->count() }}</p>
         </div>
         <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
             <p class="text-xs font-medium uppercase tracking-wide text-amber-700 dark:text-amber-300">Pending + Cancelled</p>
-            <p class="mt-2 text-3xl font-bold text-amber-700 dark:text-amber-300">{{ $pendingCount + $cancelledCount }}</p>
+            <p class="mt-2 text-3xl font-bold text-amber-700 dark:text-amber-300">{{ $serviceRequests->whereIn('status', ['pending', 'cancelled'])->count() }}</p>
         </div>
     </section>
 
@@ -146,9 +57,9 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 dark:divide-zinc-700">
-                        @foreach ($requests as $request)
+                        @foreach ($serviceRequests as $request)
                             @php
-                                $status = strtolower($request['status']);
+                                $status = strtolower($request->status);
                                 $isCompleted = $status === 'completed';
                                 $isOpen = in_array($status, ['in progress', 'pending']);
                             @endphp
@@ -157,43 +68,51 @@
                                 class="align-top hover:bg-zinc-50 dark:hover:bg-zinc-800/40"
                             >
                                 <td class="px-5 py-4">
-                                    <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ $request['code'] }}</p>
-                                    <p class="mt-1 text-xs text-zinc-500">{{ $request['client'] }}</p>
-                                    <p class="text-xs text-zinc-500">Requested on {{ $request['requested_on'] }}</p>
+                                    {{-- <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ $request['code'] }}</p> --}}
+                                    <p class="mt-1 text-xs text-zinc-500">
+                                        {{ $request->client->name }}
+                                    </p>
+                                    <p class="text-xs text-zinc-500">Requested on {{ $request->service_request_date }}</p>
                                 </td>
-                                <td class="px-5 py-4 text-zinc-700 dark:text-zinc-200">{{ $request['service'] }}</td>
+                                <td class="px-5 py-4 text-zinc-700 dark:text-zinc-200">
+                                    {{ $request->serviceRequestPeriods?->first()?->service->name ?? 'N/A' }}</td>
                                 <td class="px-5 py-4">
-                                    <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ number_format($request['hours'], 1) }} hrs</p>
+                                    <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 1) }} hrs</p>
                                     <div class="mt-2 h-1.5 w-24 rounded-full bg-zinc-100 dark:bg-zinc-700">
-                                        <div class="h-1.5 rounded-full bg-blue-500" style="width: {{ min(100, $request['hours'] * 20) }}%"></div>
+                                         <div class="h-1.5 rounded-full bg-blue-500" style="width: {{ min(100, ($request->serviceRequestPeriods?->sum('duration_hours') ?? 0) * 20) }}%"></div>
                                     </div>
                                 </td>
+
                                 <td class="px-5 py-4">
-                                    @if ($request['status'] === 'Completed')
+                                    @if ($request->status === 'completed')
                                         <span class="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Completed</span>
-                                    @elseif ($request['status'] === 'In Progress')
+                                    @elseif ($request->status === 'in progress')
                                         <span class="inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">In Progress</span>
-                                    @elseif ($request['status'] === 'Pending')
+                                    @elseif ($request->status === 'pending')
                                         <span class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Pending</span>
                                     @else
                                         <span class="inline-flex rounded-full bg-zinc-200 px-2.5 py-1 text-xs font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">Cancelled</span>
                                     @endif
                                 </td>
+
                                 <td class="px-5 py-4">
-                                    @if ($request['review'] > 0)
+                                    @if ($request->review > 0)
                                         <div class="flex items-center gap-1">
                                             @for ($i = 1; $i <= 5; $i++)
-                                                <svg class="size-3.5 {{ $i <= $request['review'] ? 'text-amber-400' : 'text-zinc-300 dark:text-zinc-600' }}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <svg class="size-3.5 {{ $i <= $request->review ? 'text-amber-400' : 'text-zinc-300 dark:text-zinc-600' }}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
                                                 </svg>
                                             @endfor
-                                            <span class="ml-1 text-xs font-semibold text-zinc-700 dark:text-zinc-200">{{ $request['review'] }}/5</span>
+                                            <span class="ml-1 text-xs font-semibold text-zinc-700 dark:text-zinc-200">{{ $request->review }}/5</span>
                                         </div>
-                                        <p class="mt-1 max-w-55 text-xs text-zinc-500">{{ $request['comment'] }}</p>
+                                        <p class="mt-1 max-w-55 text-xs text-zinc-500">{{ $request->comment }}</p>
                                     @else
                                         <span class="text-xs text-zinc-500">No review yet</span>
-                                        <p class="mt-1 max-w-55 text-xs text-zinc-500">{{ $request['comment'] }}</p>
+                                        <p class="mt-1 max-w-55 text-xs text-zinc-500">{{ $request->comment }}</p>
                                     @endif
+                                </td>
+                                <td class="">
+                                    <a href="{{ route('service-request-view', ['id' => $request->id]) }}" class="text-blue-500 hover:text-blue-700">view</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -208,21 +127,23 @@
                 <p class="mt-1 text-xs text-zinc-500">Weekly service-hour trend</p>
 
                 <div class="mt-4 space-y-4">
-                    @foreach ($history as $item)
+                    @foreach ($serviceRequests->pluck('serviceRequestPeriods')->flatten() as $item)
                         <div>
                             <div class="mb-1 flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-300">
-                                <span>{{ $item['period'] }}</span>
-                                <span class="font-semibold">{{ $item['hours'] }} hrs</span>
+                                <span>{{ $item->period }}</span>
+                                <span class="font-semibold">{{ $item->duration_hours }} hrs</span>
                             </div>
                             <div class="h-2 rounded-full bg-zinc-100 dark:bg-zinc-700">
-                                <div class="h-2 rounded-full bg-indigo-500" style="width: {{ round(($item['hours'] / $maxHistoryHours) * 100) }}%"></div>
+                                {{-- <div class="h-2 rounded-full bg-indigo-500" style="width: {{ round(($item->duration_hours / $maxHistoryHours) * 100) }}%"></div> --}}
                             </div>
+
+
                         </div>
                     @endforeach
                 </div>
             </div>
 
-            <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
+            {{-- <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
                 <h2 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Completion Status Breakdown</h2>
                 <div class="mt-4 space-y-3 text-sm">
                     <div class="flex items-center justify-between"><span class="text-zinc-600 dark:text-zinc-300">Completed</span><span class="font-semibold text-emerald-600">{{ $completedCount }}</span></div>
@@ -230,9 +151,9 @@
                     <div class="flex items-center justify-between"><span class="text-zinc-600 dark:text-zinc-300">Pending</span><span class="font-semibold text-amber-600">{{ $pendingCount }}</span></div>
                     <div class="flex items-center justify-between"><span class="text-zinc-600 dark:text-zinc-300">Cancelled</span><span class="font-semibold text-zinc-600 dark:text-zinc-300">{{ $cancelledCount }}</span></div>
                 </div>
-            </div>
+            </div> --}}
 
-            <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
+            {{-- <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
                 <h2 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Client Review Summary</h2>
                 <p class="mt-1 text-xs text-zinc-500">Average rating: <span class="font-semibold text-zinc-700 dark:text-zinc-200">{{ $avgReview }}/5</span></p>
 
@@ -253,7 +174,7 @@
                         </div>
                     @endfor
                 </div>
-            </div>
+            </div> --}}
         </div>
     </section>
 </div>

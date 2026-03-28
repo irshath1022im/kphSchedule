@@ -14,6 +14,6 @@ class ServiceRequestSeeder extends Seeder
     public function run(): void
     {
         //
-        ServiceRequest::factory()->count(50)->create();
+        ServiceRequest::factory()->count(20)->create();
     }
 }
