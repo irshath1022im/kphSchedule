@@ -28,4 +28,24 @@ class ServiceRequest extends Model
         return $this->hasMany(ServiceRequestPeriod::class, 'request_id');
     }
 
+    public function services()
+    {
+        return $this->hasManyThrough(Service::class, ServiceRequestPeriod::class, 'request_id', 'id', 'id', 'service_id');
+    }
+
+    public function getTotalHoursAttribute()
+    {
+        return $this->serviceRequestPeriods()->sum('duration_hours');
+    }
+
+    public function getTotalQuotationValueAttribute()
+    {
+        return $this->serviceRequestPeriods()->sum('quotation_value');
+    }
+
+    public function assignedMaids()
+    {
+        return $this->hasManyThrough(MaidAssignment::class, ServiceRequestPeriod::class, 'request_id', 'service_request_period_id', 'id', 'id');
+    }
+
 }

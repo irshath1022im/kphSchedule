@@ -20,6 +20,8 @@
 
         {{-- service request periods details --}}
 
+           {{-- @dump($serviceRequest->has('maids')) --}}
+
         @if ($serviceRequest->serviceRequestPeriods->isNotEmpty())
 
         {{-- display in a table --}}
@@ -28,6 +30,7 @@
                 <table class="min-w-full bg-white border border-gray-200 rounded">
                     <thead>
                         <tr class="bg-gray-100  ">
+                            <th class="px-4 py-2 border-b text-left">#</th>
                             <th class="px-4 py-2 border-b text-left">Service Type</th>
                             <th class="px-4 py-2 border-b text-left">Start Date</th>
                             <th class="px-4 py-2 border-b text-left">Start Time</th>
@@ -39,13 +42,16 @@
                     </thead>
                     <tbody>
                         @foreach($serviceRequest->serviceRequestPeriods as $period)
+
+
                             <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border-b">{{ $period->id }}</td>
                                 <td class="px-4 py-2 border-b">{{ $period->service?->name }}</td>
                                 <td class="px-4 py-2 border-b">{{ $period->start_date }}</td>
                                 <td class="px-4 py-2 border-b">{{ \Carbon\Carbon::parse($period->start_time)->format('g:i A') }}</td>
                                 <td class="px-4 py-2 border-b">{{ \Carbon\Carbon::parse($period->start_time)->addHours(intval($period->duration_hours))->format('g:i A') }}</td>
                                 <td class="px-4 py-2 border-b">{{ number_format($period->duration_hours, 1) }} hours</td>
-                                <td class="px-4 py-2 border-b">{{ $period->cleaner?->name ?? 'Not Assigned' }}</td>
+                                <td class="px-4 py-2 border-b">{{ $period->maidAssignments?->pluck('maid.name')->join(', ') ?? 'Not Assigned' }}</td>
                                 <td class="px-4 py-2 border-b">{{ $period->quotation_value ?? 'N/A' }}</td>
 
                             </tr>

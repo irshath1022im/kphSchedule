@@ -139,7 +139,7 @@ class ScheduleSummary extends Component
     public function render()
     {
         $query = ServiceRequest::query()
-            ->with(['client', 'serviceRequestPeriods.service'])
+            ->with(['client', 'serviceRequestPeriods.service', 'assignedMaids'])
             ->orderByDesc('service_request_date')
             ->when($this->search_startDate && $this->search_endDate, function ($q) {
                 $q->whereBetween('service_request_date', [$this->search_startDate, $this->search_endDate]);

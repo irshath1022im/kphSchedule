@@ -9,4 +9,14 @@ class Maid extends Model
 {
     //
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'contact_info',
+        'status',
+    ];
+
+    public function assignments()
+    {
+        return $this->hasMany(MaidAssignment::class, 'maid_id');
+    }
 }

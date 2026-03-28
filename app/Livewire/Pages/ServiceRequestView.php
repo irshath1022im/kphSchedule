@@ -15,7 +15,7 @@ class ServiceRequestView extends Component
         // Load the service request details using the provided ID
         // You can use Eloquent to fetch the service request and its related periods
         // For example:
-        $this->serviceRequest = ServiceRequest::with('client','serviceRequestPeriods.service')->findOrFail($id);
+        $this->serviceRequest = ServiceRequest::with('client','serviceRequestPeriods.service', 'assignedMaids')->findOrFail($id);
     }
 
     public function render()

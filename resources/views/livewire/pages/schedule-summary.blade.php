@@ -140,6 +140,24 @@
                                                 <span class="truncate">{{ $request->client->name }}</span>
                                             </div>
                                         @endif
+
+                                        {{-- Assigned Maids --}}
+
+
+                                        @if ($request->assignedMaids?->isNotEmpty())
+                                            <div class="period-meta-row-last">
+                                                <svg class="period-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0h-2m-4 0H3v-2a3 3 0 015.356-1.857M9 20h6m-6 0a3 3 0 01-5.356-1.857M15 20a3 3 0 00-5.356-1.857M15 20h6m2 0h2v-2a3 3 0 00-5.356-1.857M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                                </svg>
+                                                <span class="truncate">
+                                                     {{ $request->assignedMaids?->pluck('maid.name')->join(', ') ?? 'No maids assigned' }}
+                                                </span>
+                                            </div>
+
+                                        @endif
+
+
                                     </div>
                                 @endforeach
                             @else
