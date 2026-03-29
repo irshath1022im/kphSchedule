@@ -97,7 +97,7 @@ select:focus[data-flux-control] {
     .btn-clear            { @apply px-5 py-2 rounded-xl text-sm font-semibold active:scale-95 transition bg-rose-100 text-rose-600 hover:bg-rose-200; }
 
     /* --- Cards Grid --- */
-    .schedule-grid        { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5; }
+    .schedule-grid        { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-5; }
 
     /* --- Date Card --- */
     .sched-card           { @apply bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 flex flex-col overflow-hidden hover:shadow-md transition; }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->tinyInteger('day_of_week')->nullable(); //1-7 for Monday-Sunday
             $table->time('start_time')->nullable();
             $table->decimal('duration_hours', 4, 2)->nullable();
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['Scheduled', 'In Progress', 'Completed', 'Cancelled'])->default('Scheduled');
             $table->foreign('request_id')->references('id')->on('service_requests')->onDelete('cascade');
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
             $table->index(['request_id', 'service_id']);

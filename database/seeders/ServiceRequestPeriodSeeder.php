@@ -14,6 +14,6 @@ class ServiceRequestPeriodSeeder extends Seeder
     public function run(): void
     {
         //
-      ServiceRequestPeriod::factory()->count(50)->create();
+      ServiceRequestPeriod::factory()->count(2)->create();
     }
 }

@@ -13,8 +13,10 @@ class ServiceRequestPeriod extends Model
         'request_id',
         'service_id',
         'start_date',
+        'end_date',
         'day_of_week',
         'start_time',
+        'end_time',
         'duration_hours',
         'status'
     ];

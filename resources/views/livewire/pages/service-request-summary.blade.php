@@ -1,6 +1,13 @@
-
-
 <div class="space-y-6 p-6" x-data="{ tab: 'all' }">
+
+    @if (session('message'))
+        <div class="mb-4 rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-green-900/20 dark:text-green-300">
+            {{ session('message') }}
+        </div>
+    @endif
+
+    <a href="{{ route('new-service-request') }}" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">New Service Request</a>
+
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
             <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Service Request Summary</h1>
@@ -51,6 +58,7 @@
                         <tr class="border-b border-zinc-100 text-left dark:border-zinc-700">
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Request</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Requested</th>
+                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Frequency</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Hours</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Completion Status</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Assigned Maid </span></th>
@@ -76,7 +84,13 @@
                                     <p class="text-xs text-zinc-500">Requested on {{ $request->service_request_date }}</p>
                                 </td>
                                 <td class="px-5 py-4 text-zinc-700 dark:text-zinc-200">
-                                    {{ $request->serviceRequestPeriods?->first()?->service->name ?? 'N/A' }}</td>
+                                    {{ $request->serviceRequestPeriods?->first()?->service->name ?? 'N/A' }}
+                                </td>
+
+                                 <td class="px-5 py-4 text-zinc-700 dark:text-zinc-200">
+                                    {{ $request->frequency ? ucfirst($request->frequency) : 'N/A' }}
+                                </td>
+
                                 <td class="px-5 py-4">
                                     <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 1) }} hrs</p>
                                     <div class="mt-2 h-1.5 w-24 rounded-full bg-zinc-100 dark:bg-zinc-700">
@@ -118,7 +132,7 @@
                                         <span class="text-xs text-zinc-500">No maid assigned</span>
                                     @endif
                                 </td>
-                                <td class="px-5 py-4">
+                                {{-- <td class="px-5 py-4">
                                     @if ($request->review > 0)
                                         <div class="flex items-center gap-1">
                                             @for ($i = 1; $i <= 5; $i++)
@@ -134,11 +148,15 @@
                                         <span class="text-xs text-zinc-500">No review yet</span>
                                         <p class="mt-1 max-w-55 text-xs text-zinc-500">{{ $request->comment }}</p>
                                     @endif
-                                </td>
+                                </td> --}}
 
 
-                                <td class="">
-                                    <a href="{{ route('service-request-view', ['id' => $request->id]) }}" class="text-blue-500 hover:text-blue-700">view</a>
+                                <td class="px-5 py-4 flex items-center gap-2">
+                                    <a href="
+                                    {{ route('service-request-view', ['id' => $request->id]) }}" class="text-blue-500 hover:text-blue-700 border border-blue-500 rounded px-2 py-1">view</a>
+
+                                     <a href="
+                                    {{ route('new-service-request', ['id' => $request->id]) }}" class="text-blue-500 hover:text-blue-700 border border-blue-500 rounded px-2 py-1">Edit</a>
                                 </td>
                             </tr>
                         @endforeach

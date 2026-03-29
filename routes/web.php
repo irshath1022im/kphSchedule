@@ -19,6 +19,10 @@ Route::livewire('/service-request/{id}', ServiceRequestView::class)->name('servi
 Route::livewire('/clients', ClientsSummary::class)->name('clients');
 Route::livewire('/cleaners', Cleaners::class)->name('cleaners');
 
+
+Route::livewire('/new-service-request', \App\Livewire\Forms\NewServiceRequest::class)->name('new-service-request');
+Route::livewire('/new-service-schedule', \App\Livewire\Forms\NewServiceSchedule::class)->name('new-service-schedule');
+
 // Route::middleware(['auth', 'verified'])->group(function () {
 //     Route::view('dashboard', 'dashboard')->name('dashboard');
 // });

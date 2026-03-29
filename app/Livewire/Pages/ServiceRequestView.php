@@ -15,11 +15,24 @@ class ServiceRequestView extends Component
         // Load the service request details using the provided ID
         // You can use Eloquent to fetch the service request and its related periods
         // For example:
-        $this->serviceRequest = ServiceRequest::with('client','serviceRequestPeriods.service', 'assignedMaids')->findOrFail($id);
+        $this->id = $id;
+
+    }
+
+    public function deletePeriod($periodId)
+    {
+        $period = $this->serviceRequest->serviceRequestPeriods()->findOrFail($periodId);
+        $period->delete();
+
+        // Refresh the service request details after deletion
+
     }
 
     public function render()
     {
-        return view('livewire.pages.service-request-view')->layout('components.dash-board');
+        $this->serviceRequest = ServiceRequest::with('client','serviceRequestPeriods.service', 'assignedMaids')
+        ->orderBy('id', 'desc')->findOrFail($this->id);
+
+        return view('livewire.pages.service-request-view', ['serviceRequest' => $this->serviceRequest])->layout('components.dash-board');
     }
 }

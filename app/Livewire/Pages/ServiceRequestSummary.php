@@ -10,8 +10,11 @@ class ServiceRequestSummary extends Component
     public function render()
     {
         $query = ServiceRequest::query()
-                    ->with('serviceRequestPeriods', 'assignedMaids');
+                    ->with('serviceRequestPeriods', 'assignedMaids')
+                    ->get()
+                    ->sortByDesc('service_request_date');
+
         return view('livewire.pages.service-request-summary',
-        ['serviceRequests' => $query->get()])->layout('components.dash-board');
+        ['serviceRequests' => $query])->layout('components.dash-board');
     }
 }

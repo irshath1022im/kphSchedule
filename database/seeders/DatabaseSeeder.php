@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
             ClientSeeder::class,
             MaidSeeder::class,
             ServiceRequestSeeder::class,
-            ServiceRequestPeriodSeeder::class,
-            MaidAssignmentSeeder::class,
+            // ServiceRequestPeriodSeeder::class,
+            // MaidAssignmentSeeder::class,
         ]);
 
 

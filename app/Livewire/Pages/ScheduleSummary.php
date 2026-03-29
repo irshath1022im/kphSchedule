@@ -138,14 +138,22 @@ class ScheduleSummary extends Component
 
     public function render()
     {
-        $query = ServiceRequest::query()
-            ->with(['client', 'serviceRequestPeriods.service', 'assignedMaids'])
-            ->orderByDesc('service_request_date')
+        // $query = ServiceRequest::query()
+        //     ->with(['client', 'serviceRequestPeriods.service', 'assignedMaids'])
+        //     ->when($this->search_startDate && $this->search_endDate, function ($q) {
+        //         $q->withWhereHas('serviceRequestPeriods', function ($q) {
+        //             $q->whereBetween('start_date', [$this->search_startDate, $this->search_endDate]);
+        //         });
+        //     })
+        //     ->get()
+        //     ->groupBy('serviceRequestPeriods.start_date');
+
+        $query = ServiceRequestPeriod::with('serviceRequest.client', 'service', 'maidAssignments.maid')
             ->when($this->search_startDate && $this->search_endDate, function ($q) {
-                $q->whereBetween('service_request_date', [$this->search_startDate, $this->search_endDate]);
+                $q->whereBetween('start_date', [$this->search_startDate, $this->search_endDate]);
             })
             ->get()
-            ->groupBy('service_request_date');
+            ->groupBy('start_date');
 
         return view('livewire.pages.schedule-summary', ['schedule' => $query])->layout('components.dash-board');
     }
