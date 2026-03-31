@@ -20,7 +20,7 @@ class NewServiceRequest extends Component
 
     public function mount(Request $request)
     {
-        $this->frequencies = ['one-time', 'daily', 'weekly','monthly'];
+        $this->frequencies = ['one-time', 'daily', 'weekly','monthly-leave-in', 'monthly-leave-out'];
         $this->clients = \App\Models\Client::all();
 
         $this->request_id = $request->query('id');

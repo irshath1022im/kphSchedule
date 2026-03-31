@@ -113,6 +113,8 @@
 
                             {{--  Assigned Maid --}}
 
+                            {{-- @dump($request->assignedMaids?->groupBy('maid_id')?->map(fn($group) => $group->first()->maid?->name)->join(', ')) --}}
+
 
 
                                 <td class="px-5 py-4">
@@ -122,9 +124,9 @@
 
                                         {{-- @dump($request->assignedMaids) --}}
                                         <div class="flex items-center gap-1">
-                                           <span class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">{{ $request->assignedMaids->count() }}</span>
+                                           <span class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">{{ $request->assignedMaids?->groupBy('maid_id')?->count() ?? 0  }}</span>
                                             <span class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                                                {{ $request->assignedMaids?->pluck('maid.name')->join(', ') }}
+                                                {{ $request->assignedMaids?->groupBy('maid_id')?->map(fn($group) => $group->first()->maid?->name)->join(', ') ?? 'N/A' }}
                                             </span>
 
                                         </div>

@@ -1,6 +1,13 @@
 <div>
     {{-- Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less. - Maria Skłodowska-Curie --}}
 
+    <div wire:loading wire:target="save" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
+        </div>
+    </div>
+
+
     <div class="overflow-hidden rounded-2xl border border-amber-100 bg-linear-to-br from-amber-50 via-white to-teal-50 shadow-lg">
         <div class="border-b border-amber-100/80 bg-white/70 px-6 py-5 backdrop-blur">
             <h2 class="text-2xl font-black tracking-tight text-zinc-900">Create Service Schedule</h2>
@@ -79,6 +86,9 @@
                             @enderror
                         </div>
 
+
+
+
                         <div>
                             <label for="duration_hours" class="block text-sm font-semibold text-zinc-700">Duration (Hours)</label>
                             <input type="number" step="0.5" min="1" id="duration_hours" name="duration_hours" class="mt-2 block h-12 w-full rounded-lg border-zinc-300 bg-zinc-50/50 px-4 text-base text-zinc-900 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-70" wire:model.live="duration_hours">
@@ -102,9 +112,21 @@
                 </div>
 
                 <div class="flex items-center justify-end">
+
+                    @if ($editPeriodId)
+
+                        <button type="submit" class="inline-flex items-center rounded-lg bg-amber-500 px-6 py-2.5 text-sm font-bold tracking-wide text-white shadow-md transition hover:-translate-y-0.5 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2" wire:click.prevent="scheduleUpdate">
+                            Update Schedule
+                        </button>
+                    @else
+
                     <button type="submit" class="inline-flex items-center rounded-lg bg-amber-500 px-6 py-2.5 text-sm font-bold tracking-wide text-white shadow-md transition hover:-translate-y-0.5 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2" wire:click.prevent="save">
                         Save Schedule
                     </button>
+                    @endif
+
+
+
                 </div>
             </form>
         </div>
