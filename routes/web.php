@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Pages\Cleaners;
+use App\Livewire\Pages\CleanerView;
 use App\Livewire\Pages\DashBoard;
 use App\Livewire\Pages\ClientsSummary;
 use App\Livewire\Pages\ScheduleDaily;
@@ -18,6 +19,7 @@ Route::livewire('/service-request-summary', ServiceRequestSummary::class)->name(
 Route::livewire('/service-request/{id}', ServiceRequestView::class)->name('service-request-view');
 Route::livewire('/clients', ClientsSummary::class)->name('clients');
 Route::livewire('/cleaners', Cleaners::class)->name('cleaners');
+Route::livewire('/cleaners/{id}', CleanerView::class)->name('cleaner-view');
 
 
 Route::livewire('/new-service-request', \App\Livewire\Forms\NewServiceRequest::class)->name('new-service-request');

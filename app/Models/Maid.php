@@ -19,4 +19,16 @@ class Maid extends Model
     {
         return $this->hasMany(MaidAssignment::class, 'maid_id');
     }
+
+    public function serviceRequestPeriods()
+    {
+        return $this->hasManyThrough(
+            ServiceRequestPeriod::class,
+            MaidAssignment::class,
+            'maid_id', // Foreign key on MaidAssignment
+            'id', // Foreign key on ServiceRequestPeriod
+            'id', // Local key on Maid
+            'service_request_period_id' // Local key on MaidAssignment
+        );
+    }
 }
