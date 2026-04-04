@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::livewire('/',  DashBoard::class)->name('home');
 
-Route::livewire('/dashboard', DashBoard::class)->name('dashboard');
+Route::livewire('/dashboard', ScheduleSummary::class)->name('dashboard');
 Route::livewire('/schedule-summary', ScheduleSummary::class)->name('schedule-summary');
 Route::livewire('/scheduleView/daily', ScheduleDaily::class)->name('schedule-daily');
 Route::livewire('/service-request-summary', ServiceRequestSummary::class)->name('service-request-summary');
