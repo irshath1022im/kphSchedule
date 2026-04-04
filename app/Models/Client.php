@@ -13,6 +13,15 @@ class Client extends Model
     //
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'address',
+        'city',
+        'location',
+    ];
+
     public function serviceRequests()
     {
         return $this->hasMany(ServiceRequest::class);

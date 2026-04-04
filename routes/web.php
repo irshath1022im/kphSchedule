@@ -26,6 +26,9 @@ Route::livewire('/new-service-request', \App\Livewire\Forms\NewServiceRequest::c
 Route::livewire('/new-service-schedule', \App\Livewire\Forms\NewServiceSchedule::class)->name('new-service-schedule');
 Route::livewire('/assign-cleaner', \App\Livewire\Forms\AssignCleaner::class)->name('assign-cleaner');
 
+Route::livewire('/new-client', \App\Livewire\Forms\NewClient::class)->name('new-client');
+Route::livewire('/new-cleaner', \App\Livewire\Forms\NewMaid::class)->name('new-maid');
+
 // Route::middleware(['auth', 'verified'])->group(function () {
 //     Route::view('dashboard', 'dashboard')->name('dashboard');
 // });

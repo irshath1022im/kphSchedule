@@ -7,7 +7,7 @@
             <p class="text-sm text-zinc-500 dark:text-zinc-400">Maintain cleaner profiles, worked hours, earnings, attendance, and job performance.</p>
         </div>
         <div class="flex items-center gap-2">
-            <button class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Add Cleaner</button>
+            <a href="{{ route('new-maid') }}" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Add Cleaner</a>
             <button class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800">Generate Payroll</button>
         </div>
     </div>
