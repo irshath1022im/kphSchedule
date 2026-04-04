@@ -18,7 +18,7 @@ class NewMaid extends Component
     public function mount()
     {
         //generate country list for location
-        $this->locations = ['India', 'Ethiopia', 'Philippines'];   // Initialize any default values if needed
+        $this->locations = ['India', 'Ethiopia', 'Philippines', 'Kenya', 'Uganda'];   // Initialize any default values if needed
     }
 
     public function submit()
