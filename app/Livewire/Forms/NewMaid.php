@@ -26,7 +26,7 @@ class NewMaid extends Component
         // Validate the input data
         $validatedData = $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:maids,email',
+            'email' => 'nullable|email|unique:maids,email',
             'phone' => 'required|string|max:20',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:100',
