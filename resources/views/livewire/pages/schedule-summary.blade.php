@@ -1,10 +1,19 @@
 <div class="schedule-page">
 
+    @php
+        $totalPeriods = $schedule->sum(fn ($requests) => $requests->count());
+        $totalHours = $schedule->flatten()->sum('duration_hours');
+        $assignedCount = $schedule
+            ->flatten()
+            ->filter(fn ($item) => $item->maidAssignments?->isNotEmpty())
+            ->count();
+    @endphp
+
     {{-- Page Header --}}
     <div class="schedule-header">
         <div>
             <h1 class="schedule-title">Schedule Summary</h1>
-            <p class="schedule-subtitle">Browse and filter your service requests by date</p>
+            <p class="schedule-subtitle">Browse your schedule in a row-based timeline with visible time ranges</p>
         </div>
         <span class="schedule-count-badge">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,59 +51,64 @@
         </div>
     </div>
 
-    {{-- Cards Grid --}}
     @if ($schedule->isNotEmpty())
-        <div class="schedule-grid">
+        <div class="mb-6 grid gap-3 md:grid-cols-3">
+            <div class="rounded-3xl border border-white/80 bg-linear-to-br from-zinc-950 via-zinc-900 to-zinc-800 p-5 text-white shadow-sm">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-300">Periods</p>
+                <p class="mt-2 text-3xl font-black">{{ $totalPeriods }}</p>
+                <p class="mt-1 text-sm text-zinc-300">Rows in the current date range</p>
+            </div>
+            <div class="rounded-3xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm ring-1 ring-black/5">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-400">Hours</p>
+                <p class="mt-2 text-3xl font-black text-zinc-900">{{ rtrim(rtrim(number_format($totalHours, 1), '0'), '.') }}</p>
+                <p class="mt-1 text-sm text-zinc-500">Scheduled service duration</p>
+            </div>
+            <div class="rounded-3xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm ring-1 ring-black/5">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-400">Assigned</p>
+                <p class="mt-2 text-3xl font-black text-zinc-900">{{ $assignedCount }}</p>
+                <p class="mt-1 text-sm text-zinc-500">Periods with maid assignments</p>
+            </div>
+        </div>
+    @endif
+
+    {{-- Table View --}}
+    @if ($schedule->isNotEmpty())
+        <div class="space-y-6">
             @foreach ($schedule as $date => $requests)
-                @php
-                    $palettes = [
-                        ['border' => 'border-indigo-400', 'header' => 'bg-indigo-50', 'text' => 'text-indigo-700', 'badge' => 'bg-indigo-100 text-indigo-700'],
-                        ['border' => 'border-emerald-400', 'header' => 'bg-emerald-50', 'text' => 'text-emerald-700', 'badge' => 'bg-emerald-100 text-emerald-700'],
-                        ['border' => 'border-amber-400',   'header' => 'bg-amber-50',   'text' => 'text-amber-700',   'badge' => 'bg-amber-100 text-amber-700'],
-                        ['border' => 'border-rose-400',    'header' => 'bg-rose-50',    'text' => 'text-rose-700',    'badge' => 'bg-rose-100 text-rose-700'],
-                        ['border' => 'border-cyan-400',    'header' => 'bg-cyan-50',    'text' => 'text-cyan-700',    'badge' => 'bg-cyan-100 text-cyan-700'],
-                        ['border' => 'border-violet-400',  'header' => 'bg-violet-50',  'text' => 'text-violet-700',  'badge' => 'bg-violet-100 text-violet-700'],
-                        ['border' => 'border-orange-400',  'header' => 'bg-orange-50',  'text' => 'text-orange-700',  'badge' => 'bg-orange-100 text-orange-700'],
-                        ['border' => 'border-teal-400',    'header' => 'bg-teal-50',    'text' => 'text-teal-700',    'badge' => 'bg-teal-100 text-teal-700'],
-                    ];
-                    $p = $palettes[$loop->index % count($palettes)];
-                @endphp
-
-                <div class="sched-card {{ $p['border'] }}">
-
-                    {{-- Card Header --}}
-                    <div class="sched-card-header {{ $p['header'] }}">
+                <section class="overflow-hidden rounded-[28px] border border-zinc-200/80 bg-white/90 shadow-sm ring-1 ring-black/5">
+                    <div class="flex flex-col gap-3 border-b border-zinc-200/80 bg-linear-to-r from-zinc-50 via-white to-cyan-50 px-5 py-4 md:flex-row md:items-center md:justify-between">
                         <div>
-                            <p class="sched-card-day">
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
                                 {{ \Carbon\Carbon::parse($date)->format('l') }}
                             </p>
-                            <p class="sched-card-date {{ $p['text'] }}">
+                            <p class="mt-1 text-xl font-black text-zinc-900">
                                 {{ \Carbon\Carbon::parse($date)->format('F j, Y') }}
                             </p>
                         </div>
-                        <span class="sched-card-badge {{ $p['badge'] }}">
-                            {{ $requests->count() }} req
-                        </span>
+                        <div class="flex flex-wrap gap-2 text-sm font-semibold">
+                            <span class="inline-flex items-center rounded-full bg-zinc-900 px-3 py-1.5 text-white">
+                                {{ $requests->count() }} row{{ $requests->count() > 1 ? 's' : '' }}
+                            </span>
+                            <span class="inline-flex items-center rounded-full bg-cyan-100 px-3 py-1.5 text-cyan-800">
+                                {{ rtrim(rtrim(number_format($requests->sum('duration_hours'), 1), '0'), '.') }}h total
+                            </span>
+                        </div>
                     </div>
 
-                    {{-- Card Body --}}
-                    <div class="sched-card-body bg-linear-to-b from-white via-zinc-50/70 to-slate-100/90">
-                        <div class="grid grid-cols-3 gap-2 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur-sm">
-                            <div class="rounded-xl bg-zinc-900 px-3 py-2 text-white">
-                                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-300">Requests</p>
-                                <p class="mt-1 text-lg font-black">{{ $requests->count() }}</p>
-                            </div>
-                            <div class="rounded-xl bg-white px-3 py-2 ring-1 ring-zinc-200/80">
-                                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Hours</p>
-                                <p class="mt-1 text-lg font-black text-zinc-900">{{ rtrim(rtrim(number_format($requests->sum('duration_hours'), 1), '0'), '.') }}</p>
-                            </div>
-                            <div class="rounded-xl bg-white px-3 py-2 ring-1 ring-zinc-200/80">
-                                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Assigned</p>
-                                <p class="mt-1 text-lg font-black text-zinc-900">{{ $requests->filter(fn($item) => $item->assignedMaids?->isNotEmpty())->count() }}</p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-3">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-zinc-200 text-sm text-zinc-700">
+                            <thead class="bg-zinc-50/80 text-left text-[11px] font-bold uppercase tracking-[0.22em] text-zinc-500">
+                                <tr>
+                                    <th class="px-5 py-3">Time Range</th>
+                                    <th class="px-5 py-3">Status</th>
+                                    <th class="px-5 py-3">Service</th>
+                                    <th class="px-5 py-3">Client</th>
+                                    <th class="px-5 py-3">Assigned Maids</th>
+                                    <th class="px-5 py-3">Duration</th>
+                                    <th class="px-5 py-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-100 bg-white">
                             @forelse ($requests as $request)
                                 @php
                                     $statusStyle = match($request->status) {
@@ -113,72 +127,61 @@
                                         'Cancelled'   => 'bg-red-500',
                                         default       => 'bg-zinc-400',
                                     };
-                                    $assignedMaids = $request->serviceRequest->assignedMaids?->pluck('maid.name')->filter()->unique()->values() ?? collect();
+                                    $assignedMaids = $request->maidAssignments?->pluck('maid.name')->filter()->unique()->values() ?? collect();
                                     $clientName = $request->serviceRequest->client->name ?? 'No client linked';
+                                    $startTime = \Carbon\Carbon::parse($request->start_time);
+                                    $endTime = $request->end_time
+                                        ? \Carbon\Carbon::parse($request->end_time)
+                                        : $startTime->copy()->addMinutes((int) round(((float) $request->duration_hours) * 60));
                                 @endphp
 
-                                <article class="group relative overflow-hidden rounded-2xl border border-white/80 bg-white/90 p-4 shadow-sm ring-1 ring-black/5 transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                                    <div class="absolute inset-y-0 left-0 w-1.5 {{ $statusRail }}"></div>
-
-                                    <div class="pl-3">
-                                        <div class="flex items-start justify-between gap-3">
-                                            <div class="min-w-0 flex-1">
-                                                <div class="flex flex-wrap items-center gap-2">
-                                                    <span class="period-status-badge {{ $statusStyle }}">
-                                                        {{ $request->status ?? 'Unknown' }}
-                                                    </span>
-                                                    @if ($request->service)
-                                                        <span class="inline-flex max-w-full items-center rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-600" title="{{ $request->service->name }}">
-                                                            {{ $request->service->name }}
-                                                        </span>
-                                                    @endif
-                                                </div>
-
-                                                <div class="mt-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-zinc-900">
-                                                    <svg class="h-4 w-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                    </svg>
-                                                    <span>
-                                                        {{ \Carbon\Carbon::parse($request->start_time)->format('g:i A') }}
-                                                        &ndash;
-                                                        {{ \Carbon\Carbon::parse($request->start_time)->addHours(intval($request->duration_hours))->format('g:i A') }}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <a href="{{ route('service-request-view', $request->request_id) }}" class="inline-flex shrink-0 items-center rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-900">
-                                                Open
-                                            </a>
-                                        </div>
-
-                                        <div class="mt-4 grid gap-2 sm:grid-cols-3">
-                                            <div class="rounded-xl bg-zinc-50 px-3 py-2 ring-1 ring-zinc-200/70">
-                                                <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Duration</p>
-                                                <p class="mt-1 text-sm font-bold text-zinc-900">{{ $request->duration_hours }}h required</p>
-                                            </div>
-
-                                            <div class="rounded-xl bg-zinc-50 px-3 py-2 ring-1 ring-zinc-200/70">
-                                                <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Client</p>
-                                                <p class="mt-1 truncate text-sm font-bold text-zinc-900">{{ $clientName }}</p>
-                                            </div>
-
-                                            <div class="rounded-xl bg-zinc-50 px-3 py-2 ring-1 ring-zinc-200/70">
-                                                <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Assigned Maids</p>
-                                                <p class="mt-1 truncate text-sm font-bold text-zinc-900">
-                                                    {{ $assignedMaids->isNotEmpty() ? $assignedMaids->join(', ') : 'No maids assigned' }}
-                                                </p>
+                                <tr class="align-top transition hover:bg-zinc-50/80">
+                                    <td class="px-5 py-4">
+                                        <div class="flex items-start gap-3">
+                                            <span class="mt-0.5 inline-block h-10 w-1.5 rounded-full {{ $statusRail }}"></span>
+                                            <div>
+                                                <p class="font-bold text-zinc-900">{{ $startTime->format('g:i A') }} - {{ $endTime->format('g:i A') }}</p>
+                                                <p class="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-zinc-400">{{ $request->day_of_week ?: \Carbon\Carbon::parse($date)->format('l') }}</p>
                                             </div>
                                         </div>
-                                    </div>
-                                </article>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <span class="period-status-badge {{ $statusStyle }}">
+                                            {{ $request->status ?? 'Unknown' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-4 font-semibold text-zinc-900">
+                                        {{ $request->service->name ?? 'No service selected' }}
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <p class="font-semibold text-zinc-900">{{ $clientName }}</p>
+                                        <p class="mt-1 text-xs text-zinc-500">Request #{{ $request->request_id }}</p>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <span class="block max-w-xs text-sm leading-6 text-zinc-700">
+                                            {{ $assignedMaids->isNotEmpty() ? $assignedMaids->join(', ') : 'No maids assigned' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-4 font-semibold text-zinc-900">
+                                        {{ rtrim(rtrim(number_format($request->duration_hours, 1), '0'), '.') }}h
+                                    </td>
+                                    <td class="px-5 py-4 text-right">
+                                        <a href="{{ route('service-request-view', $request->request_id) }}" class="inline-flex items-center rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-900">
+                                            Open
+                                        </a>
+                                    </td>
+                                </tr>
                             @empty
-                                <div class="no-periods-card">
-                                    <span class="no-periods-label">No periods assigned</span>
-                                </div>
+                                <tr>
+                                    <td colspan="7" class="px-5 py-8 text-center text-sm font-medium text-zinc-500">
+                                        No periods assigned for this date.
+                                    </td>
+                                </tr>
                             @endforelse
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
+                </section>
             @endforeach
 
         </div>

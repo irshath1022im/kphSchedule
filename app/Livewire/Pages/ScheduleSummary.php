@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Pages;
 
-use App\Models\ServiceRequest;
 use App\Models\ServiceRequestPeriod;
 use Livewire\Component;
 
@@ -11,6 +10,10 @@ class ScheduleSummary extends Component
     public $today;
     public $search_startDate;
     public $search_endDate;
+    public $monthStart;
+    public $monthEnd;
+    public $leadingBlankDays;
+    public $daysInMonth;
 
 
 
@@ -146,6 +149,8 @@ class ScheduleSummary extends Component
             ->when($this->search_startDate && $this->search_endDate, function ($q) {
                 $q->whereBetween('start_date', [$this->search_startDate, $this->search_endDate]);
             })
+            ->orderBy('start_date')
+            ->orderBy('start_time')
             ->get()
             ->groupBy('start_date');
 
