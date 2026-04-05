@@ -28,6 +28,8 @@ class ScheduleSummary extends Component
     public function mount()
     {
         $this->today = now();
+        $this->search_startDate = $this->today->toDateString();
+        $this->search_endDate = $this->today->toDateString();
         $this->monthStart = $this->today->copy()->startOfMonth();
         $this->monthEnd = $this->today->copy()->endOfMonth();
         $this->leadingBlankDays = $this->monthStart->dayOfWeekIso - 1;
@@ -138,15 +140,7 @@ class ScheduleSummary extends Component
 
     public function render()
     {
-        // $query = ServiceRequest::query()
-        //     ->with(['client', 'serviceRequestPeriods.service', 'assignedMaids'])
-        //     ->when($this->search_startDate && $this->search_endDate, function ($q) {
-        //         $q->withWhereHas('serviceRequestPeriods', function ($q) {
-        //             $q->whereBetween('start_date', [$this->search_startDate, $this->search_endDate]);
-        //         });
-        //     })
-        //     ->get()
-        //     ->groupBy('serviceRequestPeriods.start_date');
+
 
         $query = ServiceRequestPeriod::with('serviceRequest.client', 'service', 'maidAssignments.maid')
             ->when($this->search_startDate && $this->search_endDate, function ($q) {

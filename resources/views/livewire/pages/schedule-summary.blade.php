@@ -78,84 +78,105 @@
                     </div>
 
                     {{-- Card Body --}}
-                    <div class="sched-card-body">
-                        @forelse ($requests as $request)
-                            @php
-                                $statusStyle = match($request->status) {
-                                    'In Progress' => 'status-in-progress',
-                                    'Scheduled'   => 'status-scheduled',
-                                    'Pending'     => 'status-pending',
-                                    'Completed'   => 'status-completed',
-                                    'Cancelled'   => 'status-cancelled',
-                                    default       => 'status-default',
-                                };
-                            @endphp
-
-                            <div class="period-card {{ $statusStyle }}">
-                                {{-- Status + Service --}}
-                                <div class="period-status-row">
-                                    <span class="period-status-badge {{ $statusStyle }}">
-                                        {{ $request->status ?? 'Unknown' }}
-                                    </span>
-                                    @if ($request->service)
-                                        <span class="period-service-name" title="{{ $request->service->name }}">
-                                            {{ $request->service->name }}
-                                        </span>
-                                    @endif
-                                    <a href="{{ route('service-request-view', $request->id) }}">View</a>
-                                </div>
-
-                                {{-- Time Range --}}
-                                <div class="period-meta-row">
-                                    <svg class="period-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                    <span>
-                                        {{ \Carbon\Carbon::parse($request->start_time)->format('g:i A') }}
-                                        &ndash;
-                                        {{ \Carbon\Carbon::parse($request->start_time)->addHours(intval($request->duration_hours))->format('g:i A') }}
-                                    </span>
-                                </div>
-
-                                {{-- Duration --}}
-                                <div class="period-meta-row">
-                                    <svg class="period-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/>
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                    <span>{{ $request->duration_hours }}h required</span>
-                                </div>
-
-                                {{-- Client --}}
-                                @if ($request->client)
-                                    <div class="period-meta-row-last">
-                                        <svg class="period-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                        <span class="truncate">{{ $request->client->name }}</span>
-                                    </div>
-                                @endif
-
-                                {{-- Assigned Maids --}}
-                                @if ($request->assignedMaids?->isNotEmpty())
-                                    <div class="period-meta-row-last">
-                                        <svg class="period-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0h-2m-4 0H3v-2a3 3 0 015.356-1.857M9 20h6m-6 0a3 3 0 01-5.356-1.857M15 20a3 3 0 00-5.356-1.857M15 20h6m2 0h2v-2a3 3 0 00-5.356-1.857M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                                        </svg>
-                                        <span class="truncate">
-                                            {{ $request->assignedMaids?->pluck('maid.name')->join(', ') ?? 'No maids assigned' }}
-                                        </span>
-                                    </div>
-                                @endif
+                    <div class="sched-card-body bg-linear-to-b from-white via-zinc-50/70 to-slate-100/90">
+                        <div class="grid grid-cols-3 gap-2 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur-sm">
+                            <div class="rounded-xl bg-zinc-900 px-3 py-2 text-white">
+                                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-300">Requests</p>
+                                <p class="mt-1 text-lg font-black">{{ $requests->count() }}</p>
                             </div>
-                        @empty
-                            <div class="no-periods-card">
-                                <span class="no-periods-label">No periods assigned</span>
+                            <div class="rounded-xl bg-white px-3 py-2 ring-1 ring-zinc-200/80">
+                                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Hours</p>
+                                <p class="mt-1 text-lg font-black text-zinc-900">{{ rtrim(rtrim(number_format($requests->sum('duration_hours'), 1), '0'), '.') }}</p>
                             </div>
-                        @endforelse
+                            <div class="rounded-xl bg-white px-3 py-2 ring-1 ring-zinc-200/80">
+                                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Assigned</p>
+                                <p class="mt-1 text-lg font-black text-zinc-900">{{ $requests->filter(fn($item) => $item->assignedMaids?->isNotEmpty())->count() }}</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            @forelse ($requests as $request)
+                                @php
+                                    $statusStyle = match($request->status) {
+                                        'In Progress' => 'status-in-progress',
+                                        'Scheduled'   => 'status-scheduled',
+                                        'Pending'     => 'status-pending',
+                                        'Completed'   => 'status-completed',
+                                        'Cancelled'   => 'status-cancelled',
+                                        default       => 'status-default',
+                                    };
+                                    $statusRail = match($request->status) {
+                                        'In Progress' => 'bg-blue-500',
+                                        'Scheduled'   => 'bg-emerald-500',
+                                        'Pending'     => 'bg-violet-500',
+                                        'Completed'   => 'bg-green-500',
+                                        'Cancelled'   => 'bg-red-500',
+                                        default       => 'bg-zinc-400',
+                                    };
+                                    $assignedMaids = $request->serviceRequest->assignedMaids?->pluck('maid.name')->filter()->unique()->values() ?? collect();
+                                    $clientName = $request->serviceRequest->client->name ?? 'No client linked';
+                                @endphp
+
+                                <article class="group relative overflow-hidden rounded-2xl border border-white/80 bg-white/90 p-4 shadow-sm ring-1 ring-black/5 transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                                    <div class="absolute inset-y-0 left-0 w-1.5 {{ $statusRail }}"></div>
+
+                                    <div class="pl-3">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="min-w-0 flex-1">
+                                                <div class="flex flex-wrap items-center gap-2">
+                                                    <span class="period-status-badge {{ $statusStyle }}">
+                                                        {{ $request->status ?? 'Unknown' }}
+                                                    </span>
+                                                    @if ($request->service)
+                                                        <span class="inline-flex max-w-full items-center rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-600" title="{{ $request->service->name }}">
+                                                            {{ $request->service->name }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+
+                                                <div class="mt-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-zinc-900">
+                                                    <svg class="h-4 w-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                    </svg>
+                                                    <span>
+                                                        {{ \Carbon\Carbon::parse($request->start_time)->format('g:i A') }}
+                                                        &ndash;
+                                                        {{ \Carbon\Carbon::parse($request->start_time)->addHours(intval($request->duration_hours))->format('g:i A') }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <a href="{{ route('service-request-view', $request->request_id) }}" class="inline-flex shrink-0 items-center rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-900">
+                                                Open
+                                            </a>
+                                        </div>
+
+                                        <div class="mt-4 grid gap-2 sm:grid-cols-3">
+                                            <div class="rounded-xl bg-zinc-50 px-3 py-2 ring-1 ring-zinc-200/70">
+                                                <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Duration</p>
+                                                <p class="mt-1 text-sm font-bold text-zinc-900">{{ $request->duration_hours }}h required</p>
+                                            </div>
+
+                                            <div class="rounded-xl bg-zinc-50 px-3 py-2 ring-1 ring-zinc-200/70">
+                                                <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Client</p>
+                                                <p class="mt-1 truncate text-sm font-bold text-zinc-900">{{ $clientName }}</p>
+                                            </div>
+
+                                            <div class="rounded-xl bg-zinc-50 px-3 py-2 ring-1 ring-zinc-200/70">
+                                                <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Assigned Maids</p>
+                                                <p class="mt-1 truncate text-sm font-bold text-zinc-900">
+                                                    {{ $assignedMaids->isNotEmpty() ? $assignedMaids->join(', ') : 'No maids assigned' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            @empty
+                                <div class="no-periods-card">
+                                    <span class="no-periods-label">No periods assigned</span>
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
             @endforeach

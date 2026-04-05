@@ -1,7 +1,7 @@
 <div>
 
 
-<div class="space-y-6 p-6" x-data="{ tab: 'history' }">
+<div class="space-y-6 p-6" x-data="{ tab: 'profiles' }">
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
             <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Clients Summary</h1>
@@ -57,11 +57,7 @@
                                     <p class="text-xs text-zinc-500">{{ $client['id'] }}</p>
                                 </div>
                             </div>
-                            @if ($client['status'] === 'active')
-                                <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Active</span>
-                            @else
-                                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Pending</span>
-                            @endif
+
                         </div>
 
                         <dl class="mt-4 space-y-2 text-sm">
@@ -74,18 +70,15 @@
                                 <dd class="text-zinc-700 dark:text-zinc-200">{{ $client['location'] }}<br><span class="text-xs text-zinc-500">{{ $client['address'] }}</span></dd>
                             </div>
                             <div class="grid grid-cols-[110px_1fr] gap-2">
-                                <dt class="text-zinc-500">Requested</dt>
+                                <dt class="text-zinc-500">Requested SR</dt>
                                 <dd class="flex flex-wrap gap-1.5">
+                                    <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                        {{ $client->serviceRequests->count() }}
+                                    </span>
 
-                                    @foreach ($client->serviceRequests as $serviceRequest)
-                                        <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{{ $serviceRequest }}</span>
-                                    @endforeach
                                 </dd>
                             </div>
-                            <div class="grid grid-cols-[110px_1fr] gap-2">
-                                <dt class="text-zinc-500">Assigned Maid</dt>
-                                <dd class="text-zinc-700 dark:text-zinc-200">{{ $client['assigned_maid'] }}</dd>
-                            </div>
+
                         </dl>
 
                         <p class="mt-3 rounded-lg bg-zinc-50 px-3 py-2 text-xs text-zinc-600 dark:bg-zinc-800/70 dark:text-zinc-300">{{ $client['notes'] }}</p>
