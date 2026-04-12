@@ -1,48 +1,48 @@
-<div>
+﻿<div>
 
 <div class="space-y-6 p-6" x-data="{ tab: 'roster' }">
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Cleaners Management</h1>
-            <p class="text-sm text-zinc-500 dark:text-zinc-400">Maintain cleaner profiles, worked hours, earnings, attendance, and job performance.</p>
+            <h1 class="text-2xl font-bold text-zinc-900">Cleaners Management</h1>
+            <p class="text-sm text-zinc-500">Maintain cleaner profiles, worked hours, earnings, attendance, and job performance.</p>
         </div>
         <div class="flex items-center gap-2">
             <a href="{{ route('new-maid') }}" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Add Cleaner</a>
-            <button class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800">Generate Payroll</button>
+            <button class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50">Generate Payroll</button>
         </div>
     </div>
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div class="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
+        <div class="rounded-xl border border-zinc-200 bg-white p-4">
             <p class="text-xs uppercase tracking-wide text-zinc-500">Total Cleaners</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100">{{ $maids->count()}}</p>
+            <p class="mt-2 text-3xl font-bold text-zinc-900">{{ $maids->count()}}</p>
         </div>
-        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-800 dark:bg-emerald-900/20">
-            <p class="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-300">Active / Scheduled</p>
-            <p class="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-300"></p>
+        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+            <p class="text-xs uppercase tracking-wide text-emerald-700">Active / Scheduled</p>
+            <p class="mt-2 text-3xl font-bold text-emerald-700"></p>
         </div>
-        <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
-            <p class="text-xs uppercase tracking-wide text-blue-700 dark:text-blue-300">Worked Hours (Week)</p>
-            <p class="mt-2 text-3xl font-bold text-blue-700 dark:text-blue-300">
+        <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+            <p class="text-xs uppercase tracking-wide text-blue-700">Worked Hours (Week)</p>
+            <p class="mt-2 text-3xl font-bold text-blue-700">
                 {{-- {{ $totalHoursWeek }} --}} {{ $maids->flatMap->serviceRequestPeriods->sum('duration_hours') }} hours
             </p>
         </div>
-        <div class="rounded-xl border border-violet-200 bg-violet-50 p-4 dark:border-violet-800 dark:bg-violet-900/20">
-            <p class="text-xs uppercase tracking-wide text-violet-700 dark:text-violet-300">Earned (Month)</p>
-            <p class="mt-2 text-3xl font-bold text-violet-700 dark:text-violet-300">
+        <div class="rounded-xl border border-violet-200 bg-violet-50 p-4">
+            <p class="text-xs uppercase tracking-wide text-violet-700">Earned (Month)</p>
+            <p class="mt-2 text-3xl font-bold text-violet-700">
                 {{-- PHP {{ number_format($totalEarnedMonth) }} --}} {{ $totalEarning}} QR
             </p>
         </div>
     </section>
 
     <section class="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div class="xl:col-span-2 rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
-            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 px-5 py-4 dark:border-zinc-700">
-                <h2 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Cleaners Directory</h2>
-                <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-50 p-1 dark:border-zinc-700 dark:bg-zinc-800">
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'roster' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100' : 'text-zinc-600 dark:text-zinc-300'" @click="tab = 'roster'">Roster</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'hours' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100' : 'text-zinc-600 dark:text-zinc-300'" @click="tab = 'hours'">Worked Hours</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'earnings' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100' : 'text-zinc-600 dark:text-zinc-300'" @click="tab = 'earnings'">Earnings</button>
+        <div class="xl:col-span-2 rounded-xl border border-zinc-200 bg-white">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 px-5 py-4">
+                <h2 class="text-base font-semibold text-zinc-900">Cleaners Directory</h2>
+                <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-50 p-1">
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'roster' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'roster'">Roster</button>
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'hours' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'hours'">Worked Hours</button>
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'earnings' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'earnings'">Earnings</button>
 
                     <input type="date" name="" id="" class="" wire:model="maidScheduleSearchDate" @change="$wire.set('maidScheduleSearchDate', $event.target.value);">
 
@@ -53,7 +53,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-225 text-sm">
                         <thead>
-                            <tr class="border-b border-zinc-100 text-left dark:border-zinc-700">
+                            <tr class="border-b border-zinc-100 text-left">
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Cleaner Profile</th>
 
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Status as of <span class="text-blue-500">{{ $maidScheduleSearchDate }}</span></th>
@@ -61,18 +61,18 @@
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Rating</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-700">
+                        <tbody class="divide-y divide-zinc-100">
                             @foreach ($maids as $maid)
                                 @php
                                     $parts = explode(' ', $maid['name']);
                                     $initials = strtoupper(substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''));
                                 @endphp
-                                <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                                <tr class="hover:bg-zinc-50">
                                     <td class="px-3 py-3">
                                         <div class="flex items-center gap-3">
-                                            <div class="flex size-9 items-center justify-center rounded-full bg-zinc-100 text-xs font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">{{ $initials }}</div>
+                                            <div class="flex size-9 items-center justify-center rounded-full bg-zinc-100 text-xs font-semibold text-zinc-700">{{ $initials }}</div>
                                             <div>
-                                                <a href="{{ route('cleaner-view',['id' => $maid->id]) }}" class="font-semibold text-zinc-900 dark:text-zinc-100">{{ $maid['name'] }}</a>
+                                                <a href="{{ route('cleaner-view',['id' => $maid->id]) }}" class="font-semibold text-zinc-900">{{ $maid['name'] }}</a>
                                                 <p class="text-xs text-zinc-500">{{ $maid['id'] }} · {{ $maid['phone'] }}</p>
                                             </div>
                                         </div>
@@ -92,15 +92,15 @@
 
 
 
-                                             <span class="rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-300">Completed - <span>
+                                             <span class="rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">Completed - <span>
                                                 {{ $completedSchudule }}</span></span>
 
 
-                                             <span class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">In Progress - <span>
+                                             <span class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">In Progress - <span>
                                                 {{ $inProgress }}</span></span>
 
 
-                                            <span class="rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Scheduled <span class="">
+                                            <span class="rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-700">Scheduled <span class="">
                                                 {{ $scheduledAppointments }}</span>
                                             </span>
 
@@ -108,11 +108,11 @@
                                     </td>
 
 
-                                    <td class="px-3 py-3 font-semibold text-zinc-900 dark:text-zinc-100">{{ $maid['jobs_completed'] }}</td>
+                                    <td class="px-3 py-3 font-semibold text-zinc-900">{{ $maid['jobs_completed'] }}</td>
                                     <td class="px-3 py-3">
                                         <div class="flex items-center gap-0.5">
                                             @for ($i = 1; $i <= 5; $i++)
-                                                <svg class="size-3.5 {{ $i <= $maid['rating'] ? 'text-amber-400' : 'text-zinc-300 dark:text-zinc-600' }}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <svg class="size-3.5 {{ $i <= $maid['rating'] ? 'text-amber-400' : 'text-zinc-300' }}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
                                                 </svg>
                                             @endfor
@@ -132,9 +132,9 @@
                             $weekPct = min(100, round(($cleaner['worked_hours_week'] / 45) * 100));
                             $monthPct = min(100, round(($cleaner['worked_hours_month'] / 180) * 100));
                         @endphp
-                        <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-700">
+                        <div class="rounded-xl border border-zinc-200 p-4">
                             <div class="mb-2 flex items-center justify-between">
-                                <p class="font-semibold text-zinc-900 dark:text-zinc-100">{{ $cleaner['name'] }}</p>
+                                <p class="font-semibold text-zinc-900">{{ $cleaner['name'] }}</p>
                                 <p class="text-xs text-zinc-500">Rate: PHP {{ number_format($cleaner['rate_per_hour']) }}/h</p>
                             </div>
                             <div class="space-y-2">
@@ -143,7 +143,7 @@
                                         <span>Weekly Hours</span>
                                         <span>{{ $cleaner['worked_hours_week'] }}h</span>
                                     </div>
-                                    <div class="h-2 rounded-full bg-zinc-100 dark:bg-zinc-700">
+                                    <div class="h-2 rounded-full bg-zinc-100">
                                         <div class="h-2 rounded-full bg-blue-500" style="width: {{ $weekPct }}%"></div>
                                     </div>
                                 </div>
@@ -152,7 +152,7 @@
                                         <span>Monthly Hours</span>
                                         <span>{{ $cleaner['worked_hours_month'] }}h</span>
                                     </div>
-                                    <div class="h-2 rounded-full bg-zinc-100 dark:bg-zinc-700">
+                                    <div class="h-2 rounded-full bg-zinc-100">
                                         <div class="h-2 rounded-full bg-emerald-500" style="width: {{ $monthPct }}%"></div>
                                     </div>
                                 </div>
@@ -166,7 +166,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-190 text-sm">
                         <thead>
-                            <tr class="border-b border-zinc-100 text-left dark:border-zinc-700">
+                            <tr class="border-b border-zinc-100 text-left">
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Cleaner</th>
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Rate / Hour</th>
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Hours (Week)</th>
@@ -174,14 +174,14 @@
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Earned (Month)</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-700">
+                        <tbody class="divide-y divide-zinc-100">
                             @foreach ($cleaners as $cleaner)
-                                <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-                                    <td class="px-3 py-3 font-semibold text-zinc-900 dark:text-zinc-100">{{ $cleaner['name'] }}</td>
-                                    <td class="px-3 py-3 text-zinc-700 dark:text-zinc-200">PHP {{ number_format($cleaner['rate_per_hour']) }}</td>
-                                    <td class="px-3 py-3 text-zinc-700 dark:text-zinc-200">{{ $cleaner['worked_hours_week'] }}h</td>
-                                    <td class="px-3 py-3 font-semibold text-blue-700 dark:text-blue-300">PHP {{ number_format($cleaner['earned_week']) }}</td>
-                                    <td class="px-3 py-3 font-semibold text-violet-700 dark:text-violet-300">PHP {{ number_format($cleaner['earned_month']) }}</td>
+                                <tr class="hover:bg-zinc-50">
+                                    <td class="px-3 py-3 font-semibold text-zinc-900">{{ $cleaner['name'] }}</td>
+                                    <td class="px-3 py-3 text-zinc-700">PHP {{ number_format($cleaner['rate_per_hour']) }}</td>
+                                    <td class="px-3 py-3 text-zinc-700">{{ $cleaner['worked_hours_week'] }}h</td>
+                                    <td class="px-3 py-3 font-semibold text-blue-700">PHP {{ number_format($cleaner['earned_week']) }}</td>
+                                    <td class="px-3 py-3 font-semibold text-violet-700">PHP {{ number_format($cleaner['earned_month']) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -191,8 +191,8 @@
         </div>
 
         <div class="space-y-6">
-            {{-- <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Team Hours Trend</h3>
+            {{-- <div class="rounded-xl border border-zinc-200 bg-white p-5">
+                <h3 class="text-base font-semibold text-zinc-900">Team Hours Trend</h3>
                 <p class="mt-1 text-xs text-zinc-500">Total worked hours by day (all cleaners)</p>
                 <div class="mt-4 space-y-3">
                     @foreach ($weeklyHours as $row)
@@ -201,39 +201,39 @@
                                 <span>{{ $row['day'] }}</span>
                                 <span>{{ $row['hours'] }}h</span>
                             </div>
-                            <div class="h-2 rounded-full bg-zinc-100 dark:bg-zinc-700">
+                            <div class="h-2 rounded-full bg-zinc-100">
                                 <div class="h-2 rounded-full bg-indigo-500" style="width: {{ round(($row['hours'] / $maxWeeklyHours) * 100) }}%"></div>
                             </div>
                         </div>
                     @endforeach
                 </div> --}}
             </div>
-{{--    <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-            <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Quick Workforce Snapshot</h3>
+{{--    <div class="rounded-xl border border-zinc-200 bg-white p-5">
+            <div class="rounded-xl border border-zinc-200 bg-white p-5">
+                <h3 class="text-base font-semibold text-zinc-900">Quick Workforce Snapshot</h3>
                 <div class="mt-4 grid grid-cols-2 gap-3 text-center">
-                    <div class="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/70">
+                    <div class="rounded-lg bg-zinc-50 p-3">
                         <p class="text-xs text-zinc-500">On Duty</p>
-                        <p class="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">{{ $onDutyCount }}</p>
+                        <p class="mt-1 text-2xl font-bold text-zinc-900">{{ $onDutyCount }}</p>
                     </div>
-                    <div class="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/70">
+                    <div class="rounded-lg bg-zinc-50 p-3">
                         <p class="text-xs text-zinc-500">Avg Hours / Cleaner</p>
-                        <p class="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">{{ round($totalHoursWeek / count($cleaners), 1) }}</p>
+                        <p class="mt-1 text-2xl font-bold text-zinc-900">{{ round($totalHoursWeek / count($cleaners), 1) }}</p>
                     </div>
                 </div>
             </div> --}}
 
-            <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Recent Activity Logs</h3>
+            <div class="rounded-xl border border-zinc-200 bg-white p-5">
+                <h3 class="text-base font-semibold text-zinc-900">Recent Activity Logs</h3>
                 <ul class="mt-4 space-y-3">
                     {{-- @foreach ($recentLogs as $log)
-                        <li class="rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
+                        <li class="rounded-lg border border-zinc-200 p-3">
                             <div class="flex items-center justify-between">
                                 <p class="text-xs font-medium text-zinc-500">{{ $log['time'] }}</p>
-                                <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-300">{{ $log['hours'] }}</span>
+                                <span class="text-xs font-semibold text-emerald-600">{{ $log['hours'] }}</span>
                             </div>
-                            <p class="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100">{{ $log['cleaner'] }}</p>
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ $log['activity'] }}</p>
+                            <p class="mt-1 text-sm font-semibold text-zinc-900">{{ $log['cleaner'] }}</p>
+                            <p class="text-xs text-zinc-500">{{ $log['activity'] }}</p>
                         </li>
                     @endforeach --}}
                 </ul>

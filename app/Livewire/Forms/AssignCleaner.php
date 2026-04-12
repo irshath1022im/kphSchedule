@@ -20,6 +20,8 @@ class AssignCleaner extends Component
     public $notes;
     public $selectedCleaner = [];
     public $maid_id;
+    public $status;
+    public $editMaidAssignmentId;
 
 
     #[On('assignCleaner')]
@@ -37,17 +39,17 @@ class AssignCleaner extends Component
     #[On('closeAssignCleanerModal')]
     public function handleCloseAssignCleanerModal()
     {
-        $this->reset(['service_request_period_id', 'notes', 'maid_id']);
+        $this->reset(['service_request_period_id', 'notes', 'maid_id', 'status']);
     }
 
-   
+
 
     public function deleteCleaner($lineId)
     {
        MaidAssignment::findOrFail($lineId)->delete();
-       
+
        redirect()->route('service-request-view', ['id' => $this->service_request_id]);
-   
+
     }
 
     public function mount()
@@ -55,21 +57,27 @@ class AssignCleaner extends Component
         // $this->service_request_id = $service_request_id;
         // $this->numberOfSchedules = ServiceRequest::findOrFail($service_request_id)->serviceRequestPeriods()->count();
         $this->maids = \App\Models\Maid::get();
-      
+
 
     }
 
     public function removeAssignment()
     {
-       
+
          MaidAssignment::whereIn('service_request_period_id', ServiceRequestPeriod::where('request_id', $this->service_request_id)->pluck('id')->toArray())->delete();
 
         redirect()->route('service-request-view', ['id' => $this->service_request_id])->with('message', 'Cleaner assignment removed successfully!');
     }
 
-    public function updated($selectedCleaner)
+    public function assignCleaner()
     {
-        if($this->service_request_id != null || $this->service_request_id != ''){
+
+    $this->validate([
+        'maid_id' => 'required|exists:maids,id',
+        'status' => 'required|in:assigned,day_off,upsent',
+    ]);
+
+          if($this->service_request_id != null || $this->service_request_id != ''){
               $serviceRequestPeriodsId = ServiceRequest::findOrFail($this->service_request_id)->serviceRequestPeriods()->pluck('id')->toArray();
 
             foreach($serviceRequestPeriodsId as $periodId){
@@ -78,25 +86,27 @@ class AssignCleaner extends Component
                     'service_request_period_id' => $periodId,
                     'notes' => $this->notes,
                     'date' => Carbon::now()->toDateString(),
+                    'status' => $this->status,
                 ]);
 
-                } 
+                }
 
                  redirect()->route('service-request-view', ['id' => $this->service_request_id])->with('message', 'Cleaner assigned successfully!');
-            
-            
+
+
             }elseif($this->service_request_period_id != null || $this->service_request_period_id != ''){
                 MaidAssignment::create([
                     'maid_id' => $this->maid_id,
                     'service_request_period_id' => $this->service_request_period_id,
                     'notes' => $this->notes,
                     'date' => Carbon::now()->toDateString(),
+                    'status' => $this->status,
                 ]);
 
                 //refresh the selected cleaner list after assignment
-                $this->selectedCleaner = MaidAssignment::with('maid')->where('service_request_period_id', $this->service_request_period_id)->get(); 
-                
-                    
+                $this->selectedCleaner = MaidAssignment::with('maid')->where('service_request_period_id', $this->service_request_period_id)->get();
+
+
 
             }else{
                 $this->addError('maid_id', 'The selected period is invalid for this service request.');
@@ -131,8 +141,46 @@ class AssignCleaner extends Component
         //     $this->addError('maid_id', 'The selected period is invalid for this service request.');
         // }
 
+         // Refresh the selected cleaner list after update
+        $this->selectedCleaner = MaidAssignment::with('maid')->where('service_request_period_id', $this->service_request_period_id)->get();
 
 
+
+    }
+
+
+    public function editCleaner($assignmentId)
+    {
+        $assignment = MaidAssignment::findOrFail($assignmentId);
+        $this->editMaidAssignmentId = $assignmentId;
+        $this->maid_id = $assignment->maid_id;
+        $this->notes = $assignment->notes;
+        $this->status = $assignment->status;
+        $this->service_request_period_id = $assignment->service_request_period_id;
+
+        // Open the modal for editing
+        // $this->dispatch('openEditCleanerModal', ['assignmentId' => $assignmentId]);
+    }
+
+    public function assignedCleanerUpdate()
+    {
+        $this->validate([
+            'maid_id' => 'required|exists:maids,id',
+            'status' => 'required|in:assigned,day_off,absent,replaced',
+        ]);
+
+        $assignment = MaidAssignment::where('service_request_period_id', $this->service_request_period_id)->firstOrFail();
+        $assignment->update([
+            'maid_id' => $this->maid_id,
+            'notes' => $this->notes,
+            'status' => $this->status,
+        ]);
+
+        // Refresh the selected cleaner list after update
+        $this->selectedCleaner = MaidAssignment::with('maid')->where('service_request_period_id', $this->service_request_period_id)->get();
+
+        // Close the edit modal
+        // $this->dispatch('closeEditCleanerModal');
     }
 
 

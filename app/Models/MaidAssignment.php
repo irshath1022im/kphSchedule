@@ -25,6 +25,7 @@ class MaidAssignment extends Model
         'date',
         'service_request_period_id',
         'notes',
+        'status',
     ];
 
 }

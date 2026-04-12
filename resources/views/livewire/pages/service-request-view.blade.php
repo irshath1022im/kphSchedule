@@ -1,115 +1,160 @@
-<div x-data="{
-    showAssignCleanerModal: @entangle('showAssignCleanerModal'),
-    showScheduleModal: @entangle('showScheduleModal'),
+<div
+    x-data="{
+        showAssignCleanerModal: @entangle('showAssignCleanerModal'),
+        showScheduleModal: @entangle('showScheduleModal'),
     }"
     x-cloak
-    >
-    {{-- will show the service request and service requet perionds details --}}
+>
+    <div class="space-y-6">
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">Service Request Details</h2>
+                    <p class="mt-1 text-sm text-gray-500">Review schedule periods, cleaner assignments, and quotation values.</p>
+                </div>
 
-    <div class="mb-4 p-4 bg-gray-50 border border-gray-200 rounded">
-        <h3 class="">Service Request Detailssss</h3>
-        {{-- @dump($serviceRequest) --}}
+                <div class="flex flex-wrap gap-2">
+                    <button x-on:click="showScheduleModal = true" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
+                        Schedule
+                    </button>
+                    <button x-on:click="showAssignCleanerModal = true" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700">
+                        Assign Cleaner
+                    </button>
+                    <a href="/" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                        Quotation
+                    </a>
+                    <a href="{{ route('new-service-request', ['id' => $serviceRequest->id]) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                        Edit Request
+                    </a>
+                </div>
+            </div>
 
-        <div class="flex justify-end gap-4 mb-4 p-4 bg-gray-50 border border-gray-200 rounded">
-            <button x-on:click="showScheduleModal = true" class="btn-filter">Schedule</button>
-            <a href="{{ route('assign-cleaner') }}" class="btn-filter" @click="showAssignCleanerModal = true">Assign Cleaner</a>
-            <a href="/" class="btn-filter cursor-pointer">Quotation</a>
+            <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Client</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900">{{ $serviceRequest->client?->name ?? 'N/A' }}</p>
+                </div>
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Requested Date</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900">{{ $serviceRequest->service_request_date ?? 'N/A' }}</p>
+                </div>
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Status</p>
+                    <p class="mt-1 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-800">{{ $serviceRequest->status ?? 'N/A' }}</p>
+                </div>
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Frequency</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900">{{ $serviceRequest->frequency ?? 'N/A' }}</p>
+                </div>
+            </div>
+
+            <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Notes</p>
+                <p class="mt-1 text-sm text-gray-700">{{ $serviceRequest->notes ?: 'No notes provided.' }}</p>
+            </div>
         </div>
 
-        <div class="mb-4 p-4 bg-gray-50 border border-gray-200 rounded">
-            {{-- <p><strong>Code:</strong> {{ $serviceRequest->code }}</p> --}}
-            <p><strong>Client:</strong> {{ $serviceRequest->client?->name }}</p>
-            <p><strong>Requested Date:</strong> {{ $serviceRequest->service_request_date }}</p>
-            <p><strong>Status:</strong> {{ $serviceRequest->status }}</p>
-            <p><strong>Frequency:</strong> {{ $serviceRequest->frequency }}</p>
-            <p><strong>Notes:</strong> {{ $serviceRequest->notes }}</p>
-            <p>
-                <a href="{{ route('new-service-request', ['id' => $serviceRequest->id]) }}" class="btn-filter">Edit</a>
-            </p>
-
-        </div>
-
-        {{-- service request periods details --}}
-
-           {{-- @dump($serviceRequest->has('maids')) --}}
-
-           <x-success></x-success>
+        <x-success></x-success>
 
         @if ($serviceRequest->serviceRequestPeriods->isNotEmpty())
+            <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+                <div class="flex flex-col gap-3 border-b border-gray-200 bg-gray-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                    <h3 class="text-sm font-semibold text-gray-800">Service Periods</h3>
+                    <button
+                        class="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700"
+                        wire:click.prevent="assignCleanerToAll({{ $id }})"
+                    >
+                        Assign To All
+                    </button>
+                </div>
 
-        {{-- display in a table --}}
-
-            <div class="table-overflow">
-                <table class="min-w-full bg-white border border-gray-200 rounded">
-                    <thead>
-                        <tr class="bg-gray-100  ">
-                            <th class="px-4 py-2 border-b text-left">#</th>
-                            <th class="px-4 py-2 border-b text-left">Service Type</th>
-                            <th class="px-4 py-2 border-b text-left">Start Date</th>
-                            <th class="px-4 py-2 border-b text-left">Start Time</th>
-                            <th class="px-4 py-2 border-b text-left">End Time</th>
-                            <th class="px-4 py-2 border-b text-left">End Date</th>
-                            <th class="px-4 py-2 border-b text-left">Day of Week</th>
-                            <th class="px-4 py-2 border-b text-left">Total Hours</th>
-                            <th class="px-4 py-2 border-b text-left">
-                                <div class="flex items-center gap-1 justify-between">
-                                    <span>Assigned Cleaner</span>
-                                    <button class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-sm" wire:click.prevent="assignCleanerToAll({{$id }})">Assign To All</button> 
-                                    {{-- //this will assing toall the service request periods, need to change it to assign to specific period only --}}
-                                </div>
-                                
-                            </th>
-                            <th class="px-4 py-2 border-b text-left">Quotation Value</th>
-                            <th class="px-4 py-2 border-b text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($serviceRequest->serviceRequestPeriods as $period)
-
-
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 border-b">{{ $period->id }}</td>
-                                <td class="px-4 py-2 border-b">{{ $period->service?->name }}</td>
-                                <td class="px-4 py-2 border-b">{{ $period->start_date }}</td>
-                                <td class="px-4 py-2 border-b">{{ \Carbon\Carbon::parse($period->start_time)->format('g:i A') }}</td>
-                                <td class="px-4 py-2 border-b">{{ \Carbon\Carbon::parse($period->start_time)->addHours(intval($period->duration_hours))->format('g:i A') }}</td>
-                                 <td class="px-4 py-2 border-b">{{ \Carbon\Carbon::parse($period->end_date)->format('Y-m-d') }}</td>
-                                <td class="px-4 py-2 border-b">{{ \Carbon\Carbon::parse($period->start_date)->format('l') }}</td>
-                                <td class="px-4 py-2 border-b">{{ number_format($period->duration_hours, 1) }} hours</td>
-                                <td class="px-4 py-2 border-b">
-                                    {{ $period->maidAssignments?->pluck('maid.name')->join(', ') ?? 'Not Assigned' }}
-                                    <button wire:click.prevent="assignCleaner({{ $period->id }})" class="ml-2">+</button>
-                                </td>
-                                <td class="px-4 py-2 border-b">{{ $period->quotation_value ?? 'N/A' }}</td>
-                                <td class="px-4 py-2 border-b">
-                                    <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                                        wire:click="deletePeriod({{ $period->id }})" wire:loading.attr="disabled" wire:confirm="Are you sure you want to delete this service period?"
-                                    >Delete</button>
-                                    <button class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-                                        wire:click="editPeriod({{ $period->id }})" wire:loading.attr="disabled"
-                                    >Edit</button>
-                                </td>
-
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-xs uppercase tracking-wide text-gray-600">
+                                <th class="px-4 py-3 text-left">#</th>
+                                <th class="px-4 py-3 text-left">Service Type</th>
+                                <th class="px-4 py-3 text-left">Start Date</th>
+                                <th class="px-4 py-3 text-left">Start Time</th>
+                                <th class="px-4 py-3 text-left">End Time</th>
+                                <th class="px-4 py-3 text-left">End Date</th>
+                                <th class="px-4 py-3 text-left">Day</th>
+                                <th class="px-4 py-3 text-left">Total Hours</th>
+                                <th class="px-4 py-3 text-left">Assigned Cleaner</th>
+                                <th class="px-4 py-3 text-left">Quotation</th>
+                                <th class="px-4 py-3 text-left">Actions</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @foreach($serviceRequest->serviceRequestPeriods as $period)
+                                <tr class="align-top hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-gray-700">{{ $period->id }}</td>
+                                    <td class="px-4 py-3 text-gray-900">{{ $period->service?->name ?? 'N/A' }}</td>
+                                    <td class="px-4 py-3 text-gray-700">{{ $period->start_date }}</td>
+                                    <td class="px-4 py-3 text-gray-700">{{ \Carbon\Carbon::parse($period->start_time)->format('g:i A') }}</td>
+                                    <td class="px-4 py-3 text-gray-700">{{ \Carbon\Carbon::parse($period->start_time)->addHours(intval($period->duration_hours))->format('g:i A') }}</td>
+                                    <td class="px-4 py-3 text-gray-700">{{ \Carbon\Carbon::parse($period->end_date)->format('Y-m-d') }}</td>
+                                    <td class="px-4 py-3 text-gray-700">{{ \Carbon\Carbon::parse($period->start_date)->format('l') }}</td>
+                                    <td class="px-4 py-3 text-gray-700">{{ number_format($period->duration_hours, 1) }} hrs</td>
+                                    <td class="px-4 py-3">
+                                        @if($period->maidAssignments?->isNotEmpty())
+                                            <div class="space-y-1">
+                                                @foreach($period->maidAssignments as $assignedMaid)
+                                                    <div class="rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-700">
+                                                        {{ $assignedMaid->maid?->name }} / {{ $assignedMaid->status }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <span class="text-xs text-gray-500">No cleaner assigned</span>
+                                        @endif
+
+                                        <button
+                                            wire:click.prevent="assignCleaner({{ $period->id }})"
+                                            class="mt-2 rounded-md border border-blue-200 px-2 py-1 text-xs font-medium text-blue-700 transition hover:bg-blue-50"
+                                        >
+                                            + Assign
+                                        </button>
+                                    </td>
+
+                                    <td class="px-4 py-3 text-gray-700">{{ $period->quotation_value ?? 'N/A' }}</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex flex-wrap gap-2">
+                                            <button
+                                                class="rounded-md bg-blue-600 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-blue-700"
+                                                wire:click="editPeriod({{ $period->id }})"
+                                                wire:loading.attr="disabled"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                class="rounded-md bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-red-700"
+                                                wire:click="deletePeriod({{ $period->id }})"
+                                                wire:loading.attr="disabled"
+                                                wire:confirm="Are you sure you want to delete this service period?"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
         @else
-
-            <div class="p-4 bg-yellow-100 text-yellow-800 rounded">
-                No Service Request Found
+            <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-800">
+                No service periods found for this request.
             </div>
         @endif
-
-        </div>
-
+    </div>
 
 
 
 
-    {{-- Assign Cleaner modal popup --}}
+
+    {{-- Schedule modal popup --}}
     <div
         x-show="showScheduleModal"
         x-cloak

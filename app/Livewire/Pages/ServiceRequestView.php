@@ -79,7 +79,7 @@ class ServiceRequestView extends Component
     // {
     //     // Refresh the service request details after a cleaner assignment is deleted
     //     $this->render();
-       
+
     // }
 
     public function render()
