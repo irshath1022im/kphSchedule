@@ -52,7 +52,7 @@
 }
 
 [data-flux-label] {
-    @apply  !mb-0 !leading-tight;
+    @apply mb-0! leading-tight!;
 }
 
 input:focus[data-flux-control],
@@ -70,66 +70,136 @@ select:focus[data-flux-control] {
    ============================================================ */
 @layer components {
 
+    /* --- Sidebar Theme --- */
+    .sidebar-panel         { @apply border-e border-zinc-800 bg-linear-to-b from-zinc-900 via-zinc-900 to-zinc-950; }
+    .sidebar-section       { @apply grid gap-1; }
+    .sidebar-link          { @apply rounded-xl border border-transparent text-zinc-300 transition hover:border-zinc-700 hover:bg-zinc-800/70 hover:text-cyan-200; }
+    .sidebar-footer-link   { @apply rounded-xl border border-transparent text-zinc-400 transition hover:border-zinc-700 hover:bg-zinc-800/70 hover:text-cyan-200; }
+    .mobile-topbar         { @apply border-b border-zinc-800 bg-zinc-950/95 text-zinc-100; }
+    .sidebar-brand         { @apply rounded-xl border border-zinc-700/80 bg-zinc-900/80 px-2 py-1 text-zinc-100; }
+    .sidebar-brand-logo    { @apply flex aspect-square size-8 items-center justify-center rounded-md border border-cyan-400/35 bg-cyan-500/15 text-cyan-200 shadow-[0_0_0_1px_rgba(34,211,238,0.08)]; }
+
+    .sidebar-link svg,
+    .sidebar-footer-link svg {
+        @apply text-zinc-400 transition;
+    }
+
+    .sidebar-link:hover svg,
+    .sidebar-footer-link:hover svg {
+        @apply text-cyan-300;
+    }
+
+    .sidebar-link[aria-current='page'],
+    .sidebar-link[data-current],
+    .sidebar-link[data-active='true'] {
+        @apply border-cyan-400/40 bg-cyan-500/15 text-cyan-200 shadow-sm;
+    }
+
+    .sidebar-link[aria-current='page'] svg,
+    .sidebar-link[data-current] svg,
+    .sidebar-link[data-active='true'] svg {
+        @apply text-cyan-300;
+    }
+
+    /* Force Flux sidebar internals to dark schedule palette */
+    [data-flux-sidebar] {
+        @apply border-e border-zinc-800 bg-linear-to-b from-zinc-900 via-zinc-900 to-zinc-950;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-header] {
+        @apply border-b border-zinc-800/90 pb-2;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-item] {
+        @apply border border-transparent text-zinc-300;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-item]:hover {
+        @apply border-zinc-700 bg-zinc-800/70 text-cyan-200;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-item][data-current] {
+        @apply border-cyan-400/40 bg-cyan-500/15 text-cyan-200 shadow-sm;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-item] svg {
+        @apply text-zinc-400;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-item]:hover svg,
+    [data-flux-sidebar] [data-flux-sidebar-item][data-current] svg {
+        @apply text-cyan-300;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-group] > div > div,
+    [data-flux-sidebar] [data-flux-sidebar-group] > .px-3 {
+        @apply text-zinc-500;
+    }
+
+    [data-flux-sidebar] [data-flux-sidebar-profile] {
+        @apply border border-transparent text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/70;
+    }
+
     /* --- Page Wrapper --- */
-    .schedule-page        { @apply min-h-screen bg-gray-50 p-6; }
+    .schedule-page        { @apply min-h-screen rounded-3xl border border-zinc-800/70 bg-linear-to-br from-zinc-950 via-zinc-900 to-slate-950 p-6 text-zinc-100 shadow-[0_24px_80px_-30px_rgba(8,145,178,0.35)]; }
 
     /* --- Page Header --- */
     .schedule-header      { @apply mb-6 flex items-center justify-between; }
-    .schedule-title       { @apply text-3xl font-extrabold text-gray-800 tracking-tight; }
-    .schedule-subtitle    { @apply text-sm text-gray-400 mt-1; }
-    .schedule-count-badge { @apply inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow; }
+    .schedule-title       { @apply text-3xl font-extrabold text-zinc-50 tracking-tight; }
+    .schedule-subtitle    { @apply mt-1 text-sm text-zinc-400; }
+    .schedule-count-badge { @apply inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-bold text-cyan-200 shadow-[0_0_0_1px_rgba(6,182,212,0.12)]; }
 
     /* --- Filter Panel --- */
-    .filter-panel         { @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-7; }
+    .filter-panel         { @apply mb-7 rounded-2xl border border-zinc-700/70 bg-zinc-900/70 p-5 shadow-sm backdrop-blur; }
     .filter-btn-group     { @apply flex flex-wrap gap-2 mb-4; }
     .date-range-row       { @apply flex flex-wrap items-end gap-3; }
-    .date-label           { @apply text-xs font-semibold text-gray-400 uppercase tracking-wide; }
-    .date-input           { @apply px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition; }
+    .date-label           { @apply text-xs font-semibold uppercase tracking-wide text-zinc-400; }
+    .date-input           { @apply rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 transition focus:outline-none focus:ring-2 focus:ring-cyan-400; }
 
     /* --- Filter Buttons (base styles inlined per variant — Tailwind v4 @apply limitation) --- */
-    .btn-filter-primary   { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm; }
-    .btn-filter-secondary { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-slate-100 text-slate-700 hover:bg-slate-200; }
-    .btn-filter-cyan      { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-cyan-100 text-cyan-700 hover:bg-cyan-200; }
-    .btn-filter-violet    { @apply px-4 py-1.5 rounded-full text-sm font-semibold active:scale-95 transition bg-violet-100 text-violet-700 hover:bg-violet-200; }
+    .btn-filter-primary   { @apply rounded-full bg-cyan-500 px-4 py-1.5 text-sm font-semibold text-zinc-950 shadow-sm transition active:scale-95 hover:bg-cyan-400; }
+    .btn-filter-secondary { @apply rounded-full border border-zinc-700 bg-zinc-900 px-4 py-1.5 text-sm font-semibold text-zinc-300 transition active:scale-95 hover:bg-zinc-800; }
+    .btn-filter-cyan      { @apply rounded-full border border-cyan-500/40 bg-cyan-500/15 px-4 py-1.5 text-sm font-semibold text-cyan-200 transition active:scale-95 hover:bg-cyan-500/25; }
+    .btn-filter-violet    { @apply rounded-full border border-violet-500/40 bg-violet-500/15 px-4 py-1.5 text-sm font-semibold text-violet-200 transition active:scale-95 hover:bg-violet-500/25; }
 
     /* --- Action Buttons (base styles inlined per variant) --- */
-    .btn-search           { @apply px-5 py-2 rounded-xl text-sm font-semibold active:scale-95 transition bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm; }
-    .btn-clear            { @apply px-5 py-2 rounded-xl text-sm font-semibold active:scale-95 transition bg-rose-100 text-rose-600 hover:bg-rose-200; }
+    .btn-search           { @apply rounded-xl bg-cyan-500 px-5 py-2 text-sm font-semibold text-zinc-950 shadow-sm transition active:scale-95 hover:bg-cyan-400; }
+    .btn-clear            { @apply rounded-xl border border-rose-500/35 bg-rose-500/10 px-5 py-2 text-sm font-semibold text-rose-200 transition active:scale-95 hover:bg-rose-500/20; }
 
     /* --- Cards Grid --- */
     .schedule-grid        { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-5; }
 
     /* --- Date Card --- */
-    .sched-card           { @apply bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 flex flex-col overflow-hidden hover:shadow-md transition; }
+    .sched-card           { @apply flex flex-col overflow-hidden rounded-2xl border border-zinc-700/80 border-t-4 bg-zinc-900/80 shadow-sm transition hover:shadow-md; }
     .sched-card-header    { @apply px-4 py-3 flex items-start justify-between; }
-    .sched-card-day       { @apply text-xs font-semibold uppercase tracking-widest text-gray-400; }
+    .sched-card-day       { @apply text-xs font-semibold uppercase tracking-widest text-zinc-400; }
     .sched-card-date      { @apply text-base font-bold; }
     .sched-card-badge     { @apply text-xs font-bold px-2.5 py-1 rounded-full mt-0.5 whitespace-nowrap; }
     .sched-card-body      { @apply p-4 flex-1 overflow-y-auto max-h-80 space-y-3; }
 
     /* --- Period Item Card --- */
-    .period-card          { @apply rounded-xl border bg-white p-3 hover:shadow-sm transition; }
+    .period-card          { @apply rounded-xl border border-zinc-700 bg-zinc-950/80 p-3 transition hover:shadow-sm; }
     .period-status-row    { @apply flex items-center justify-between mb-2 gap-1; }
     .period-status-badge  { @apply text-xs font-bold px-2 py-0.5 rounded-full; }
-    .period-service-name  { @apply text-xs text-gray-400 font-medium truncate max-w-32; }
-    .period-meta-row      { @apply flex items-center gap-1.5 text-xs text-gray-600 mb-1; }
-    .period-meta-row-last { @apply flex items-center gap-1.5 text-xs text-gray-500; }
-    .period-meta-icon     { @apply w-3.5 h-3.5 text-gray-400 shrink-0; }
+    .period-service-name  { @apply max-w-32 truncate text-xs font-medium text-zinc-400; }
+    .period-meta-row      { @apply mb-1 flex items-center gap-1.5 text-xs text-zinc-300; }
+    .period-meta-row-last { @apply flex items-center gap-1.5 text-xs text-zinc-400; }
+    .period-meta-icon     { @apply h-3.5 w-3.5 shrink-0 text-zinc-500; }
 
     /* --- Status colours: border + bg + text --- */
-    .status-in-progress   { @apply bg-blue-100 text-blue-700 border-blue-200; }
-    .status-scheduled     { @apply bg-emerald-100 text-emerald-700 border-emerald-200; }
-    .status-pending       { @apply bg-violet-100 text-violet-700 border-violet-200; }
-    .status-completed     { @apply bg-green-100 text-green-700 border-green-200; }
-    .status-cancelled     { @apply bg-red-100 text-red-700 border-red-200; }
-    .status-default       { @apply bg-gray-100 text-gray-600 border-gray-200; }
+    .status-in-progress   { @apply border-blue-400/40 bg-blue-500/15 text-blue-200; }
+    .status-scheduled     { @apply border-emerald-400/40 bg-emerald-500/15 text-emerald-200; }
+    .status-pending       { @apply border-violet-400/40 bg-violet-500/15 text-violet-200; }
+    .status-completed     { @apply border-green-400/40 bg-green-500/15 text-green-200; }
+    .status-cancelled     { @apply border-red-400/40 bg-red-500/15 text-red-200; }
+    .status-default       { @apply border-zinc-500/40 bg-zinc-500/15 text-zinc-200; }
 
     /* --- No-periods placeholder --- */
-    .no-periods-card      { @apply rounded-xl border border-amber-200 bg-amber-50 p-3 text-center; }
-    .no-periods-label     { @apply text-xs font-semibold text-amber-600; }
+    .no-periods-card      { @apply rounded-xl border border-amber-400/40 bg-amber-500/10 p-3 text-center; }
+    .no-periods-label     { @apply text-xs font-semibold text-amber-200; }
 
     /* --- Empty State --- */
-    .empty-state          { @apply flex flex-col items-center justify-center py-24 text-gray-300; }
-    .empty-state-title    { @apply text-xl font-bold text-gray-400; }
-    .empty-state-text     { @apply text-sm mt-1 text-gray-400; }
+    .empty-state          { @apply flex flex-col items-center justify-center py-24 text-zinc-500; }
+    .empty-state-title    { @apply text-xl font-bold text-zinc-300; }
+    .empty-state-text     { @apply mt-1 text-sm text-zinc-400; }
 }

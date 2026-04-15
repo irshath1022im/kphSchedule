@@ -1,61 +1,61 @@
-﻿<div class="space-y-6 p-6" x-data="{ tab: 'all' }">
+﻿<div class="schedule-page space-y-6" x-data="{ tab: 'all' }">
 
     @if (session('message'))
-        <div class="mb-4 rounded-lg bg-green-100 p-4 text-sm text-green-700">
+        <div class="mb-4 rounded-lg border border-emerald-400/30 bg-emerald-500/15 p-4 text-sm text-emerald-200">
             {{ session('message') }}
         </div>
     @endif
 
-    <a href="{{ route('new-service-request') }}" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">New Service Request</a>
+    <a href="{{ route('new-service-request') }}" class="rounded-lg bg-cyan-500 px-4 py-2 text-zinc-950 hover:bg-cyan-400">New Service Request</a>
 
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-zinc-900">Service Request Summary</h1>
-            <p class="text-sm text-zinc-500">Track service requested, service-hour history, completion status, and client review performance.</p>
+            <h1 class="text-2xl font-bold text-zinc-100">Service Request Summary</h1>
+            <p class="text-sm text-zinc-400">Track service requested, service-hour history, completion status, and client review performance.</p>
         </div>
-        <div class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700">
+        <div class="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-300">
             Last updated: {{ now()->format('M d, Y h:i A') }}
         </div>
     </div>
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <div class="rounded-xl border border-zinc-200 bg-white p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-zinc-500">Total Requests</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-900">{{ $serviceRequests->count() }}</p>
+        <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-4">
+            <p class="text-xs font-medium uppercase tracking-wide text-zinc-400">Total Requests</p>
+            <p class="mt-2 text-3xl font-bold text-zinc-100">{{ $serviceRequests->count() }}</p>
         </div>
-        <div class="rounded-xl border border-zinc-200 bg-white p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-zinc-500">Total Service Hours</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-900">{{ number_format($serviceRequests->pluck('serviceRequestPeriods')->flatten()->sum('duration_hours'), 1) }}</p>
+        <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-4">
+            <p class="text-xs font-medium uppercase tracking-wide text-zinc-400">Total Service Hours</p>
+            <p class="mt-2 text-3xl font-bold text-zinc-100">{{ number_format($serviceRequests->pluck('serviceRequestPeriods')->flatten()->sum('duration_hours'), 1) }}</p>
         </div>
-        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-emerald-700">Completed</p>
-            <p class="mt-2 text-3xl font-bold text-emerald-700">{{ $serviceRequests->where('status', 'completed')->count() }}</p>
+        <div class="rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+            <p class="text-xs font-medium uppercase tracking-wide text-emerald-200">Completed</p>
+            <p class="mt-2 text-3xl font-bold text-emerald-200">{{ $serviceRequests->where('status', 'completed')->count() }}</p>
         </div>
-        <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-blue-700">In Progress</p>
-            <p class="mt-2 text-3xl font-bold text-blue-700">{{ $serviceRequests->where('status', 'in_progress')->count() }}</p>
+        <div class="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
+            <p class="text-xs font-medium uppercase tracking-wide text-blue-200">In Progress</p>
+            <p class="mt-2 text-3xl font-bold text-blue-200">{{ $serviceRequests->where('status', 'in_progress')->count() }}</p>
         </div>
-        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-amber-700">Pending + Cancelled</p>
-            <p class="mt-2 text-3xl font-bold text-amber-700">{{ $serviceRequests->whereIn('status', ['pending', 'cancelled'])->count() }}</p>
+        <div class="rounded-xl border border-amber-400/30 bg-amber-500/10 p-4">
+            <p class="text-xs font-medium uppercase tracking-wide text-amber-200">Pending + Cancelled</p>
+            <p class="mt-2 text-3xl font-bold text-amber-200">{{ $serviceRequests->whereIn('status', ['pending', 'cancelled'])->count() }}</p>
         </div>
     </section>
 
-    <section class="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div class="xl:col-span-2 rounded-xl border border-zinc-200 bg-white">
-            <div class="flex flex-col gap-4 border-b border-zinc-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 class="text-base font-semibold text-zinc-900">Service Request Records</h2>
-                <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-50 p-1">
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'all' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'all'">All</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'completed' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'completed'">Completed</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'open' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'open'">Open</button>
+    <section class="grid grid-cols-1 gap-6 ">
+        <div class="xl:col-span-2 rounded-xl border border-zinc-700 bg-zinc-900/75">
+            <div class="flex flex-col gap-4 border-b border-zinc-700 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <h2 class="text-base font-semibold text-zinc-100">Service Request Records</h2>
+                <div class="inline-flex rounded-lg border border-zinc-700 bg-zinc-900 p-1">
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'all' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'all'">All</button>
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'completed' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'completed'">Completed</button>
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'open' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'open'">Open</button>
                 </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-225 text-sm">
                     <thead>
-                        <tr class="border-b border-zinc-100 text-left">
+                        <tr class="border-b border-zinc-700 text-left">
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Request</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Requested</th>
                              <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Frequency</th>
@@ -65,7 +65,7 @@
 
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-100">
+                    <tbody class="divide-y divide-zinc-800">
                         @foreach ($serviceRequests as $request)
                             @php
                                 $status = strtolower($request->status);
@@ -74,7 +74,7 @@
                             @endphp
                             <tr
                                 x-show="tab === 'all' || (tab === 'completed' && {{ $isCompleted ? 'true' : 'false' }}) || (tab === 'open' && {{ $isOpen ? 'true' : 'false' }})"
-                                class="align-top hover:bg-zinc-50"
+                                class="align-top hover:bg-zinc-800/40"
                             >
                                 <td class="px-5 py-4">
                                     {{-- <p class="font-semibold text-zinc-900">{{ $request['code'] }}</p> --}}
@@ -83,30 +83,30 @@
                                     </p>
                                     <p class="text-xs text-zinc-500">Requested on {{ $request->service_request_date }}</p>
                                 </td>
-                                <td class="px-5 py-4 text-zinc-700">
+                                <td class="px-5 py-4 text-zinc-300">
                                     {{ $request->serviceRequestPeriods?->first()?->service->name ?? 'N/A' }}
                                 </td>
 
-                                 <td class="px-5 py-4 text-zinc-700">
+                                 <td class="px-5 py-4 text-zinc-300">
                                     {{ $request->frequency ? ucfirst($request->frequency) : 'N/A' }}
                                 </td>
 
                                 <td class="px-5 py-4">
-                                    <p class="font-semibold text-zinc-900">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 1) }} hrs</p>
-                                    <div class="mt-2 h-1.5 w-24 rounded-full bg-zinc-100">
-                                         <div class="h-1.5 rounded-full bg-blue-500" style="width: {{ min(100, ($request->serviceRequestPeriods?->sum('duration_hours') ?? 0) * 20) }}%"></div>
+                                     <p class="font-semibold text-zinc-100">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 1) }} hrs</p>
+                                     <div class="mt-2 h-1.5 w-24 rounded-full bg-zinc-800">
+                                         <div class="h-1.5 rounded-full bg-cyan-500" style="width: {{ min(100, ($request->serviceRequestPeriods?->sum('duration_hours') ?? 0) * 20) }}%"></div>
                                     </div>
                                 </td>
 
                                 <td class="px-5 py-4">
                                     @if ($request->status === 'completed')
-                                        <span class="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Completed</span>
+                                        <span class="inline-flex rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-1 text-xs font-semibold text-emerald-200">Completed</span>
                                     @elseif ($request->status === 'in progress')
-                                        <span class="inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">In Progress</span>
+                                        <span class="inline-flex rounded-full border border-blue-400/40 bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-200">In Progress</span>
                                     @elseif ($request->status === 'pending')
-                                        <span class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">Pending</span>
+                                        <span class="inline-flex rounded-full border border-amber-400/40 bg-amber-500/15 px-2.5 py-1 text-xs font-semibold text-amber-200">Pending</span>
                                     @else
-                                        <span class="inline-flex rounded-full bg-zinc-200 px-2.5 py-1 text-xs font-semibold text-zinc-700">Cancelled</span>
+                                        <span class="inline-flex rounded-full border border-zinc-500/40 bg-zinc-500/15 px-2.5 py-1 text-xs font-semibold text-zinc-200">Cancelled</span>
                                     @endif
                                 </td>
 
@@ -124,8 +124,8 @@
 
                                         {{-- @dump($request->assignedMaids) --}}
                                         <div class="flex items-center gap-1">
-                                           <span class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">{{ $request->assignedMaids?->groupBy('maid_id')?->count() ?? 0  }}</span>
-                                            <span class="text-sm font-medium text-zinc-900">
+                                           <span class="rounded-full border border-cyan-400/40 bg-cyan-500/15 px-2.5 py-1 text-xs font-semibold text-cyan-200">{{ $request->assignedMaids?->groupBy('maid_id')?->count() ?? 0  }}</span>
+                                            <span class="text-sm font-medium text-zinc-100">
                                                 {{ $request->assignedMaids?->groupBy('maid_id')?->map(fn($group) => $group->first()->maid?->name)->join(', ') ?? 'N/A' }}
                                             </span>
 
@@ -155,10 +155,10 @@
 
                                 <td class="px-5 py-4 flex items-center gap-2">
                                     <a href="
-                                    {{ route('service-request-view', ['id' => $request->id]) }}" class="text-blue-500 hover:text-blue-700 border border-blue-500 rounded px-2 py-1">view</a>
+                                    {{ route('service-request-view', ['id' => $request->id]) }}" class="rounded border border-cyan-400/40 bg-cyan-500/10 px-2 py-1 text-cyan-200 hover:bg-cyan-500/20">view</a>
 
                                      <a href="
-                                    {{ route('new-service-request', ['id' => $request->id]) }}" class="text-blue-500 hover:text-blue-700 border border-blue-500 rounded px-2 py-1">Edit</a>
+                                    {{ route('new-service-request', ['id' => $request->id]) }}" class="rounded border border-cyan-400/40 bg-cyan-500/10 px-2 py-1 text-cyan-200 hover:bg-cyan-500/20">Edit</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -167,9 +167,9 @@
             </div>
         </div>
 
-        <div class="space-y-6">
-            <div class="rounded-xl border border-zinc-200 bg-white p-5">
-                <h2 class="text-base font-semibold text-zinc-900">Service Hours History</h2>
+        {{-- <div class="space-y-6">
+            <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-5">
+                <h2 class="text-base font-semibold text-zinc-100">Service Hours History</h2>
                 <p class="mt-1 text-xs text-zinc-500">Weekly service-hour trend</p>
 
                 <div class="mt-4 space-y-4">
@@ -179,8 +179,7 @@
                                 <span>{{ $item->period }}</span>
                                 <span class="font-semibold">{{ $item->duration_hours }} hrs</span>
                             </div>
-                            <div class="h-2 rounded-full bg-zinc-100">
-                                {{-- <div class="h-2 rounded-full bg-indigo-500" style="width: {{ round(($item->duration_hours / $maxHistoryHours) * 100) }}%"></div> --}}
+                            <div class="h-2 rounded-full bg-zinc-800">
                             </div>
 
 
@@ -189,7 +188,7 @@
                 </div>
             </div>
 
-            {{-- <div class="rounded-xl border border-zinc-200 bg-white p-5">
+           <div class="rounded-xl border border-zinc-200 bg-white p-5">
                 <h2 class="text-base font-semibold text-zinc-900">Completion Status Breakdown</h2>
                 <div class="mt-4 space-y-3 text-sm">
                     <div class="flex items-center justify-between"><span class="text-zinc-600">Completed</span><span class="font-semibold text-emerald-600">{{ $completedCount }}</span></div>
@@ -197,9 +196,9 @@
                     <div class="flex items-center justify-between"><span class="text-zinc-600">Pending</span><span class="font-semibold text-amber-600">{{ $pendingCount }}</span></div>
                     <div class="flex items-center justify-between"><span class="text-zinc-600">Cancelled</span><span class="font-semibold text-zinc-600">{{ $cancelledCount }}</span></div>
                 </div>
-            </div> --}}
+            </div>
 
-            {{-- <div class="rounded-xl border border-zinc-200 bg-white p-5">
+            <div class="rounded-xl border border-zinc-200 bg-white p-5">
                 <h2 class="text-base font-semibold text-zinc-900">Client Review Summary</h2>
                 <p class="mt-1 text-xs text-zinc-500">Average rating: <span class="font-semibold text-zinc-700">{{ $avgReview }}/5</span></p>
 
@@ -220,7 +219,7 @@
                         </div>
                     @endfor
                 </div>
-            </div> --}}
-        </div>
+            </div>
+        </div> --}}
     </section>
 </div>

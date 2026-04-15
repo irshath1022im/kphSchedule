@@ -53,20 +53,20 @@
 
     @if ($schedule->isNotEmpty())
         <div class="mb-6 grid gap-3 md:grid-cols-3">
-            <div class="rounded-3xl border border-white/80 bg-linear-to-br from-zinc-950 via-zinc-900 to-zinc-800 p-5 text-white shadow-sm">
+            <div class="rounded-3xl border border-cyan-400/20 bg-linear-to-br from-cyan-950/70 via-zinc-900 to-zinc-950 p-5 text-white shadow-sm">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-300">Periods</p>
                 <p class="mt-2 text-3xl font-black">{{ $totalPeriods }}</p>
                 <p class="mt-1 text-sm text-zinc-300">Rows in the current date range</p>
             </div>
-            <div class="rounded-3xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm ring-1 ring-black/5">
+            <div class="rounded-3xl border border-zinc-700 bg-zinc-900/75 p-5 shadow-sm ring-1 ring-white/5">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-400">Hours</p>
-                <p class="mt-2 text-3xl font-black text-zinc-900">{{ rtrim(rtrim(number_format($totalHours, 1), '0'), '.') }}</p>
-                <p class="mt-1 text-sm text-zinc-500">Scheduled service duration</p>
+                <p class="mt-2 text-3xl font-black text-zinc-100">{{ rtrim(rtrim(number_format($totalHours, 1), '0'), '.') }}</p>
+                <p class="mt-1 text-sm text-zinc-400">Scheduled service duration</p>
             </div>
-            <div class="rounded-3xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm ring-1 ring-black/5">
+            <div class="rounded-3xl border border-zinc-700 bg-zinc-900/75 p-5 shadow-sm ring-1 ring-white/5">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-400">Assigned</p>
-                <p class="mt-2 text-3xl font-black text-zinc-900">{{ $assignedCount }}</p>
-                <p class="mt-1 text-sm text-zinc-500">Periods with maid assignments</p>
+                <p class="mt-2 text-3xl font-black text-zinc-100">{{ $assignedCount }}</p>
+                <p class="mt-1 text-sm text-zinc-400">Periods with maid assignments</p>
             </div>
         </div>
     @endif
@@ -75,29 +75,29 @@
     @if ($schedule->isNotEmpty())
         <div class="space-y-6">
             @foreach ($schedule as $date => $requests)
-                <section class="overflow-hidden rounded-[28px] border border-zinc-200/80 bg-white/90 shadow-sm ring-1 ring-black/5">
-                    <div class="flex flex-col gap-3 border-b border-zinc-200/80 bg-linear-to-r from-zinc-50 via-white to-cyan-50 px-5 py-4 md:flex-row md:items-center md:justify-between">
+                <section class="overflow-hidden rounded-[28px] border border-zinc-700 bg-zinc-900/75 shadow-sm ring-1 ring-white/5">
+                    <div class="flex flex-col gap-3 border-b border-zinc-700 bg-linear-to-r from-zinc-900 via-zinc-900 to-cyan-950/40 px-5 py-4 md:flex-row md:items-center md:justify-between">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
                                 {{ \Carbon\Carbon::parse($date)->format('l') }}
                             </p>
-                            <p class="mt-1 text-xl font-black text-zinc-900">
+                            <p class="mt-1 text-xl font-black text-zinc-100">
                                 {{ \Carbon\Carbon::parse($date)->format('F j, Y') }}
                             </p>
                         </div>
                         <div class="flex flex-wrap gap-2 text-sm font-semibold">
-                            <span class="inline-flex items-center rounded-full bg-zinc-900 px-3 py-1.5 text-white">
+                            <span class="inline-flex items-center rounded-full border border-zinc-600 bg-zinc-950 px-3 py-1.5 text-zinc-100">
                                 {{ $requests->count() }} row{{ $requests->count() > 1 ? 's' : '' }}
                             </span>
-                            <span class="inline-flex items-center rounded-full bg-cyan-100 px-3 py-1.5 text-cyan-800">
+                            <span class="inline-flex items-center rounded-full border border-cyan-400/40 bg-cyan-500/15 px-3 py-1.5 text-cyan-200">
                                 {{ rtrim(rtrim(number_format($requests->sum('duration_hours'), 1), '0'), '.') }}h total
                             </span>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-zinc-200 text-sm text-zinc-700">
-                            <thead class="bg-zinc-50/80 text-left text-[11px] font-bold uppercase tracking-[0.22em] text-zinc-500">
+                        <table class="min-w-full divide-y divide-zinc-700 text-sm text-zinc-300">
+                            <thead class="bg-zinc-900/80 text-left text-[11px] font-bold uppercase tracking-[0.22em] text-zinc-500">
                                 <tr>
                                     <th class="px-5 py-3">Time Range</th>
                                     <th class="px-5 py-3">Status</th>
@@ -108,7 +108,7 @@
                                     <th class="px-5 py-3 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-zinc-100 bg-white">
+                            <tbody class="divide-y divide-zinc-800 bg-zinc-950/40">
                             @forelse ($requests as $request)
                                 @php
                                     $statusStyle = match($request->status) {
@@ -135,12 +135,12 @@
                                         : $startTime->copy()->addMinutes((int) round(((float) $request->duration_hours) * 60));
                                 @endphp
 
-                                <tr class="align-top transition hover:bg-zinc-50/80">
+                                <tr class="align-top transition hover:bg-zinc-800/40">
                                     <td class="px-5 py-4">
                                         <div class="flex items-start gap-3">
                                             <span class="mt-0.5 inline-block h-10 w-1.5 rounded-full {{ $statusRail }}"></span>
                                             <div>
-                                                <p class="font-bold text-zinc-900">{{ $startTime->format('g:i A') }} - {{ $endTime->format('g:i A') }}</p>
+                                                <p class="font-bold text-zinc-100">{{ $startTime->format('g:i A') }} - {{ $endTime->format('g:i A') }}</p>
                                                 <p class="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-zinc-400">{{ $request->day_of_week ?: \Carbon\Carbon::parse($date)->format('l') }}</p>
                                             </div>
                                         </div>
@@ -150,11 +150,11 @@
                                             {{ $request->status ?? 'Unknown' }}
                                         </span>
                                     </td>
-                                    <td class="px-5 py-4 font-semibold text-zinc-900">
+                                    <td class="px-5 py-4 font-semibold text-zinc-100">
                                         {{ $request->service->name ?? 'No service selected' }}
                                     </td>
                                     <td class="px-5 py-4">
-                                        <p class="font-semibold text-zinc-900">{{ $clientName }}</p>
+                                        <p class="font-semibold text-zinc-100">{{ $clientName }}</p>
                                         <p class="mt-1 text-xs text-zinc-500">Request #{{ $request->request_id }}</p>
                                     </td>
                                     <td class="px-5 py-4">
@@ -162,11 +162,11 @@
                                             {{ $assignedMaids->isNotEmpty() ? $assignedMaids->join(', ') : 'No maids assigned' }}
                                         </span>
                                     </td>
-                                    <td class="px-5 py-4 font-semibold text-zinc-900">
+                                    <td class="px-5 py-4 font-semibold text-zinc-100">
                                         {{ rtrim(rtrim(number_format($request->duration_hours, 1), '0'), '.') }}h
                                     </td>
                                     <td class="px-5 py-4 text-right">
-                                        <a href="{{ route('service-request-view', $request->request_id) }}" class="inline-flex items-center rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-900">
+                                        <a href="{{ route('service-request-view', $request->request_id) }}" class="inline-flex items-center rounded-full border border-cyan-400/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-cyan-200 transition hover:border-cyan-300/50 hover:bg-cyan-500/20 hover:text-cyan-100">
                                             Open
                                         </a>
                                     </td>

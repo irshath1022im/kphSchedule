@@ -16,6 +16,7 @@ class ServiceRequest extends Model
         'client_id',
         'frequency',
         'notes',
+        'status'
     ];
 
     public function client()

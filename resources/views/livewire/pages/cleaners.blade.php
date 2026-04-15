@@ -1,50 +1,50 @@
 ﻿<div>
 
-<div class="space-y-6 p-6" x-data="{ tab: 'roster' }">
+<div class="schedule-page space-y-6" x-data="{ tab: 'roster' }">
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-zinc-900">Cleaners Management</h1>
-            <p class="text-sm text-zinc-500">Maintain cleaner profiles, worked hours, earnings, attendance, and job performance.</p>
+            <h1 class="text-2xl font-bold text-zinc-100">Cleaners Management</h1>
+            <p class="text-sm text-zinc-400">Maintain cleaner profiles, worked hours, earnings, attendance, and job performance.</p>
         </div>
         <div class="flex items-center gap-2">
-            <a href="{{ route('new-maid') }}" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Add Cleaner</a>
-            <button class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50">Generate Payroll</button>
+            <a href="{{ route('new-maid') }}" class="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-medium text-zinc-950 hover:bg-cyan-400">Add Cleaner</a>
+            <button class="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800">Generate Payroll</button>
         </div>
     </div>
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div class="rounded-xl border border-zinc-200 bg-white p-4">
-            <p class="text-xs uppercase tracking-wide text-zinc-500">Total Cleaners</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-900">{{ $maids->count()}}</p>
+        <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-4">
+            <p class="text-xs uppercase tracking-wide text-zinc-400">Total Cleaners</p>
+            <p class="mt-2 text-3xl font-bold text-zinc-100">{{ $maids->count()}}</p>
         </div>
-        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-            <p class="text-xs uppercase tracking-wide text-emerald-700">Active / Scheduled</p>
+        <div class="rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+            <p class="text-xs uppercase tracking-wide text-emerald-200">Active / Scheduled</p>
             <p class="mt-2 text-3xl font-bold text-emerald-700"></p>
         </div>
-        <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
-            <p class="text-xs uppercase tracking-wide text-blue-700">Worked Hours (Week)</p>
-            <p class="mt-2 text-3xl font-bold text-blue-700">
+        <div class="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
+            <p class="text-xs uppercase tracking-wide text-blue-200">Worked Hours (Week)</p>
+            <p class="mt-2 text-3xl font-bold text-blue-200">
                 {{-- {{ $totalHoursWeek }} --}} {{ $maids->flatMap->serviceRequestPeriods->sum('duration_hours') }} hours
             </p>
         </div>
-        <div class="rounded-xl border border-violet-200 bg-violet-50 p-4">
-            <p class="text-xs uppercase tracking-wide text-violet-700">Earned (Month)</p>
-            <p class="mt-2 text-3xl font-bold text-violet-700">
+        <div class="rounded-xl border border-violet-400/30 bg-violet-500/10 p-4">
+            <p class="text-xs uppercase tracking-wide text-violet-200">Earned (Month)</p>
+            <p class="mt-2 text-3xl font-bold text-violet-200">
                 {{-- PHP {{ number_format($totalEarnedMonth) }} --}} {{ $totalEarning}} QR
             </p>
         </div>
     </section>
 
     <section class="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div class="xl:col-span-2 rounded-xl border border-zinc-200 bg-white">
-            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 px-5 py-4">
-                <h2 class="text-base font-semibold text-zinc-900">Cleaners Directory</h2>
-                <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-50 p-1">
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'roster' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'roster'">Roster</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'hours' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'hours'">Worked Hours</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'earnings' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'" @click="tab = 'earnings'">Earnings</button>
+        <div class="xl:col-span-2 rounded-xl border border-zinc-700 bg-zinc-900/75">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-700 px-5 py-4">
+                <h2 class="text-base font-semibold text-zinc-100">Cleaners Directory</h2>
+                <div class="inline-flex rounded-lg border border-zinc-700 bg-zinc-900 p-1">
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'roster' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'roster'">Roster</button>
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'hours' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'hours'">Worked Hours</button>
+                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'earnings' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'earnings'">Earnings</button>
 
-                    <input type="date" name="" id="" class="" wire:model="maidScheduleSearchDate" @change="$wire.set('maidScheduleSearchDate', $event.target.value);">
+                    <input type="date" name="" id="" class="rounded border border-zinc-700 bg-zinc-950 px-2 py-1 text-zinc-200" wire:model="maidScheduleSearchDate" @change="$wire.set('maidScheduleSearchDate', $event.target.value);">
 
                 </div>
             </div>
@@ -53,7 +53,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-225 text-sm">
                         <thead>
-                            <tr class="border-b border-zinc-100 text-left">
+                            <tr class="border-b border-zinc-700 text-left">
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Cleaner Profile</th>
 
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Status as of <span class="text-blue-500">{{ $maidScheduleSearchDate }}</span></th>
@@ -61,18 +61,18 @@
                                 <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Rating</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-100">
+                        <tbody class="divide-y divide-zinc-800">
                             @foreach ($maids as $maid)
                                 @php
                                     $parts = explode(' ', $maid['name']);
                                     $initials = strtoupper(substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''));
                                 @endphp
-                                <tr class="hover:bg-zinc-50">
+                                <tr class="hover:bg-zinc-800/40">
                                     <td class="px-3 py-3">
                                         <div class="flex items-center gap-3">
-                                            <div class="flex size-9 items-center justify-center rounded-full bg-zinc-100 text-xs font-semibold text-zinc-700">{{ $initials }}</div>
+                                            <div class="flex size-9 items-center justify-center rounded-full bg-zinc-800 text-xs font-semibold text-zinc-200">{{ $initials }}</div>
                                             <div>
-                                                <a href="{{ route('cleaner-view',['id' => $maid->id]) }}" class="font-semibold text-zinc-900">{{ $maid['name'] }}</a>
+                                                <a href="{{ route('cleaner-view',['id' => $maid->id]) }}" class="font-semibold text-zinc-100">{{ $maid['name'] }}</a>
                                                 <p class="text-xs text-zinc-500">{{ $maid['id'] }} · {{ $maid['phone'] }}</p>
                                             </div>
                                         </div>
@@ -92,15 +92,15 @@
 
 
 
-                                             <span class="rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">Completed - <span>
+                                             <span class="rounded-full border border-green-400/40 bg-green-500/15 px-2.5 py-1 text-xs font-semibold text-green-200">Completed - <span>
                                                 {{ $completedSchudule }}</span></span>
 
 
-                                             <span class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">In Progress - <span>
+                                             <span class="rounded-full border border-blue-400/40 bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-200">In Progress - <span>
                                                 {{ $inProgress }}</span></span>
 
 
-                                            <span class="rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-700">Scheduled <span class="">
+                                            <span class="rounded-full border border-yellow-400/40 bg-yellow-500/15 px-2.5 py-1 text-xs font-semibold text-yellow-200">Scheduled <span class="">
                                                 {{ $scheduledAppointments }}</span>
                                             </span>
 
@@ -108,7 +108,7 @@
                                     </td>
 
 
-                                    <td class="px-3 py-3 font-semibold text-zinc-900">{{ $maid['jobs_completed'] }}</td>
+                                    <td class="px-3 py-3 font-semibold text-zinc-100">{{ $maid['jobs_completed'] }}</td>
                                     <td class="px-3 py-3">
                                         <div class="flex items-center gap-0.5">
                                             @for ($i = 1; $i <= 5; $i++)
@@ -223,8 +223,8 @@
                 </div>
             </div> --}}
 
-            <div class="rounded-xl border border-zinc-200 bg-white p-5">
-                <h3 class="text-base font-semibold text-zinc-900">Recent Activity Logs</h3>
+            <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-5">
+                <h3 class="text-base font-semibold text-zinc-100">Recent Activity Logs</h3>
                 <ul class="mt-4 space-y-3">
                     {{-- @foreach ($recentLogs as $log)
                         <li class="rounded-lg border border-zinc-200 p-3">

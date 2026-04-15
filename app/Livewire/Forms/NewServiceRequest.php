@@ -11,9 +11,11 @@ class NewServiceRequest extends Component
     public $service_request_date,
             $client_id,
             $frequency,
-            $notes;
+            $notes,
+            $status;
 
     public $frequencies;
+    public $statuses = ['pending', 'completed', 'cancelled'];
     public $clients;
     public $request_id;
 
@@ -31,6 +33,7 @@ class NewServiceRequest extends Component
                 $this->client_id = $serviceRequest->client_id;
                 $this->frequency = $serviceRequest->frequency;
                 $this->notes = $serviceRequest->notes;
+                $this->status = $serviceRequest->status;
             }
         }
     }
@@ -41,7 +44,8 @@ class NewServiceRequest extends Component
                 'service_request_date' => 'required',
                 'client_id' => 'required',
                 'frequency' => 'required',
-                'notes' => 'nullable'
+                'notes' => 'nullable',
+                'status' => 'nullable'
         ]);
 
         \App\Models\ServiceRequest::updateOrCreate(
@@ -50,7 +54,8 @@ class NewServiceRequest extends Component
                 'service_request_date' => $this->service_request_date,
                 'client_id' => $this->client_id,
                 'frequency' => $this->frequency,
-                'notes' => $this->notes
+                'notes' => $this->notes,
+                'status' => $this->status
             ]
         );
 

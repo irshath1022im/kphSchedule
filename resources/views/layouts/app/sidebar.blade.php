@@ -3,37 +3,37 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white">
-        <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200 bg-zinc-50">
-            <flux:sidebar.header>
+    <body class="min-h-screen bg-zinc-950 text-zinc-100">
+        <flux:sidebar sticky collapsible="mobile" class="sidebar-panel">
+            <flux:sidebar.header class="border-b border-zinc-800/90">
                 <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Overview')" class="grid">
-                    <flux:sidebar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                <flux:sidebar.group :heading="__('Overview')" class="sidebar-section">
+                    <flux:sidebar.item class="sidebar-link" icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
 
-                <flux:sidebar.group :heading="__('Management')" class="grid">
-                    <flux:sidebar.item icon="users" href="#" wire:navigate>
+                <flux:sidebar.group :heading="__('Management')" class="sidebar-section">
+                    <flux:sidebar.item class="sidebar-link" icon="users" href="#" wire:navigate>
                         {{ __('Clients') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="clipboard-list" href="#" wire:navigate>
+                    <flux:sidebar.item class="sidebar-link" icon="clipboard-list" href="#" wire:navigate>
                         {{ __('Service Requests') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="calendar-days" href="#" wire:navigate>
+                    <flux:sidebar.item class="sidebar-link" icon="calendar-days" href="#" wire:navigate>
                         {{ __('Schedule') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
 
-                <flux:sidebar.group :heading="__('Team')" class="grid">
-                    <flux:sidebar.item icon="user-check" href="#" wire:navigate>
+                <flux:sidebar.group :heading="__('Team')" class="sidebar-section">
+                    <flux:sidebar.item class="sidebar-link" icon="user-check" href="#" wire:navigate>
                         {{ __('Cleaners') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="check-circle" href="#" wire:navigate>
+                    <flux:sidebar.item class="sidebar-link" icon="check-circle" href="#" wire:navigate>
                         {{ __('Completed Services') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
@@ -42,20 +42,22 @@
             <flux:spacer />
 
             <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
+                <flux:sidebar.item class="sidebar-footer-link" icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                     {{ __('Repository') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
+                <flux:sidebar.item class="sidebar-footer-link" icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
                     {{ __('Documentation') }}
                 </flux:sidebar.item>
             </flux:sidebar.nav>
 
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+            <div class="hidden border-t border-zinc-800/90 pt-2 lg:block">
+                <x-desktop-user-menu :name="auth()->user()->name" />
+            </div>
         </flux:sidebar>
 
         <!-- Mobile User Menu -->
-        <flux:header class="lg:hidden">
+        <flux:header class="mobile-topbar lg:hidden">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:spacer />
