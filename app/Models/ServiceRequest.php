@@ -49,4 +49,9 @@ class ServiceRequest extends Model
         return $this->hasManyThrough(MaidAssignment::class, ServiceRequestPeriod::class, 'request_id', 'service_request_period_id', 'id', 'id');
     }
 
+    public function serviceCharges()
+    {
+        return $this->hasMany(ServiceCharge::class);
+    }
+
 }

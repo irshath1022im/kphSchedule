@@ -24,6 +24,7 @@ Route::livewire('/cleaners/{id}', CleanerView::class)->name('cleaner-view');
 
 Route::livewire('/new-service-request', \App\Livewire\Forms\NewServiceRequest::class)->name('new-service-request');
 Route::livewire('/new-service-schedule', \App\Livewire\Forms\NewServiceSchedule::class)->name('new-service-schedule');
+Route::livewire('/new-service-charge', \App\Livewire\Forms\NewServiceCharge::class)->name('new-service-charge');
 Route::livewire('/assign-cleaner', \App\Livewire\Forms\AssignCleaner::class)->name('assign-cleaner');
 
 Route::livewire('/new-client', \App\Livewire\Forms\NewClient::class)->name('new-client');

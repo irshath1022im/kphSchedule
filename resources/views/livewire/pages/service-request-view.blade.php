@@ -20,9 +20,10 @@
                     <button x-on:click="showAssignCleanerModal = true" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700">
                         Assign Cleaner
                     </button>
-                    <a href="/" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
-                        Quotation
+                    <a href="{{ route('new-service-charge', ['sr' => $serviceRequest->id ]) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                        Service Charge
                     </a>
+
                     <a href="{{ route('new-service-request', ['id' => $serviceRequest->id]) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
                         Edit Request
                     </a>
@@ -52,6 +53,17 @@
                 <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Notes</p>
                 <p class="mt-1 text-sm text-gray-700">{{ $serviceRequest->notes ?: 'No notes provided.' }}</p>
             </div>
+
+            {{-- service charge --}}
+            @if($serviceRequest->serviceCharges->isNotEmpty())
+                <div class="mt-4 rounded-lg border border-green-200 bg-green-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-green-500">Service Charge</p>
+                    <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharges->sum('amount') ?? 'N/A' }}</p>
+                </div>
+
+            @endif
+
+
         </div>
 
         <x-success></x-success>
