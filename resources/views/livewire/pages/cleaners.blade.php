@@ -1,50 +1,60 @@
-﻿<div>
+﻿<div class="ops-page">
 
-<div class="schedule-page space-y-6" x-data="{ tab: 'roster' }">
-    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+<div class="ops-shell" x-data="{ tab: 'roster' }">
+    <div class="ops-hero">
+        <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-zinc-100">Cleaners Management</h1>
-            <p class="text-sm text-zinc-400">Maintain cleaner profiles, worked hours, earnings, attendance, and job performance.</p>
+            <p class="ops-eyebrow">Workforce Control</p>
+            <h1 class="ops-title">Cleaners Management</h1>
+            <p class="ops-subtitle">Maintain cleaner profiles, worked hours, earnings, attendance, and job performance using the shared blue management UI.</p>
         </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('new-maid') }}" class="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-medium text-zinc-950 hover:bg-cyan-400">Add Cleaner</a>
-            <button class="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800">Generate Payroll</button>
+        <div class="ops-actions">
+            <a href="{{ route('new-maid') }}" class="ops-btn-primary">Add Cleaner</a>
+            <button class="ops-btn-secondary">Generate Payroll</button>
+        </div>
         </div>
     </div>
 
-    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-4">
-            <p class="text-xs uppercase tracking-wide text-zinc-400">Total Cleaners</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-100">{{ $maids->count()}}</p>
+    <section class="ops-stats-grid">
+        <div class="ops-stat-card">
+            <p class="ops-stat-label">Total Cleaners</p>
+            <p class="ops-stat-value">{{ $maids->count()}}</p>
+            <p class="ops-stat-meta">Profiles in the workforce directory</p>
         </div>
-        <div class="rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4">
-            <p class="text-xs uppercase tracking-wide text-emerald-200">Active / Scheduled</p>
+        <div class="ops-stat-card-accent">
+            <p class="ops-stat-label text-cyan-100/75">Active / Scheduled</p>
             <p class="mt-2 text-3xl font-bold text-emerald-700"></p>
+            <p class="ops-stat-meta text-cyan-100/70">Current work allocation</p>
         </div>
-        <div class="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
-            <p class="text-xs uppercase tracking-wide text-blue-200">Worked Hours (Week)</p>
-            <p class="mt-2 text-3xl font-bold text-blue-200">
+        <div class="ops-stat-card">
+            <p class="ops-stat-label">Worked Hours (Week)</p>
+            <p class="ops-stat-value">
                 {{-- {{ $totalHoursWeek }} --}} {{ $maids->flatMap->serviceRequestPeriods->sum('duration_hours') }} hours
             </p>
+            <p class="ops-stat-meta">Logged delivery hours this week</p>
         </div>
-        <div class="rounded-xl border border-violet-400/30 bg-violet-500/10 p-4">
-            <p class="text-xs uppercase tracking-wide text-violet-200">Earned (Month)</p>
-            <p class="mt-2 text-3xl font-bold text-violet-200">
+        <div class="ops-stat-card">
+            <p class="ops-stat-label">Earned (Month)</p>
+            <p class="ops-stat-value">
                 {{-- PHP {{ number_format($totalEarnedMonth) }} --}} {{ $totalEarning}} QR
             </p>
+            <p class="ops-stat-meta">Estimated monthly payout</p>
         </div>
     </section>
 
     <section class="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div class="xl:col-span-2 rounded-xl border border-zinc-700 bg-zinc-900/75">
-            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-700 px-5 py-4">
-                <h2 class="text-base font-semibold text-zinc-100">Cleaners Directory</h2>
-                <div class="inline-flex rounded-lg border border-zinc-700 bg-zinc-900 p-1">
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'roster' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'roster'">Roster</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'hours' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'hours'">Worked Hours</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'earnings' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'earnings'">Earnings</button>
+        <div class="xl:col-span-2 ops-panel">
+            <div class="ops-panel-header">
+                <div>
+                    <h2 class="ops-panel-title">Cleaners Directory</h2>
+                    <p class="ops-panel-copy">Switch between roster and other workforce perspectives while keeping date filtering visible.</p>
+                </div>
+                <div class="inline-flex flex-wrap items-center gap-2 rounded-full border border-sky-300/14 bg-slate-950/70 p-1">
+                    <button type="button" class="rounded-full px-3 py-1.5 text-xs font-medium transition" :class="tab === 'roster' ? 'bg-sky-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-sky-400/10'" @click="tab = 'roster'">Roster</button>
+                    <button type="button" class="rounded-full px-3 py-1.5 text-xs font-medium transition" :class="tab === 'hours' ? 'bg-sky-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-sky-400/10'" @click="tab = 'hours'">Worked Hours</button>
+                    <button type="button" class="rounded-full px-3 py-1.5 text-xs font-medium transition" :class="tab === 'earnings' ? 'bg-sky-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-sky-400/10'" @click="tab = 'earnings'">Earnings</button>
 
-                    <input type="date" name="" id="" class="rounded border border-zinc-700 bg-zinc-950 px-2 py-1 text-zinc-200" wire:model="maidScheduleSearchDate" @change="$wire.set('maidScheduleSearchDate', $event.target.value);">
+                    <input type="date" name="" id="" class="ops-input" wire:model="maidScheduleSearchDate" @change="$wire.set('maidScheduleSearchDate', $event.target.value);">
 
                 </div>
             </div>
@@ -53,27 +63,27 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-225 text-sm">
                         <thead>
-                            <tr class="border-b border-zinc-700 text-left">
-                                <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Cleaner Profile</th>
+                            <tr class="ops-table-head">
+                                <th class="px-3 py-3">Cleaner Profile</th>
 
-                                <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Status as of <span class="text-blue-500">{{ $maidScheduleSearchDate }}</span></th>
-                                <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Jobs Completed</th>
-                                <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Rating</th>
+                                <th class="px-3 py-3">Status as of <span class="text-sky-300">{{ $maidScheduleSearchDate }}</span></th>
+                                <th class="px-3 py-3">Jobs Completed</th>
+                                <th class="px-3 py-3">Rating</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-800">
+                        <tbody class="ops-table-body">
                             @foreach ($maids as $maid)
                                 @php
                                     $parts = explode(' ', $maid['name']);
                                     $initials = strtoupper(substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''));
                                 @endphp
-                                <tr class="hover:bg-zinc-800/40">
+                                <tr class="ops-table-row">
                                     <td class="px-3 py-3">
                                         <div class="flex items-center gap-3">
-                                            <div class="flex size-9 items-center justify-center rounded-full bg-zinc-800 text-xs font-semibold text-zinc-200">{{ $initials }}</div>
+                                            <div class="ops-avatar">{{ $initials }}</div>
                                             <div>
-                                                <a href="{{ route('cleaner-view',['id' => $maid->id]) }}" class="font-semibold text-zinc-100">{{ $maid['name'] }}</a>
-                                                <p class="text-xs text-zinc-500">{{ $maid['id'] }} · {{ $maid['phone'] }}</p>
+                                                <a href="{{ route('cleaner-view',['id' => $maid->id]) }}" class="font-semibold text-slate-100">{{ $maid['name'] }}</a>
+                                                <p class="text-xs text-slate-500">{{ $maid['id'] }} · {{ $maid['phone'] }}</p>
                                             </div>
                                         </div>
                                     </td>
@@ -92,15 +102,15 @@
 
 
 
-                                             <span class="rounded-full border border-green-400/40 bg-green-500/15 px-2.5 py-1 text-xs font-semibold text-green-200">Completed - <span>
+                                             <span class="ops-status-chip ops-status-available">Completed - <span>
                                                 {{ $completedSchudule }}</span></span>
 
 
-                                             <span class="rounded-full border border-blue-400/40 bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-200">In Progress - <span>
+                                             <span class="ops-status-chip ops-status-busy">In Progress - <span>
                                                 {{ $inProgress }}</span></span>
 
 
-                                            <span class="rounded-full border border-yellow-400/40 bg-yellow-500/15 px-2.5 py-1 text-xs font-semibold text-yellow-200">Scheduled <span class="">
+                                            <span class="ops-status-chip ops-status-scheduled">Scheduled <span class="">
                                                 {{ $scheduledAppointments }}</span>
                                             </span>
 
@@ -108,7 +118,7 @@
                                     </td>
 
 
-                                    <td class="px-3 py-3 font-semibold text-zinc-100">{{ $maid['jobs_completed'] }}</td>
+                                    <td class="px-3 py-3 font-semibold text-slate-100">{{ $maid['jobs_completed'] }}</td>
                                     <td class="px-3 py-3">
                                         <div class="flex items-center gap-0.5">
                                             @for ($i = 1; $i <= 5; $i++)
@@ -223,8 +233,8 @@
                 </div>
             </div> --}}
 
-            <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-5">
-                <h3 class="text-base font-semibold text-zinc-100">Recent Activity Logs</h3>
+            <div class="ops-panel p-5">
+                <h3 class="ops-panel-title">Recent Activity Logs</h3>
                 <ul class="mt-4 space-y-3">
                     {{-- @foreach ($recentLogs as $log)
                         <li class="rounded-lg border border-zinc-200 p-3">

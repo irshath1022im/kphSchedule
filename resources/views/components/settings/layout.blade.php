@@ -1,5 +1,5 @@
-<div class="flex items-start max-md:flex-col">
-    <div class="me-10 w-full pb-4 md:w-[220px]">
+<div class="settings-shell">
+    <div class="settings-nav-card">
         <flux:navlist aria-label="{{ __('Settings') }}">
             <flux:navlist.item :href="route('profile.edit')" wire:navigate>{{ __('Profile') }}</flux:navlist.item>
             <flux:navlist.item :href="route('security.edit')" wire:navigate>{{ __('Security') }}</flux:navlist.item>
@@ -9,11 +9,11 @@
 
     <flux:separator class="md:hidden" />
 
-    <div class="flex-1 self-stretch max-md:pt-6">
-        <flux:heading>{{ $heading ?? '' }}</flux:heading>
-        <flux:subheading>{{ $subheading ?? '' }}</flux:subheading>
+    <div class="settings-content-card max-md:pt-6">
+        <flux:heading class="settings-section-title">{{ $heading ?? '' }}</flux:heading>
+        <flux:subheading class="settings-section-copy">{{ $subheading ?? '' }}</flux:subheading>
 
-        <div class="mt-5 w-full max-w-lg">
+        <div class="settings-form-shell">
             {{ $slot }}
         </div>
     </div>

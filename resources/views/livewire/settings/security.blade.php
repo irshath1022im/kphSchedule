@@ -42,14 +42,14 @@
         </form>
 
         @if ($canManageTwoFactor)
-            <section class="mt-12">
-                <flux:heading>{{ __('Two-factor authentication') }}</flux:heading>
-                <flux:subheading>{{ __('Manage your two-factor authentication settings') }}</flux:subheading>
+            <section class="settings-subsection mt-12">
+                <flux:heading class="text-slate-50!">{{ __('Two-factor authentication') }}</flux:heading>
+                <flux:subheading class="text-slate-300/72!">{{ __('Manage your two-factor authentication settings') }}</flux:subheading>
 
                 <div class="flex flex-col w-full mx-auto space-y-6 text-sm" wire:cloak>
                     @if ($twoFactorEnabled)
                         <div class="space-y-4">
-                            <flux:text>
+                            <flux:text class="text-slate-300!">
                                 {{ __('You will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your phone.') }}
                             </flux:text>
 
@@ -66,7 +66,7 @@
                         </div>
                     @else
                         <div class="space-y-4">
-                            <flux:text variant="subtle">
+                            <flux:text variant="subtle" class="text-slate-300/72!">
                                 {{ __('When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.') }}
                             </flux:text>
 
@@ -83,33 +83,33 @@
 
             <flux:modal
                 name="two-factor-setup-modal"
-                class="max-w-md md:min-w-md"
+                class="settings-modal-panel max-w-md md:min-w-md"
                 @close="closeModal"
                 wire:model="showModal"
             >
                 <div class="space-y-6">
                     <div class="flex flex-col items-center space-y-4">
-                        <div class="p-0.5 w-auto rounded-full border border-stone-100 bg-white shadow-sm">
-                            <div class="p-2.5 rounded-full border border-stone-200 overflow-hidden bg-stone-100 relative">
-                                <div class="flex items-stretch absolute inset-0 w-full h-full divide-x [&>div]:flex-1 divide-stone-200 justify-around opacity-50">
+                        <div class="w-auto rounded-full border border-sky-300/14 bg-slate-950/70 p-0.5 shadow-sm">
+                            <div class="relative overflow-hidden rounded-full border border-sky-300/14 bg-slate-900 p-2.5">
+                                <div class="absolute inset-0 flex h-full w-full items-stretch justify-around divide-x divide-sky-300/10 opacity-50 [&>div]:flex-1">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <div></div>
                                     @endfor
                                 </div>
 
-                                <div class="flex flex-col items-stretch absolute w-full h-full divide-y [&>div]:flex-1 inset-0 divide-stone-200 justify-around opacity-50">
+                                <div class="absolute inset-0 flex h-full w-full flex-col items-stretch justify-around divide-y divide-sky-300/10 opacity-50 [&>div]:flex-1">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <div></div>
                                     @endfor
                                 </div>
 
-                                <flux:icon.qr-code class="relative z-20"/>
+                                <flux:icon.qr-code class="relative z-20 text-sky-100"/>
                             </div>
                         </div>
 
                         <div class="space-y-2 text-center">
-                            <flux:heading size="lg">{{ $this->modalConfig['title'] }}</flux:heading>
-                            <flux:text>{{ $this->modalConfig['description'] }}</flux:text>
+                            <flux:heading size="lg" class="text-slate-50!">{{ $this->modalConfig['title'] }}</flux:heading>
+                            <flux:text class="text-slate-300!">{{ $this->modalConfig['description'] }}</flux:text>
                         </div>
                     </div>
 
@@ -151,9 +151,9 @@
                         @enderror
 
                         <div class="flex justify-center">
-                            <div class="relative w-64 overflow-hidden border rounded-lg border-stone-200 aspect-square">
+                            <div class="relative aspect-square w-64 overflow-hidden rounded-2xl border border-sky-300/14">
                                 @empty($qrCodeSvg)
-                                    <div class="absolute inset-0 flex items-center justify-center bg-white animate-pulse">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-slate-900 animate-pulse text-sky-100">
                                         <flux:icon.loading/>
                                     </div>
                                 @else
@@ -182,8 +182,8 @@
 
                         <div class="space-y-4">
                             <div class="relative flex items-center justify-center w-full">
-                                <div class="absolute inset-0 w-full h-px top-1/2 bg-stone-200"></div>
-                                <span class="relative px-2 text-sm bg-white text-stone-600">
+                                <div class="absolute inset-0 top-1/2 h-px w-full bg-sky-300/12"></div>
+                                <span class="relative bg-slate-950 px-2 text-sm text-slate-400">
                                     {{ __('or, enter the code manually') }}
                                 </span>
                             </div>
@@ -203,9 +203,9 @@
                                     }
                                 }"
                             >
-                                <div class="flex items-stretch w-full border rounded-xl">
+                                <div class="settings-manual-key">
                                     @empty($manualSetupKey)
-                                        <div class="flex items-center justify-center w-full p-3 bg-stone-100">
+                                        <div class="flex w-full items-center justify-center bg-slate-900 p-3 text-sky-100">
                                             <flux:icon.loading variant="mini"/>
                                         </div>
                                     @else
@@ -213,12 +213,12 @@
                                             type="text"
                                             readonly
                                             value="{{ $manualSetupKey }}"
-                                            class="w-full p-3 bg-transparent outline-none text-stone-900"
+                                            class="settings-manual-key-input"
                                         />
 
                                         <button
                                             @click="copy()"
-                                            class="px-3 transition-colors border-l cursor-pointer border-stone-200"
+                                            class="cursor-pointer border-l border-sky-300/14 px-3 transition-colors hover:bg-sky-400/10"
                                         >
                                             <flux:icon.document-duplicate x-show="!copied" variant="outline"></flux:icon>
                                             <flux:icon.check

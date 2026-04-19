@@ -1,20 +1,24 @@
-﻿<div class="space-y-6 p-6">
+﻿<div class="ops-page">
+    <div class="ops-shell">
 
     {{-- Page Header --}}
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+    <div class="ops-hero">
+        <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-zinc-900">Dashboard</h1>
-            <p class="mt-0.5 text-sm text-zinc-500">Cleaning Service Overview &mdash; {{ now()->format('l, F j, Y') }}</p>
+            <p class="ops-eyebrow">Operations Overview</p>
+            <h1 class="ops-title">Dashboard</h1>
+            <p class="ops-subtitle">Cleaning service overview for {{ now()->format('l, F j, Y') }} with active requests, workforce availability, and recent completions in one blue command surface.</p>
         </div>
-        <div class="flex items-center gap-2 mt-3 sm:mt-0">
-            <a href="#" class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700">
+        <div class="ops-actions mt-1 xl:justify-end">
+            <a href="#" class="ops-btn-primary">
                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 New Request
             </a>
-            <a href="{{ route('schedule-summary') }}" class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50">
+            <a href="{{ route('schedule-summary') }}" class="ops-btn-secondary">
                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
                 Schedule
             </a>
+        </div>
         </div>
     </div>
 
@@ -28,12 +32,15 @@
         @livewire('dash-board.recent-service-requests')
 
         {{-- Cleaner Status --}}
-        <div class="rounded-xl border border-zinc-200 bg-white">
-            <div class="flex items-center justify-between border-b border-zinc-100 px-5 py-4">
-                <h2 class="text-base font-semibold text-zinc-900">Cleaner Status</h2>
-                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700">Manage</a>
+        <div class="ops-panel">
+            <div class="ops-panel-header">
+                <div>
+                    <h2 class="ops-panel-title">Cleaner Status</h2>
+                    <p class="ops-panel-copy">Live roster snapshot for current assignments and availability.</p>
+                </div>
+                <a href="#" class="ops-link">Manage</a>
             </div>
-            <div class="divide-y divide-zinc-100">
+            <div class="divide-y divide-sky-300/10">
                 @php
                     $cleaners = [
                         ['name'=>'Ana Reyes',      'job'=>'Deep Clean – Santos',   'status'=>'busy',      'time'=>'Until 11 AM'],
@@ -46,33 +53,33 @@
                     ];
                 @endphp
                 @foreach($cleaners as $cleaner)
-                <div class="flex items-center gap-3 px-5 py-3.5 hover:bg-zinc-50 transition-colors">
+                <div class="flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-sky-400/6">
                     @php $cp = explode(' ', $cleaner['name']); $ci = strtoupper(substr($cp[0],0,1).(isset($cp[1])?substr($cp[1],0,1):'')); @endphp
-                    <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-xs font-semibold text-zinc-700">{{ $ci }}</div>
+                    <div class="ops-avatar">{{ $ci }}</div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-zinc-800 truncate">{{ $cleaner['name'] }}</p>
-                        <p class="text-xs text-zinc-500 truncate">{{ $cleaner['job'] }}</p>
+                        <p class="truncate text-sm font-medium text-slate-100">{{ $cleaner['name'] }}</p>
+                        <p class="truncate text-xs text-slate-400">{{ $cleaner['job'] }}</p>
                     </div>
                     <div class="text-right shrink-0">
                         @if($cleaner['status'] === 'busy')
-                            <span class="inline-block size-2 rounded-full bg-blue-500"></span>
+                            <span class="inline-block size-2 rounded-full bg-cyan-400"></span>
                         @elseif($cleaner['status'] === 'available')
-                            <span class="inline-block size-2 rounded-full bg-emerald-500"></span>
+                            <span class="inline-block size-2 rounded-full bg-sky-400"></span>
                         @elseif($cleaner['status'] === 'scheduled')
-                            <span class="inline-block size-2 rounded-full bg-amber-400"></span>
+                            <span class="inline-block size-2 rounded-full bg-indigo-400"></span>
                         @else
-                            <span class="inline-block size-2 rounded-full bg-zinc-400"></span>
+                            <span class="inline-block size-2 rounded-full bg-slate-400"></span>
                         @endif
-                        <p class="text-xs text-zinc-400 mt-0.5">{{ $cleaner['time'] }}</p>
+                        <p class="mt-0.5 text-xs text-slate-400">{{ $cleaner['time'] }}</p>
                     </div>
                 </div>
                 @endforeach
 
-                <div class="px-5 py-3 text-xs text-zinc-400">
-                    <span class="inline-block size-2 rounded-full bg-emerald-500 mr-1"></span>Available &nbsp;
-                    <span class="inline-block size-2 rounded-full bg-blue-500 mr-1"></span>Busy &nbsp;
-                    <span class="inline-block size-2 rounded-full bg-amber-400 mr-1"></span>Scheduled &nbsp;
-                    <span class="inline-block size-2 rounded-full bg-zinc-400 mr-1"></span>Off
+                <div class="px-5 py-3 text-xs text-slate-400">
+                    <span class="mr-1 inline-block size-2 rounded-full bg-sky-400"></span>Available &nbsp;
+                    <span class="mr-1 inline-block size-2 rounded-full bg-cyan-400"></span>Busy &nbsp;
+                    <span class="mr-1 inline-block size-2 rounded-full bg-indigo-400"></span>Scheduled &nbsp;
+                    <span class="mr-1 inline-block size-2 rounded-full bg-slate-400"></span>Off
                 </div>
             </div>
         </div>
@@ -80,24 +87,27 @@
     </div>
 
     {{-- Recently Completed Services --}}
-    <div class="rounded-xl border border-zinc-200 bg-white">
-        <div class="flex items-center justify-between border-b border-zinc-100 px-5 py-4">
-            <h2 class="text-base font-semibold text-zinc-900">Recently Completed Services</h2>
-            <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700">View all</a>
+    <div class="ops-panel">
+        <div class="ops-panel-header">
+            <div>
+                <h2 class="ops-panel-title">Recently Completed Services</h2>
+                <p class="ops-panel-copy">Latest finished jobs with duration and rating context.</p>
+            </div>
+            <a href="#" class="ops-link">View all</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-zinc-100">
-                        <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Client</th>
-                        <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Service</th>
-                        <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Cleaner</th>
-                        <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Completed</th>
-                        <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Duration</th>
-                        <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Rating</th>
+                    <tr class="ops-table-head">
+                        <th class="px-5 py-3">Client</th>
+                        <th class="px-5 py-3">Service</th>
+                        <th class="px-5 py-3">Cleaner</th>
+                        <th class="px-5 py-3">Completed</th>
+                        <th class="px-5 py-3">Duration</th>
+                        <th class="px-5 py-3">Rating</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-zinc-100">
+                <tbody class="ops-table-body">
                     @php
                         $completed = [
                             ['client'=>'Ana Villanueva', 'service'=>'Deep Cleaning',     'cleaner'=>'Ana Reyes',     'date'=>'Mar 11, 2026', 'duration'=>'3h 20m', 'rating'=>5],
@@ -108,18 +118,18 @@
                         ];
                     @endphp
                     @foreach($completed as $job)
-                    <tr class="hover:bg-zinc-50 transition-colors">
+                    <tr class="ops-table-row">
                         <td class="px-5 py-3.5">
                             <div class="flex items-center gap-2.5">
                                 @php $jp = explode(' ', $job['client']); $ji = strtoupper(substr($jp[0],0,1).(isset($jp[1])?substr($jp[1],0,1):'')); @endphp
-                                <div class="flex size-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-700">{{ $ji }}</div>
-                                <span class="font-medium text-zinc-800">{{ $job['client'] }}</span>
+                                <div class="ops-avatar">{{ $ji }}</div>
+                                <span class="font-medium text-slate-100">{{ $job['client'] }}</span>
                             </div>
                         </td>
-                        <td class="px-5 py-3.5 text-zinc-600">{{ $job['service'] }}</td>
-                        <td class="px-5 py-3.5 text-zinc-600">{{ $job['cleaner'] }}</td>
-                        <td class="px-5 py-3.5 text-zinc-500 whitespace-nowrap">{{ $job['date'] }}</td>
-                        <td class="px-5 py-3.5 text-zinc-500">{{ $job['duration'] }}</td>
+                        <td class="px-5 py-3.5 text-slate-300">{{ $job['service'] }}</td>
+                        <td class="px-5 py-3.5 text-slate-300">{{ $job['cleaner'] }}</td>
+                        <td class="px-5 py-3.5 whitespace-nowrap text-slate-400">{{ $job['date'] }}</td>
+                        <td class="px-5 py-3.5 text-slate-400">{{ $job['duration'] }}</td>
                         <td class="px-5 py-3.5">
                             <div class="flex items-center gap-0.5">
                                 @for($i = 1; $i <= 5; $i++)
@@ -136,4 +146,5 @@
         </div>
     </div>
 
+    </div>
 </div>

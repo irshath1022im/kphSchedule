@@ -3,9 +3,9 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-zinc-950 text-zinc-100">
+    <body class="app-shell-body">
         <flux:sidebar sticky collapsible="mobile" class="sidebar-panel">
-            <flux:sidebar.header class="border-b border-zinc-800/90">
+            <flux:sidebar.header class="border-b border-sky-300/12">
                 <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
             </flux:sidebar.header>
@@ -51,7 +51,7 @@
                 </flux:sidebar.item>
             </flux:sidebar.nav>
 
-            <div class="hidden border-t border-zinc-800/90 pt-2 lg:block">
+            <div class="hidden border-t border-sky-300/12 pt-2 lg:block">
                 <x-desktop-user-menu :name="auth()->user()->name" />
             </div>
         </flux:sidebar>
@@ -111,7 +111,9 @@
             </flux:dropdown>
         </flux:header>
 
-        {{ $slot }}
+        <div class="app-shell-content">
+            {{ $slot }}
+        </div>
 
         @fluxScripts
     </body>

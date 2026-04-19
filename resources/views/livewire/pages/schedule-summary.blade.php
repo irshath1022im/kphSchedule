@@ -1,3 +1,4 @@
+<div class="ops-page">
 <div class="schedule-page">
 
     @php
@@ -53,20 +54,20 @@
 
     @if ($schedule->isNotEmpty())
         <div class="mb-6 grid gap-3 md:grid-cols-3">
-            <div class="rounded-3xl border border-cyan-400/20 bg-linear-to-br from-cyan-950/70 via-zinc-900 to-zinc-950 p-5 text-white shadow-sm">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-300">Periods</p>
-                <p class="mt-2 text-3xl font-black">{{ $totalPeriods }}</p>
-                <p class="mt-1 text-sm text-zinc-300">Rows in the current date range</p>
+            <div class="ops-stat-card-accent rounded-3xl p-5">
+                <p class="ops-stat-label text-cyan-100/75">Periods</p>
+                <p class="mt-2 text-3xl font-black text-slate-50">{{ $totalPeriods }}</p>
+                <p class="mt-1 text-sm text-cyan-100/70">Rows in the current date range</p>
             </div>
-            <div class="rounded-3xl border border-zinc-700 bg-zinc-900/75 p-5 shadow-sm ring-1 ring-white/5">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-400">Hours</p>
-                <p class="mt-2 text-3xl font-black text-zinc-100">{{ rtrim(rtrim(number_format($totalHours, 1), '0'), '.') }}</p>
-                <p class="mt-1 text-sm text-zinc-400">Scheduled service duration</p>
+            <div class="ops-stat-card rounded-3xl p-5">
+                <p class="ops-stat-label">Hours</p>
+                <p class="mt-2 text-3xl font-black text-slate-50">{{ rtrim(rtrim(number_format($totalHours, 1), '0'), '.') }}</p>
+                <p class="mt-1 text-sm text-slate-300/72">Scheduled service duration</p>
             </div>
-            <div class="rounded-3xl border border-zinc-700 bg-zinc-900/75 p-5 shadow-sm ring-1 ring-white/5">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-400">Assigned</p>
-                <p class="mt-2 text-3xl font-black text-zinc-100">{{ $assignedCount }}</p>
-                <p class="mt-1 text-sm text-zinc-400">Periods with maid assignments</p>
+            <div class="ops-stat-card rounded-3xl p-5">
+                <p class="ops-stat-label">Assigned</p>
+                <p class="mt-2 text-3xl font-black text-slate-50">{{ $assignedCount }}</p>
+                <p class="mt-1 text-sm text-slate-300/72">Periods with maid assignments</p>
             </div>
         </div>
     @endif
@@ -75,18 +76,18 @@
     @if ($schedule->isNotEmpty())
         <div class="space-y-6">
             @foreach ($schedule as $date => $requests)
-                <section class="overflow-hidden rounded-[28px] border border-zinc-700 bg-zinc-900/75 shadow-sm ring-1 ring-white/5">
-                    <div class="flex flex-col gap-3 border-b border-zinc-700 bg-linear-to-r from-zinc-900 via-zinc-900 to-cyan-950/40 px-5 py-4 md:flex-row md:items-center md:justify-between">
+                <section class="overflow-hidden rounded-[28px] border border-sky-300/14 bg-linear-to-b from-slate-900 to-slate-950 shadow-[0_24px_60px_-32px_rgba(14,165,233,0.25)]">
+                    <div class="flex flex-col gap-3 border-b border-sky-300/10 bg-linear-to-r from-slate-950 via-slate-900 to-sky-950/40 px-5 py-4 md:flex-row md:items-center md:justify-between">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-sky-100/55">
                                 {{ \Carbon\Carbon::parse($date)->format('l') }}
                             </p>
-                            <p class="mt-1 text-xl font-black text-zinc-100">
+                            <p class="mt-1 text-xl font-black text-slate-50">
                                 {{ \Carbon\Carbon::parse($date)->format('F j, Y') }}
                             </p>
                         </div>
                         <div class="flex flex-wrap gap-2 text-sm font-semibold">
-                            <span class="inline-flex items-center rounded-full border border-zinc-600 bg-zinc-950 px-3 py-1.5 text-zinc-100">
+                            <span class="inline-flex items-center rounded-full border border-sky-300/22 bg-slate-950 px-3 py-1.5 text-slate-100">
                                 {{ $requests->count() }} row{{ $requests->count() > 1 ? 's' : '' }}
                             </span>
                             <span class="inline-flex items-center rounded-full border border-cyan-400/40 bg-cyan-500/15 px-3 py-1.5 text-cyan-200">
@@ -96,8 +97,8 @@
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-zinc-700 text-sm text-zinc-300">
-                            <thead class="bg-zinc-900/80 text-left text-[11px] font-bold uppercase tracking-[0.22em] text-zinc-500">
+                        <table class="min-w-full divide-y divide-sky-300/10 text-sm text-slate-300">
+                            <thead class="bg-slate-950/60 text-left text-[11px] font-bold uppercase tracking-[0.22em] text-sky-100/50">
                                 <tr>
                                     <th class="px-5 py-3">Time Range</th>
                                     <th class="px-5 py-3">Status</th>
@@ -108,7 +109,7 @@
                                     <th class="px-5 py-3 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-zinc-800 bg-zinc-950/40">
+                            <tbody class="divide-y divide-sky-300/8 bg-slate-950/30">
                             @forelse ($requests as $request)
                                 @php
                                     $statusStyle = match($request->status) {
@@ -135,13 +136,13 @@
                                         : $startTime->copy()->addMinutes((int) round(((float) $request->duration_hours) * 60));
                                 @endphp
 
-                                <tr class="align-top transition hover:bg-zinc-800/40">
+                                <tr class="align-top transition hover:bg-sky-400/6">
                                     <td class="px-5 py-4">
                                         <div class="flex items-start gap-3">
                                             <span class="mt-0.5 inline-block h-10 w-1.5 rounded-full {{ $statusRail }}"></span>
                                             <div>
-                                                <p class="font-bold text-zinc-100">{{ $startTime->format('g:i A') }} - {{ $endTime->format('g:i A') }}</p>
-                                                <p class="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-zinc-400">{{ $request->day_of_week ?: \Carbon\Carbon::parse($date)->format('l') }}</p>
+                                                <p class="font-bold text-slate-50">{{ $startTime->format('g:i A') }} - {{ $endTime->format('g:i A') }}</p>
+                                                <p class="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-slate-400">{{ $request->day_of_week ?: \Carbon\Carbon::parse($date)->format('l') }}</p>
                                             </div>
                                         </div>
                                     </td>
@@ -150,19 +151,19 @@
                                             {{ $request->status ?? 'Unknown' }}
                                         </span>
                                     </td>
-                                    <td class="px-5 py-4 font-semibold text-zinc-100">
+                                    <td class="px-5 py-4 font-semibold text-slate-100">
                                         {{ $request->service->name ?? 'No service selected' }}
                                     </td>
                                     <td class="px-5 py-4">
-                                        <p class="font-semibold text-zinc-100">{{ $clientName }}</p>
-                                        <p class="mt-1 text-xs text-zinc-500">Request #{{ $request->request_id }}</p>
+                                        <p class="font-semibold text-slate-100">{{ $clientName }}</p>
+                                        <p class="mt-1 text-xs text-slate-400">Request #{{ $request->request_id }}</p>
                                     </td>
                                     <td class="px-5 py-4">
-                                        <span class="block max-w-xs text-sm leading-6 text-zinc-700">
+                                        <span class="block max-w-xs text-sm leading-6 text-slate-400">
                                             {{ $assignedMaids->isNotEmpty() ? $assignedMaids->join(', ') : 'No maids assigned' }}
                                         </span>
                                     </td>
-                                    <td class="px-5 py-4 font-semibold text-zinc-100">
+                                    <td class="px-5 py-4 font-semibold text-slate-100">
                                         {{ rtrim(rtrim(number_format($request->duration_hours, 1), '0'), '.') }}h
                                     </td>
                                     <td class="px-5 py-4 text-right">
@@ -173,7 +174,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-5 py-8 text-center text-sm font-medium text-zinc-500">
+                                    <td colspan="7" class="px-5 py-8 text-center text-sm font-medium text-slate-400">
                                         No periods assigned for this date.
                                     </td>
                                 </tr>
@@ -195,5 +196,7 @@
             <p class="empty-state-text">Try adjusting your date filters above</p>
         </div>
     @endif
+
+</div>
 
 </div>

@@ -59,9 +59,9 @@
             </div>
         </form>
 
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600">
+        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-slate-400">
             <span>{{ __('Already have an account?') }}</span>
-            <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+            <flux:link class="font-medium text-sky-200!" :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
         </div>
     </div>
 </x-layouts::auth>

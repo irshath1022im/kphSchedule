@@ -1,20 +1,23 @@
-﻿ <div class="lg:col-span-2 rounded-xl border border-zinc-200 bg-white">
-            <div class="flex items-center justify-between border-b border-zinc-100 px-5 py-4">
-                <h2 class="text-base font-semibold text-zinc-900">Recent Service Requests</h2>
-                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700">View all</a>
+﻿ <div class="lg:col-span-2 ops-panel">
+            <div class="ops-panel-header">
+                <div>
+                    <h2 class="ops-panel-title">Recent Service Requests</h2>
+                    <p class="ops-panel-copy">Latest bookings flowing through the daily operations queue.</p>
+                </div>
+                <a href="#" class="ops-link">View all</a>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
-                        <tr class="border-b border-zinc-100">
-                            <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Client</th>
-                            <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Service Type</th>
-                            <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Scheduled</th>
-                            <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Assigned To</th>
-                            <th class="px-5 py-3 text-left text-xs font-medium text-zinc-500">Status</th>
+                        <tr class="ops-table-head">
+                            <th class="px-5 py-3">Client</th>
+                            <th class="px-5 py-3">Service Type</th>
+                            <th class="px-5 py-3">Scheduled</th>
+                            <th class="px-5 py-3">Assigned To</th>
+                            <th class="px-5 py-3">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-100">
+                    <tbody class="ops-table-body">
                         @php
                             $requests = [
                                 ['client'=>'Maria Santos',   'service'=>'Deep Cleaning',     'date'=>'Today, 09:00 AM', 'cleaner'=>'Ana Reyes',    'status'=>'in-progress', 'color'=>'blue'],
@@ -26,24 +29,24 @@
                             ];
                         @endphp
                         @foreach($requests as $req)
-                        <tr class="hover:bg-zinc-50 transition-colors">
+                        <tr class="ops-table-row">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2.5">
                                     @php $parts = explode(' ', $req['client']); $ini = strtoupper(substr($parts[0],0,1).(isset($parts[1])?substr($parts[1],0,1):'')); @endphp
-                                    <div class="flex size-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">{{ $ini }}</div>
-                                    <span class="font-medium text-zinc-800">{{ $req['client'] }}</span>
+                                    <div class="ops-avatar">{{ $ini }}</div>
+                                    <span class="font-medium text-slate-100">{{ $req['client'] }}</span>
                                 </div>
                             </td>
-                            <td class="px-5 py-3.5 text-zinc-600">{{ $req['service'] }}</td>
-                            <td class="px-5 py-3.5 text-zinc-500 whitespace-nowrap">{{ $req['date'] }}</td>
-                            <td class="px-5 py-3.5 text-zinc-600">{{ $req['cleaner'] }}</td>
+                            <td class="px-5 py-3.5 text-slate-300">{{ $req['service'] }}</td>
+                            <td class="px-5 py-3.5 whitespace-nowrap text-slate-400">{{ $req['date'] }}</td>
+                            <td class="px-5 py-3.5 text-slate-300">{{ $req['cleaner'] }}</td>
                             <td class="px-5 py-3.5">
                                 @if($req['status'] === 'in-progress')
-                                    <span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">In Progress</span>
+                                    <span class="ops-status-chip ops-status-busy">In Progress</span>
                                 @elseif($req['status'] === 'pending')
-                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">Pending</span>
+                                    <span class="ops-status-chip ops-status-scheduled">Pending</span>
                                 @else
-                                    <span class="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700">Scheduled</span>
+                                    <span class="ops-status-chip ops-status-available">Scheduled</span>
                                 @endif
                             </td>
                         </tr>

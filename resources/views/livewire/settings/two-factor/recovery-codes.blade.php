@@ -1,14 +1,14 @@
 ﻿<div
-    class="py-6 space-y-6 border shadow-sm rounded-xl border-zinc-200"
+    class="settings-recovery-panel py-6 space-y-6"
     wire:cloak
     x-data="{ showRecoveryCodes: false }"
 >
     <div class="px-6 space-y-2">
-        <div class="flex items-center gap-2">
-            <flux:icon.lock-closed variant="outline" class="size-4"/>
+        <div class="flex items-center gap-2 text-slate-50">
+            <flux:icon.lock-closed variant="outline" class="size-4 text-sky-100"/>
             <flux:heading size="lg" level="3">{{ __('2FA recovery codes') }}</flux:heading>
         </div>
-        <flux:text variant="subtle">
+        <flux:text variant="subtle" class="text-slate-300/72">
             {{ __('Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.') }}
         </flux:text>
     </div>
@@ -65,7 +65,7 @@
 
                 @if (filled($recoveryCodes))
                     <div
-                        class="grid gap-1 p-4 font-mono text-sm rounded-lg bg-zinc-100"
+                        class="settings-recovery-grid"
                         role="list"
                         aria-label="{{ __('Recovery codes') }}"
                     >
@@ -79,7 +79,7 @@
                             </div>
                         @endforeach
                     </div>
-                    <flux:text variant="subtle" class="text-xs">
+                    <flux:text variant="subtle" class="text-xs text-slate-400">
                         {{ __('Each recovery code can be used once to access your account and will be removed after use. If you need more, click Regenerate codes above.') }}
                     </flux:text>
                 @endif

@@ -3,16 +3,16 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white antialiased">
-        <div class="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-            <div class="flex w-full max-w-sm flex-col gap-2">
+    <body class="auth-shell-body">
+        <div class="auth-shell-center">
+            <div class="auth-shell-form-wrap auth-shell-form-wrap-narrow gap-4">
                 <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
-                    <span class="flex h-9 w-9 mb-1 items-center justify-center rounded-md">
-                        <x-app-logo-icon class="size-9 fill-current text-black" />
+                    <span class="auth-shell-brand-mark mb-1 h-9 w-9">
+                        <x-app-logo-icon class="size-9 fill-current text-sky-100" />
                     </span>
                     <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
                 </a>
-                <div class="flex flex-col gap-6">
+                <div class="auth-shell-card flex flex-col gap-6">
                     {{ $slot }}
                 </div>
             </div>

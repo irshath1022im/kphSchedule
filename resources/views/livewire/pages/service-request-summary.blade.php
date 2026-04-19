@@ -1,4 +1,5 @@
-﻿<div class="schedule-page space-y-6" x-data="{ tab: 'all' }">
+﻿<div class="ops-page">
+<div class="ops-shell space-y-6" x-data="{ tab: 'all' }">
 
     @if (session('message'))
         <div class="mb-4 rounded-lg border border-emerald-400/30 bg-emerald-500/15 p-4 text-sm text-emerald-200">
@@ -6,68 +7,75 @@
         </div>
     @endif
 
-    <a href="{{ route('new-service-request') }}" class="rounded-lg bg-cyan-500 px-4 py-2 text-zinc-950 hover:bg-cyan-400">New Service Request</a>
-
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div class="ops-hero">
+        <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-zinc-100">Service Request Summary</h1>
-            <p class="text-sm text-zinc-400">Track service requested, service-hour history, completion status, and client review performance.</p>
+            <p class="ops-eyebrow">Request Reporting</p>
+            <h1 class="ops-title">Service Request Summary</h1>
+            <p class="ops-subtitle">Track requested services, service-hour history, completion status, and assignments with the same blue reporting language used across the app.</p>
         </div>
-        <div class="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-300">
-            Last updated: {{ now()->format('M d, Y h:i A') }}
+        <div class="flex flex-wrap items-center gap-3">
+            <a href="{{ route('new-service-request') }}" class="ops-btn-primary">New Service Request</a>
+            <div class="rounded-full border border-sky-300/16 bg-slate-950/70 px-4 py-2 text-sm font-medium text-slate-300">
+                Last updated: {{ now()->format('M d, Y h:i A') }}
+            </div>
+        </div>
         </div>
     </div>
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-zinc-400">Total Requests</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-100">{{ $serviceRequests->count() }}</p>
+        <div class="ops-stat-card">
+            <p class="ops-stat-label">Total Requests</p>
+            <p class="ops-stat-value">{{ $serviceRequests->count() }}</p>
         </div>
-        <div class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-zinc-400">Total Service Hours</p>
-            <p class="mt-2 text-3xl font-bold text-zinc-100">{{ number_format($serviceRequests->pluck('serviceRequestPeriods')->flatten()->sum('duration_hours'), 1) }}</p>
+        <div class="ops-stat-card">
+            <p class="ops-stat-label">Total Service Hours</p>
+            <p class="ops-stat-value">{{ number_format($serviceRequests->pluck('serviceRequestPeriods')->flatten()->sum('duration_hours'), 1) }}</p>
         </div>
-        <div class="rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-emerald-200">Completed</p>
-            <p class="mt-2 text-3xl font-bold text-emerald-200">{{ $serviceRequests->where('status', 'completed')->count() }}</p>
+        <div class="ops-stat-card-accent">
+            <p class="ops-stat-label text-cyan-100/75">Completed</p>
+            <p class="ops-stat-value text-cyan-100">{{ $serviceRequests->where('status', 'completed')->count() }}</p>
         </div>
-        <div class="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-blue-200">In Progress</p>
-            <p class="mt-2 text-3xl font-bold text-blue-200">{{ $serviceRequests->where('status', 'in_progress')->count() }}</p>
+        <div class="ops-stat-card">
+            <p class="ops-stat-label">In Progress</p>
+            <p class="ops-stat-value">{{ $serviceRequests->where('status', 'in_progress')->count() }}</p>
         </div>
-        <div class="rounded-xl border border-amber-400/30 bg-amber-500/10 p-4">
-            <p class="text-xs font-medium uppercase tracking-wide text-amber-200">Pending + Cancelled</p>
-            <p class="mt-2 text-3xl font-bold text-amber-200">{{ $serviceRequests->whereIn('status', ['pending', 'cancelled'])->count() }}</p>
+        <div class="ops-stat-card">
+            <p class="ops-stat-label">Pending + Cancelled</p>
+            <p class="ops-stat-value">{{ $serviceRequests->whereIn('status', ['pending', 'cancelled'])->count() }}</p>
         </div>
     </section>
 
     <section class="grid grid-cols-1 gap-6 ">
-        <div class="xl:col-span-2 rounded-xl border border-zinc-700 bg-zinc-900/75">
-            <div class="flex flex-col gap-4 border-b border-zinc-700 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 class="text-base font-semibold text-zinc-100">Service Request Records</h2>
-                <div class="inline-flex rounded-lg border border-zinc-700 bg-zinc-900 p-1">
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'all' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'all'">All</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'completed' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'completed'">Completed</button>
-                    <button type="button" class="rounded-md px-3 py-1.5 text-xs font-medium" :class="tab === 'open' ? 'bg-cyan-500 text-zinc-950 shadow-sm' : 'text-zinc-300'" @click="tab = 'open'">Open</button>
+        <div class="xl:col-span-2 ops-panel">
+            <div class="ops-panel-header">
+                <div>
+                    <h2 class="ops-panel-title">Service Request Records</h2>
+                    <p class="ops-panel-copy">Filter request records by state while keeping charges, hours, and assignments visible.</p>
+                </div>
+                <div class="inline-flex rounded-full border border-sky-300/14 bg-slate-950/70 p-1">
+                    <button type="button" class="rounded-full px-3 py-1.5 text-xs font-medium transition" :class="tab === 'all' ? 'bg-sky-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-sky-400/10'" @click="tab = 'all'">All</button>
+                    <button type="button" class="rounded-full px-3 py-1.5 text-xs font-medium transition" :class="tab === 'completed' ? 'bg-sky-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-sky-400/10'" @click="tab = 'completed'">Completed</button>
+                    <button type="button" class="rounded-full px-3 py-1.5 text-xs font-medium transition" :class="tab === 'open' ? 'bg-sky-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-sky-400/10'" @click="tab = 'open'">Open</button>
                 </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-225 text-sm">
                     <thead>
-                        <tr class="border-b border-zinc-700 text-left">
-                            <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">#</th>
-                            <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Request</th>
-                            <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Requested</th>
-                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Frequency</th>
-                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Hours</th>
-                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Charge</th>
-                            <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Completion Status</th>
-                            <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Assigned Maid </span></th>
+                        <tr class="ops-table-head">
+                            <th class="px-5 py-3">#</th>
+                            <th class="px-5 py-3">Request</th>
+                            <th class="px-5 py-3">Service Requested</th>
+                             <th class="px-5 py-3">Frequency</th>
+                             <th class="px-5 py-3">Service Hours</th>
+                             <th class="px-5 py-3">Service Charge</th>
+                            <th class="px-5 py-3">Completion Status</th>
+                            <th class="px-5 py-3">Assigned Maid </span></th>
 
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-800">
+                    <tbody class="ops-table-body">
                         @foreach ($serviceRequests as $request)
                             @php
                                 $status = strtolower($request->status);
@@ -78,33 +86,33 @@
 
                             <tr
                                 x-show="tab === 'all' || (tab === 'completed' && {{ $isCompleted ? 'true' : 'false' }}) || (tab === 'open' && {{ $isOpen ? 'true' : 'false' }})"
-                                class="align-top hover:bg-zinc-800/40"
+                                class="align-top transition hover:bg-sky-400/6"
                             >
 
                                 <td class="px-5 py-4">
-                                    <p class="font-semibold text-zinc-100">{{ $request->id }}</p>
+                                    <p class="font-semibold text-slate-100">{{ $request->id }}</p>
                                 </td>
                                 <td class="px-5 py-4">
                                     {{-- <p class="font-semibold text-zinc-900">{{ $request['code'] }}</p> --}}
-                                    <p class="mt-1 text-xs text-zinc-500">
+                                    <p class="mt-1 text-xs text-slate-400">
                                         {{ $request->client->name }}
                                     </p>
-                                    <p class="text-xs text-zinc-500">Requested on {{ $request->service_request_date }}</p>
+                                    <p class="text-xs text-slate-500">Requested on {{ $request->service_request_date }}</p>
                                 </td>
-                                <td class="px-5 py-4 text-zinc-300">
+                                <td class="px-5 py-4 text-slate-300">
                                     {{ $request->serviceRequestPeriods?->first()?->service->name ?? 'N/A' }}
                                 </td>
 
-                                 <td class="px-5 py-4 text-zinc-300">
+                                 <td class="px-5 py-4 text-slate-300">
                                     {{ $request->frequency ? ucfirst($request->frequency) : 'N/A' }}
                                 </td>
 
 
 
                                 <td class="px-5 py-4">
-                                     <p class="font-semibold text-zinc-100">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 0) }} hrs</p>
-                                     <div class="mt-2 h-1.5 w-24 rounded-full bg-zinc-800">
-                                         <div class="h-1.5 rounded-full bg-cyan-500" style="width: {{ min(100, ($request->serviceRequestPeriods?->sum('duration_hours') ?? 0) * 20) }}%"></div>
+                                     <p class="font-semibold text-slate-100">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 0) }} hrs</p>
+                                     <div class="mt-2 h-1.5 w-24 rounded-full bg-slate-800">
+                                         <div class="h-1.5 rounded-full bg-sky-400" style="width: {{ min(100, ($request->serviceRequestPeriods?->sum('duration_hours') ?? 0) * 20) }}%"></div>
                                     </div>
                                 </td>
 
@@ -112,26 +120,26 @@
 
                                 @if ($request->serviceCharge)
                                     <td class="px-5 py-4">
-                                        <p class="font-semibold text-zinc-100">{{ $request->serviceCharge?->first()?->amount ? 'QR ' . number_format($request->serviceCharge->first()->amount, 0) : 'N/A' }}</p>
-                                        <p class="mt-1 text-xs text-zinc-500">{{ $request->serviceCharge?->first()?->invoice_date ? \Carbon\Carbon::parse($request->serviceCharge->first()->invoice_date)->toDateString() : 'N/A' }}</p>
+                                        <p class="font-semibold text-slate-100">{{ $request->serviceCharge?->amount ? 'QR ' . number_format($request->serviceCharge->amount, 0) : 'N/A' }}</p>
+                                        <p class="mt-1 text-xs text-slate-500">{{ $request->serviceCharge?->invoice_date ? \Carbon\Carbon::parse($request->serviceCharge->invoice_date)->toDateString() : 'N/A' }}</p>
                                     </td>
 
                                 @else
 
                                     <td class="px-5 py-4">
-                                        <span class="text-xs text-zinc-500">N/A</span>
+                                        <span class="text-xs text-slate-500">N/A</span>
                                     </td>
                                 @endif
 
                                 <td class="px-5 py-4">
                                     @if ($request->status === 'completed')
-                                        <span class="inline-flex rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-1 text-xs font-semibold text-emerald-200">Completed</span>
+                                        <span class="ops-status-chip ops-status-available">Completed</span>
                                     @elseif ($request->status === 'in progress')
-                                        <span class="inline-flex rounded-full border border-blue-400/40 bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-200">In Progress</span>
+                                        <span class="ops-status-chip ops-status-busy">In Progress</span>
                                     @elseif ($request->status === 'pending')
-                                        <span class="inline-flex rounded-full border border-amber-400/40 bg-amber-500/15 px-2.5 py-1 text-xs font-semibold text-amber-200">Pending</span>
+                                        <span class="ops-status-chip ops-status-scheduled">Pending</span>
                                     @else
-                                        <span class="inline-flex rounded-full border border-zinc-500/40 bg-zinc-500/15 px-2.5 py-1 text-xs font-semibold text-zinc-200">Cancelled</span>
+                                        <span class="ops-status-chip ops-status-off">Cancelled</span>
                                     @endif
                                 </td>
 
@@ -149,14 +157,14 @@
 
                                         {{-- @dump($request->assignedMaids) --}}
                                         <div class="flex items-center gap-1">
-                                           <span class="rounded-full border border-cyan-400/40 bg-cyan-500/15 px-2.5 py-1 text-xs font-semibold text-cyan-200">{{ $request->assignedMaids?->groupBy('maid_id')?->count() ?? 0  }}</span>
-                                            <span class="text-sm font-medium text-zinc-100">
+                                           <span class="rounded-full border border-sky-300/16 bg-sky-400/10 px-2.5 py-1 text-xs font-semibold text-sky-100">{{ $request->assignedMaids?->groupBy('maid_id')?->count() ?? 0  }}</span>
+                                            <span class="text-sm font-medium text-slate-100">
                                                 {{ $request->assignedMaids?->groupBy('maid_id')?->map(fn($group) => $group->first()->maid?->name)->join(', ') ?? 'N/A' }}
                                             </span>
 
                                         </div>
                                     @else
-                                        <span class="text-xs text-zinc-500">No maid assigned</span>
+                                        <span class="text-xs text-slate-500">No maid assigned</span>
                                     @endif
                                 </td>
                                 {{-- <td class="px-5 py-4">
@@ -180,10 +188,10 @@
 
                                 <td class="px-5 py-4 flex items-center gap-2">
                                     <a href="
-                                    {{ route('service-request-view', ['id' => $request->id]) }}" class="rounded border border-cyan-400/40 bg-cyan-500/10 px-2 py-1 text-cyan-200 hover:bg-cyan-500/20">view</a>
+                                    {{ route('service-request-view', ['id' => $request->id]) }}" class="ops-table-action">view</a>
 
                                      <a href="
-                                    {{ route('new-service-request', ['id' => $request->id]) }}" class="rounded border border-cyan-400/40 bg-cyan-500/10 px-2 py-1 text-cyan-200 hover:bg-cyan-500/20">Edit</a>
+                                    {{ route('new-service-request', ['id' => $request->id]) }}" class="ops-table-action">Edit</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -247,4 +255,6 @@
             </div>
         </div> --}}
     </section>
+</div>
+
 </div>
