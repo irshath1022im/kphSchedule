@@ -8,12 +8,12 @@
 >
     @php
         $totalPeriods = $serviceRequest->serviceRequestPeriods->count();
-        $assignedCleanerCount = $serviceRequest->serviceRequestPeriods
+        $assignedMaidNames = $serviceRequest->serviceRequestPeriods
             ->flatMap(fn ($period) => $period->maidAssignments ?? collect())
             ->pluck('maid.name')
             ->filter()
-            ->unique()
-            ->count();
+            ->unique();
+        $assignedCleanerCount = $assignedMaidNames->count();
         $requestStatusClass = match (strtolower((string) $serviceRequest->status)) {
             'scheduled' => 'service-request-status-scheduled',
             'pending' => 'service-request-status-pending',
@@ -24,13 +24,15 @@
         };
     @endphp
 
-    <div class="service-request-shell border-sky-200/70 bg-sky-100/80 text-sky-900 shadow-[0_24px_80px_-36px_rgba(59,130,246,0.24)]">
+    <div class="service-request-shell w-full max-w-none border-sky-200/70 bg-sky-100/80 text-sky-900 shadow-[0_24px_80px_-36px_rgba(59,130,246,0.24)]">
         <div class="service-request-hero border-sky-300/70 bg-linear-to-br from-sky-200 via-blue-400 to-cyan-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
             <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div>
                     <p class="service-request-section-title text-sky-700">Request Overview</p>
                     <h2 class="service-request-heading text-sky-950">Service Request Details</h2>
-                  
+                    <p class="mt-3 max-w-3xl text-sm leading-6 text-sky-800/90 sm:text-base">
+                        Review the request summary, scheduling details, payment reference, and assigned team from one operational view.
+                    </p>
                 </div>
 
                 <div class="service-request-action-row lg:max-w-xl lg:justify-end">
@@ -69,7 +71,7 @@
                 </div>
                 <div class="service-request-stat-card border-sky-200/70 bg-sky-100/80 shadow-sm">
                     <p class="service-request-stat-label text-sky-700">Status</p>
-                    <p class="mt-2"><span class="service-request-status-pill {{ $requestStatusClass }}">{{ $serviceRequest->status ?? 'N/A' }}</span></p>
+                    <p class="mt-2"><span class="service-request-status-pill bg-green-400 {{ $requestStatusClass }}">{{ $serviceRequest->status ?? 'N/A' }}</span></p>
                     <p class="service-request-stat-note text-sky-700/85">Live request state</p>
                 </div>
                 <div class="service-request-stat-card border-sky-200/70 bg-sky-100/80 shadow-sm">
@@ -79,30 +81,60 @@
                 </div>
             </div>
 
-            <div class="service-request-info-grid">
-                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
-                    <p class="service-request-info-label text-sky-700">Frequency</p>
-                    <p class="service-request-info-value text-sky-950">{{ $serviceRequest->frequency ?? 'N/A' }}</p>
-                </div>
-                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
-                    <p class="service-request-info-label text-sky-700">Periods</p>
-                    <p class="service-request-info-value text-sky-950">{{ $totalPeriods }}</p>
-                </div>
-                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
-                    <p class="service-request-info-label text-sky-700">Assigned Cleaners</p>
-                    <p class="service-request-info-value text-sky-950">{{ $assignedCleanerCount }}</p>
-                </div>
-                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
-                    <p class="service-request-info-label text-sky-700">Receipt No.</p>
-                    <p class="service-request-info-value text-sky-950">{{ $serviceRequest->serviceCharge?->receipt_no ?? 'N/A' }}</p>
-                </div>
-            </div>
+            <div class="mt-6 grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.85fr)]">
+                <div class="space-y-4">
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                            <p class="service-request-info-label text-sky-700">Frequency</p>
+                            <p class="service-request-info-value text-sky-950">{{ $serviceRequest->frequency ?? 'N/A' }}</p>
+                        </div>
+                        <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                            <p class="service-request-info-label text-sky-700">Periods</p>
+                            <p class="service-request-info-value text-sky-950">{{ $totalPeriods }}</p>
+                        </div>
+                        <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                            <p class="service-request-info-label text-sky-700">Request ID</p>
+                            <p class="service-request-info-value text-sky-950">#{{ $serviceRequest->id }}</p>
+                        </div>
+                        <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                            <p class="service-request-info-label text-sky-700">Receipt No.</p>
+                            <p class="service-request-info-value text-sky-950">{{ $serviceRequest->serviceCharge?->receipt_no ?? 'N/A' }}</p>
+                        </div>
+                    </div>
 
-            <div class="service-request-note-card border-sky-200/70 bg-sky-100/78 shadow-sm">
-                <p class="service-request-info-label text-sky-700">Notes</p>
-                <p class="mt-2 text-sm leading-6 text-sky-800">{{ $serviceRequest->notes ?: 'No notes provided.' }}</p>
+                    <div class="service-request-note-card border-sky-200/70 bg-sky-100/78 shadow-sm">
+                        <div class="flex items-center justify-between gap-3">
+                            <p class="service-request-info-label text-sky-700">Notes</p>
+                            <span class="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600/80">Internal</span>
+                        </div>
+                        <p class="mt-3 text-sm leading-6 text-sky-800">{{ $serviceRequest->notes ?: 'No notes provided.' }}</p>
+                    </div>
+                </div>
+
+                <div class="service-request-assignees border-sky-200/70 bg-sky-100/78 shadow-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="service-request-info-label text-sky-700">Assigned Maids</p>
+                            <p class="mt-1 text-sm text-sky-800/85">Current cleaners linked to this request.</p>
+                        </div>
+                        <span class="inline-flex items-center rounded-full border border-sky-300/35 bg-sky-200/70 px-3 py-1 text-xs font-semibold text-sky-800">
+                            {{ $assignedCleanerCount }} Total
+                        </span>
+                    </div>
+
+                    @if($assignedMaidNames->isNotEmpty())
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            @foreach($assignedMaidNames as $assignedMaidName)
+                                <div class="service-request-assignee border-sky-300/30 bg-sky-100 text-sky-800">
+                                    {{ $assignedMaidName }}
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="mt-4 text-sm leading-6 text-sky-800">No maids assigned.</p>
+                    @endif
+                </div>
             </div>
-        
 
         </div>
 
@@ -227,13 +259,13 @@
     <div
         x-show="showScheduleModal"
         x-cloak
-        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        class="fixed inset-0 z-120 flex items-start justify-center overflow-y-auto p-4 pt-8 sm:pt-12"
         aria-labelledby="assign-cleaner-modal-title"
         role="dialog"
         aria-modal="true"
     >
         <div
-            class="absolute inset-0 bg-sky-950/30 backdrop-blur-sm"
+            class="absolute inset-0 z-0 bg-sky-950/30 backdrop-blur-sm"
             aria-hidden="true"
         ></div>
 
@@ -245,7 +277,7 @@
             x-transition:leave="transition ease-in duration-250"
             x-transition:leave-start="opacity-100 scale-250"
             x-transition:leave-end="opacity-0 scale-95"
-            class="service-request-modal-panel"
+            class="service-request-modal-panel z-10"
         >
             <div class="flex items-start justify-between">
                 <h3 id="assign-cleaner-modal-title" class="text-lg font-semibold text-slate-50">Create Schedule</h3>
@@ -271,13 +303,13 @@
     <div
         x-show="showAssignCleanerModal"
         x-cloak
-        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        class="fixed inset-0 z-120 flex items-start justify-center overflow-y-auto p-4 pt-8 sm:pt-12"
         aria-labelledby="assign-cleaner-modal-title"
         role="dialog"
         aria-modal="true"
     >
         <div
-            class="absolute inset-0 bg-black/50"
+            class="absolute inset-0 z-0 bg-black/50"
             aria-hidden="true"
         ></div>
 
@@ -289,7 +321,7 @@
             x-transition:leave="transition ease-in duration-250"
             x-transition:leave-start="opacity-100 scale-250"
             x-transition:leave-end="opacity-0 scale-95"
-            class="service-request-modal-panel"
+            class="service-request-modal-panel z-10"
         >
             <div class="flex items-start justify-between">
                 <h3 id="assign-cleaner-modal-title" class="text-lg font-semibold text-slate-50">Assign Cleaner</h3>

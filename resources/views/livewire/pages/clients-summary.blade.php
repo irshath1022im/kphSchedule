@@ -1,5 +1,5 @@
 ﻿<div class="ops-page">
-<div class="ops-shell" x-data="{ tab: 'profiles' }">
+<div class="ops-shell w-full max-w-none" x-data="{ tab: 'profiles' }">
     <div class="ops-hero">
         <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
         <div>

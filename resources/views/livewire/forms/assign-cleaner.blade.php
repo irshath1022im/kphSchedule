@@ -1,5 +1,5 @@
 <div>
-    <h3 class="text-lg font-bold tracking-tight text-slate-50">Assign Cleaner for
+    <h3 class="text-lg font-bold tracking-tight text-slate-50 ">Assign Cleaner for
     {{  $service_request_id ? 'Service Request '.$service_request_id.' ' : 'Indivustual' }}
 
    </h3>
