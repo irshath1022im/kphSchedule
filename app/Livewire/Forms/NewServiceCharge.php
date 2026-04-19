@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\Service;
 use App\Models\ServiceRequest;
+use Illuminate\Http\Request;
 use Livewire\Component;
 
 class NewServiceCharge extends Component
@@ -12,31 +14,51 @@ class NewServiceCharge extends Component
     public $serviceRequest;
     public $services;
     public $service_id;
-    public $service_date;
-    public $end_date;
+    public $invoice_date;
     public $material_consumption;
     public $description;
-    public $worked_hours;
-    public $assigned_maids;
     public $amount;
+    public $receipt_no;
+    public $payment_method;
+    public $paymentMethods = [];
 
 
-    public function mount()
+    public function mount(Request $request, $id)
     {
         // You can initialize any properties or perform any setup logic here if needed
 
-        if(request()->has('sr')) {
-          $this->service_request_id= request()->get('sr');
+
+        // dd($id);
+        $this->paymentMethods = ['Cash', 'Fawran', 'Bank Transfer', 'Other']; // Example payment methods, you can customize this as needed
+
+        // dd($request->all());
+//
+        if($id) {
+
+          $this->service_request_id= $id;
             // You can use this service request ID to load any relevant data or perform any necessary actions
 
-            $this->serviceRequest = ServiceRequest::findOrFail($this->service_request_id);
-            $this->services = $this->serviceRequest->services;
+            $this->serviceRequest = ServiceRequest::with('serviceRequestPeriods', 'serviceCharge', 'client')->findOrFail($this->service_request_id);
+            $this->services = Service::all(); // Assuming you have a Services model to fetch available services
 
+            //check the url query has sc parameter for edit mode
+            if($request->has('sc')) {
+                $serviceChargeId = $request->query('sc');
+                $serviceCharge = $this->serviceRequest->serviceCharge()->find($serviceChargeId);
+                if($serviceCharge) {
+                    $this->service_id = $serviceCharge->service_id;
+                    $this->invoice_date = $serviceCharge->invoice_date;
+                    $this->material_consumption = $serviceCharge->material_consumption;
+                    $this->description = $serviceCharge->description;
+                    $this->amount = $serviceCharge->amount;
+                    $this->receipt_no = $serviceCharge->receipt_no;
+                    $this->payment_method = $serviceCharge->payment_method;
+                } else {
+                    redirect()->route('service-request-view', ['id' => $this->service_request_id])->with('error', 'Service charge not found for editing.')->send();
+                }
 
-
-        }else{
-            return redirect()->route('service-request-summary'); // Redirect to service request summary if no service request ID is provided
-        }
+         }
+    }
 
     }
 
@@ -44,18 +66,19 @@ class NewServiceCharge extends Component
     {
         $validated = $this->validate([
             'service_request_id' => 'required|exists:service_requests,id',
-            'service_id' => 'required|exists:services,id',
-            'service_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:service_date',
+            'invoice_date' => 'required|date',
             'material_consumption' => 'boolean',
             'description' => 'nullable|string',
-            'worked_hours' => 'required|integer|min:0',
-            'assigned_maids' => 'required|integer|min:0',
             'amount' => 'required|numeric|min:0',
+            'receipt_no' => 'nullable|string|max:255',
+            'payment_method' => 'nullable|string|max:255',
         ]);
 
 
-        $serviceCharge = \App\Models\ServiceCharge::create($validated);
+        $serviceCharge = \App\Models\ServiceCharge::updateOrCreate(
+            ['service_request_id' => $this->service_request_id],
+            $validated
+        );
 
         if($serviceCharge) {
             // You can perform any additional actions after successfully saving the service charge, such as redirecting or showing a success message

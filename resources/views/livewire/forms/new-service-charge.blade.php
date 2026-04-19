@@ -10,30 +10,40 @@
     <section class="rounded-xl border border-zinc-700 bg-zinc-900/75 p-5 shadow-sm">
         <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-400">Service Request Details</h2>
 
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 capitalize">
             <div>
                 <p class="text-xs uppercase tracking-wide text-zinc-500">Client Name</p>
-                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest->client->name }}</p>
+                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest?->client?->name }}</p>
             </div>
             <div>
                 <p class="text-xs uppercase tracking-wide text-zinc-500">Requested Date</p>
-                <p class="mt-1 font-semibold text-zinc-100">{{ \Carbon\Carbon::parse($serviceRequest->date)->toDateString() }}</p>
+                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest?->service_request_date ? \Carbon\Carbon::parse($serviceRequest->service_request_date)->toDateString() : 'N/A' }}</p>
             </div>
             <div>
                 <p class="text-xs uppercase tracking-wide text-zinc-500">Request Type</p>
-                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest->frequency }}</p>
+                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest?->frequency }}</p>
             </div>
+
+
+            {{-- start date and end date --}}
+            <div>
+                <p class="text-xs uppercase tracking-wide text-zinc-500">Work Period</p>
+                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest?->serviceRequestPeriods?->first()?->start_date ? \Carbon\Carbon::parse($serviceRequest->serviceRequestPeriods->first()->start_date)->toDateString() : 'N/A' }}</p>
+                 <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest?->serviceRequestPeriods?->first()?->start_date ? \Carbon\Carbon::parse($serviceRequest->serviceRequestPeriods->last()->end_date)->toDateString() : 'N/A' }}</p>
+            </div>
+
+
             <div>
                 <p class="text-xs uppercase tracking-wide text-zinc-500">Status</p>
-                <p class="mt-1 inline-flex rounded-full border border-zinc-500/40 bg-zinc-500/15 px-2.5 py-1 text-xs font-semibold text-zinc-200">{{ $serviceRequest->status }}</p>
+                <p class="mt-1 inline-flex rounded-full border border-zinc-500/40 bg-zinc-500/15 px-2.5 py-1 text-xs font-semibold text-zinc-200">{{ $serviceRequest?->status }}</p>
             </div>
             <div>
-                <p class="text-xs uppercase tracking-wide text-zinc-500">Service Charged</p>
-                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest->service_charged }}</p>
+                <p class="text-xs uppercase tracking-wide text-zinc-500">Service</p>
+                <p class="mt-1 font-semibold text-zinc-100">{{ $serviceRequest?->services?->first()?->name ?? 'N/A' }}</p>
             </div>
             <div class="md:col-span-2 xl:col-span-1">
                 <p class="text-xs uppercase tracking-wide text-zinc-500">Notes</p>
-                <p class="mt-1 text-sm text-zinc-300">{{ $serviceRequest->notes ?: 'No notes provided' }}</p>
+                <p class="mt-1 text-sm text-zinc-300">{{ $serviceRequest?->notes ?: 'No notes provided' }}</p>
             </div>
         </div>
     </section>
@@ -42,76 +52,80 @@
         <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-400">Service Charge Form</h2>
 
         <form action="" class="space-y-6">
-            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <div>
-                    <label class="block text-sm font-medium text-zinc-300" for="service_id">Service</label>
-                    <select name="service_id" id="service_id" wire:model="service_id" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30">
-                        <option value="">Select a service</option>
-                        @foreach ($services as $service)
-                            <option value="{{ $service->id }}">{{ $service->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('service_id')
-                        <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
+            {{-- Service & Schedule --}}
+            <div>
+                <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">Service & Schedule</p>
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    {{-- service date --}}
 
-                <div>
-                    <label class="block text-sm font-medium text-zinc-300" for="material_consumption">Material Consumption</label>
-                    <select name="material_consumption" id="material_consumption" wire:model="material_consumption" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30">
-                        <option value="">Select an option</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                    </select>
-                    @error('material_consumption')
-                        <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-300" for="invoice_date">Invoice Date</label>
+                        <input type="date" name="invoice_date" id="invoice_date" placeholder="Enter invoice date" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="invoice_date">
+                        @error('invoice_date')
+                            <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-zinc-300" for="service_date">Service Date</label>
-                    <input type="date" name="service_date" id="service_date" wire:model="service_date" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30">
-                    @error('service_date')
-                        <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-300" for="material_consumption">Material Consumption</label>
+                        <select name="material_consumption" id="material_consumption" wire:model="material_consumption" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30">
+                            <option value="">Select an option</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        @error('material_consumption')
+                            <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-zinc-300" for="end_date">End Date</label>
-                    <input type="date" name="end_date" id="end_date" wire:model="end_date" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30">
-                </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-zinc-300" for="worked_hours">Worked Hours</label>
-                    <input type="number" name="worked_hours" id="worked_hours" placeholder="Enter total worked hours" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="worked_hours">
-                    @error('worked_hours')
-                        <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-zinc-300" for="assigned_maids">Assigned Maids</label>
-                    <input type="number" name="assigned_maids" id="assigned_maids" placeholder="Enter assigned maid count" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="assigned_maids">
-                    @error('assigned_maids')
-                        <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
-                    @enderror
                 </div>
+            </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-zinc-300" for="amount">Amount</label>
-                    <input type="number" name="amount" id="amount" placeholder="Enter total amount" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="amount">
-                    @error('amount')
-                        <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-zinc-300" for="description">Description</label>
-                    <textarea name="description" id="description" rows="4" placeholder="Provide a detailed description of the service charge..." class="mt-2 block w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 py-3 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="description"></textarea>
-                    @error('description')
-                        <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
-                    @enderror
+            {{-- Payment --}}
+            <div>
+                <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">Payment</p>
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-300" for="amount">Amount</label>
+                        <input type="number" name="amount" id="amount" placeholder="Enter total amount" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="amount">
+                        @error('amount')
+                            <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-300" for="receipt_no">Receipt No</label>
+                        <input type="text" name="receipt_no" id="receipt_no" placeholder="Enter receipt number (optional)" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="receipt_no">
+                        @error('receipt_no')
+                            <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-300" for="payment_method">Payment Method</label>
+                        <select name="payment_method" id="payment_method" class="mt-2 block h-12 w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="payment_method">
+                            <option value="">Select a payment method (optional)</option>
+                            @foreach($paymentMethods as $method)
+                                <option value="{{ $method }}">{{ $method }}</option>
+                            @endforeach
+                        </select>
+                        @error('payment_method')
+                            <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
+            </div>
+
+            {{-- Notes --}}
+            <div>
+                <label class="block text-sm font-medium text-zinc-300" for="description">Description</label>
+                <textarea name="description" id="description" rows="4" placeholder="Provide a detailed description of the service charge..." class="mt-2 block w-full rounded-lg border-zinc-700 bg-zinc-950 px-4 py-3 text-base text-zinc-100 shadow-sm focus:border-cyan-400 focus:ring focus:ring-cyan-400/30" wire:model="description"></textarea>
+                @error('description')
+                    <span class="mt-1 block text-sm font-medium text-red-500">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="flex justify-end">
@@ -120,5 +134,6 @@
                 </button>
             </div>
         </form>
+
     </section>
 </div>

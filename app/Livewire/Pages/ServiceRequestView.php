@@ -84,7 +84,7 @@ class ServiceRequestView extends Component
 
     public function render()
     {
-        $this->serviceRequest = ServiceRequest::with('client','serviceRequestPeriods.service', 'assignedMaids', 'serviceCharges')
+        $this->serviceRequest = ServiceRequest::with('client','serviceRequestPeriods.service', 'assignedMaids', 'serviceCharge')
         ->orderBy('id', 'desc')->findOrFail($this->id);
 
         return view('livewire.pages.service-request-view', ['serviceRequest' => $this->serviceRequest])->layout('components.dash-board');

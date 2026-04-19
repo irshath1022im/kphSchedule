@@ -56,7 +56,7 @@ class NewServiceSchedule extends Component
         $this->editPeriodId = null;
     }
 
-   
+
     public function mount($id)
     {
         $this->request_id = $id;
@@ -71,6 +71,8 @@ class NewServiceSchedule extends Component
             'In Progress',
             'Completed',
             'Cancelled',
+            'Day-off',
+            'Postponed',
         ];
 
         $this->services = Service::all(); // Fetch all services to populate the dropdown in the form
@@ -154,7 +156,7 @@ class NewServiceSchedule extends Component
 
         }
 
-       
+
         //generate monthly service days between start date and end date
 
         $startDate = \Carbon\Carbon::parse($this->start_date);
@@ -180,7 +182,7 @@ class NewServiceSchedule extends Component
                     'duration_hours' => $this->duration_hours,
                     'status' => $this->status,
                 ]);
-         
+
 
         }
 

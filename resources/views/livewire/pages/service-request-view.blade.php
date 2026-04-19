@@ -17,12 +17,18 @@
                     <button x-on:click="showScheduleModal = true" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
                         Schedule
                     </button>
-                    <button x-on:click="showAssignCleanerModal = true" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700">
-                        Assign Cleaner
-                    </button>
-                    <a href="{{ route('new-service-charge', ['sr' => $serviceRequest->id ]) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
-                        Service Charge
-                    </a>
+
+                    @if ($serviceRequest->serviceCharge)
+                        <a href="{{ route('new-service-charge', ['id' => $serviceRequest->id, 'sc' => $serviceRequest->serviceCharge->id]) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                            Edit Service Charge
+                        </a>
+
+                    @else
+                        <a href="{{ route('new-service-charge', ['id' => $serviceRequest->id ]) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+                            Service Charge
+                        </a>
+
+                    @endif
 
                     <a href="{{ route('new-service-request', ['id' => $serviceRequest->id]) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
                         Edit Request
@@ -55,10 +61,17 @@
             </div>
 
             {{-- service charge --}}
-            @if($serviceRequest->serviceCharges->isNotEmpty())
+            @if($serviceRequest->serviceCharge)
                 <div class="mt-4 rounded-lg border border-green-200 bg-green-50 p-3">
                     <p class="text-xs font-semibold uppercase tracking-wide text-green-500">Service Charge</p>
-                    <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharges->sum('amount') ?? 'N/A' }}</p>
+                    <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharge->amount ?? 'N/A' }}</p>
+                </div>
+
+                {{-- receipt no --}}
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-green-500">Receipt No.</p>
+                    <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharge->receipt_no ?? 'N/A' }}</p>
                 </div>
 
             @endif
@@ -92,8 +105,8 @@
                                 <th class="px-4 py-3 text-left">End Date</th>
                                 <th class="px-4 py-3 text-left">Day</th>
                                 <th class="px-4 py-3 text-left">Total Hours</th>
+                                <th class="px-4 py-3 text-left">Status</th>
                                 <th class="px-4 py-3 text-left">Assigned Cleaner</th>
-                                <th class="px-4 py-3 text-left">Quotation</th>
                                 <th class="px-4 py-3 text-left">Actions</th>
                             </tr>
                         </thead>
@@ -108,6 +121,7 @@
                                     <td class="px-4 py-3 text-gray-700">{{ \Carbon\Carbon::parse($period->end_date)->format('Y-m-d') }}</td>
                                     <td class="px-4 py-3 text-gray-700">{{ \Carbon\Carbon::parse($period->start_date)->format('l') }}</td>
                                     <td class="px-4 py-3 text-gray-700">{{ number_format($period->duration_hours, 1) }} hrs</td>
+                                    <td class="px-4 py-3 text-gray-700">{{ $period->status }}</td>
                                     <td class="px-4 py-3">
                                         @if($period->maidAssignments?->isNotEmpty())
                                             <div class="space-y-1">
@@ -129,7 +143,6 @@
                                         </button>
                                     </td>
 
-                                    <td class="px-4 py-3 text-gray-700">{{ $period->quotation_value ?? 'N/A' }}</td>
                                     <td class="px-4 py-3">
                                         <div class="flex flex-wrap gap-2">
                                             <button

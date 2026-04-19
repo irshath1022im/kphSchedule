@@ -9,14 +9,13 @@ class ServiceCharge extends Model
     //
     protected $fillable = [
         'service_request_id',
-        'service_id',
-        'service_date',
-        'end_date',
+        'invoice_date',
         'material_consumption',
         'description',
-        'worked_hours',
-        'assigned_maids',
         'amount',
+        'receipt_no',
+        'payment_method',
+
     ];
 
     public function serviceRequest()
