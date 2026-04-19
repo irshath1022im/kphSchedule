@@ -24,13 +24,13 @@
         };
     @endphp
 
-    <div class="service-request-shell border-sky-200/70 bg-white/72 text-sky-900 shadow-[0_24px_80px_-36px_rgba(59,130,246,0.24)]">
-        <div class="service-request-hero border-sky-200/80 bg-linear-to-br from-sky-100 via-blue-100 to-cyan-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+    <div class="service-request-shell border-sky-200/70 bg-sky-100/80 text-sky-900 shadow-[0_24px_80px_-36px_rgba(59,130,246,0.24)]">
+        <div class="service-request-hero border-sky-300/70 bg-linear-to-br from-sky-200 via-blue-400 to-cyan-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
             <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div>
                     <p class="service-request-section-title text-sky-700">Request Overview</p>
                     <h2 class="service-request-heading text-sky-950">Service Request Details</h2>
-                    <p class="service-request-subheading text-sky-800/85">Review schedule periods, cleaner assignments, and quotation values in a cleaner blue interface with a sharper typographic hierarchy.</p>
+                  
                 </div>
 
                 <div class="service-request-action-row lg:max-w-xl lg:justify-end">
@@ -39,67 +39,67 @@
                     </button>
 
                     @if ($serviceRequest->serviceCharge)
-                        <a href="{{ route('new-service-charge', ['id' => $serviceRequest->id, 'sc' => $serviceRequest->serviceCharge->id]) }}" class="service-request-secondary-btn">
+                        <a href="{{ route('new-service-charge', ['id' => $serviceRequest->id, 'sc' => $serviceRequest->serviceCharge->id]) }}" class="service-request-secondary-btn border-sky-300/35 bg-sky-100/85 text-sky-800 hover:bg-sky-200">
                             Edit Service Charge
                         </a>
 
                     @else
-                        <a href="{{ route('new-service-charge', ['id' => $serviceRequest->id ]) }}" class="service-request-secondary-btn">
+                        <a href="{{ route('new-service-charge', ['id' => $serviceRequest->id ]) }}" class="service-request-secondary-btn border-sky-300/35 bg-sky-100/85 text-sky-800 hover:bg-sky-200">
                             Service Charge
                         </a>
 
                     @endif
 
-                    <a href="{{ route('new-service-request', ['id' => $serviceRequest->id]) }}" class="service-request-secondary-btn">
+                    <a href="{{ route('new-service-request', ['id' => $serviceRequest->id]) }}" class="service-request-secondary-btn border-sky-300/35 bg-sky-100/85 text-sky-800 hover:bg-sky-200">
                         Edit Request
                     </a>
                 </div>
             </div>
 
             <div class="service-request-stat-grid">
-                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-                    <p class="service-request-stat-label">Client</p>
+                <div class="service-request-stat-card border-sky-200/70 bg-sky-100/80 shadow-sm">
+                    <p class="service-request-stat-label text-sky-700">Client</p>
                     <p class="service-request-stat-value text-sky-950">{{ $serviceRequest->client?->name ?? 'N/A' }}</p>
                     <p class="service-request-stat-note text-sky-700/85">Primary request owner</p>
                 </div>
-                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-                    <p class="service-request-stat-label">Requested Date</p>
+                <div class="service-request-stat-card border-sky-200/70 bg-sky-100/80 shadow-sm">
+                    <p class="service-request-stat-label text-sky-700">Requested Date</p>
                     <p class="service-request-stat-value text-sky-950">{{ $serviceRequest->service_request_date ?? 'N/A' }}</p>
                     <p class="service-request-stat-note text-sky-700/85">Initial service request date</p>
                 </div>
-                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-                    <p class="service-request-stat-label">Status</p>
+                <div class="service-request-stat-card border-sky-200/70 bg-sky-100/80 shadow-sm">
+                    <p class="service-request-stat-label text-sky-700">Status</p>
                     <p class="mt-2"><span class="service-request-status-pill {{ $requestStatusClass }}">{{ $serviceRequest->status ?? 'N/A' }}</span></p>
                     <p class="service-request-stat-note text-sky-700/85">Live request state</p>
                 </div>
-                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-                    <p class="service-request-stat-label">Service Charge</p>
+                <div class="service-request-stat-card border-sky-200/70 bg-sky-100/80 shadow-sm">
+                    <p class="service-request-stat-label text-sky-700">Service Charge</p>
                     <p class="service-request-stat-value text-sky-950">{{ $serviceRequest->serviceCharge?->amount ? 'QR ' . number_format($serviceRequest->serviceCharge->amount, 0) : 'Pending' }}</p>
                     <p class="service-request-stat-note text-sky-700/85">Quotation and payment status</p>
                 </div>
             </div>
 
             <div class="service-request-info-grid">
-                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
-                    <p class="service-request-info-label">Frequency</p>
+                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                    <p class="service-request-info-label text-sky-700">Frequency</p>
                     <p class="service-request-info-value text-sky-950">{{ $serviceRequest->frequency ?? 'N/A' }}</p>
                 </div>
-                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
-                    <p class="service-request-info-label">Periods</p>
+                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                    <p class="service-request-info-label text-sky-700">Periods</p>
                     <p class="service-request-info-value text-sky-950">{{ $totalPeriods }}</p>
                 </div>
-                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
-                    <p class="service-request-info-label">Assigned Cleaners</p>
+                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                    <p class="service-request-info-label text-sky-700">Assigned Cleaners</p>
                     <p class="service-request-info-value text-sky-950">{{ $assignedCleanerCount }}</p>
                 </div>
-                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
-                    <p class="service-request-info-label">Receipt No.</p>
+                <div class="service-request-info-item border-sky-200/70 bg-sky-100/78 shadow-sm">
+                    <p class="service-request-info-label text-sky-700">Receipt No.</p>
                     <p class="service-request-info-value text-sky-950">{{ $serviceRequest->serviceCharge?->receipt_no ?? 'N/A' }}</p>
                 </div>
             </div>
 
-            <div class="service-request-note-card border-sky-200/70 bg-white/76 shadow-sm">
-                <p class="service-request-info-label">Notes</p>
+            <div class="service-request-note-card border-sky-200/70 bg-sky-100/78 shadow-sm">
+                <p class="service-request-info-label text-sky-700">Notes</p>
                 <p class="mt-2 text-sm leading-6 text-sky-800">{{ $serviceRequest->notes ?: 'No notes provided.' }}</p>
             </div>
         
@@ -108,9 +108,11 @@
 
         <x-success></x-success>
 
+        {{-- service periods --}}
+
         @if ($serviceRequest->serviceRequestPeriods->isNotEmpty())
-            <div class="service-request-table-shell border-sky-200/70 bg-white/84 shadow-[0_24px_60px_-36px_rgba(59,130,246,0.18)]">
-                <div class="service-request-table-header border-sky-200/70 bg-sky-100/72">
+            <div class="service-request-table-shell border-sky-200/70 bg-sky-100/84 shadow-[0_24px_60px_-36px_rgba(59,130,246,0.18)] text-white">
+                <div class="service-request-table-header border-sky-300/65 bg-sky-200/72">
                     <div>
                         <h3 class="service-request-table-title text-sky-950">Service Periods</h3>
                         <p class="service-request-table-subtitle text-sky-700/85">A blue-toned operational view of each scheduled period and its assigned cleaner.</p>
@@ -126,7 +128,7 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
-                            <tr class="service-request-table-head border-sky-200/70 text-sky-700">
+                            <tr class="service-request-table-head border-sky-200/70 text-white">
                                 <th class="px-4 py-3 text-left">#</th>
                                 <th class="px-4 py-3 text-left">Service Type</th>
                                 <th class="px-4 py-3 text-left">Start Date</th>
@@ -152,21 +154,21 @@
                                         default => 'service-request-status-default',
                                     };
                                 @endphp
-                                <tr class="service-request-table-row hover:bg-sky-100/70">
-                                    <td class="px-4 py-3 text-sky-800">{{ $period->id }}</td>
-                                    <td class="px-4 py-3 font-semibold text-sky-950">{{ $period->service?->name ?? 'N/A' }}</td>
-                                    <td class="px-4 py-3 text-sky-800">{{ $period->start_date }}</td>
-                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->start_time)->format('g:i A') }}</td>
-                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->start_time)->addHours(intval($period->duration_hours))->format('g:i A') }}</td>
-                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->end_date)->format('Y-m-d') }}</td>
-                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->start_date)->format('l') }}</td>
-                                    <td class="px-4 py-3 text-sky-800">{{ number_format($period->duration_hours, 1) }} hrs</td>
+                                <tr class="service-request-table-row hover:bg-sky-100/70 text-white">
+                                    <td class="px-4 py-3 text-white">{{ $period->id }}</td>
+                                    <td class="px-4 py-3 font-semibold text-white">{{ $period->service?->name ?? 'N/A' }}</td>
+                                    <td class="px-4 py-3 text-white">{{ $period->start_date }}</td>
+                                    <td class="px-4 py-3 text-white">{{ \Carbon\Carbon::parse($period->start_time)->format('g:i A') }}</td>
+                                    <td class="px-4 py-3 text-white">{{ \Carbon\Carbon::parse($period->start_time)->addHours(intval($period->duration_hours))->format('g:i A') }}</td>
+                                    <td class="px-4 py-3 text-white">{{ \Carbon\Carbon::parse($period->end_date)->format('Y-m-d') }}</td>
+                                    <td class="px-4 py-3 text-white">{{ \Carbon\Carbon::parse($period->start_date)->format('l') }}</td>
+                                    <td class="px-4 py-3 text-white">{{ number_format($period->duration_hours, 1) }} hrs</td>
                                     <td class="px-4 py-3"><span class="service-request-status-pill {{ $periodStatusClass }}">{{ $period->status }}</span></td>
                                     <td class="px-4 py-3">
                                         @if($period->maidAssignments?->isNotEmpty())
                                             <div class="space-y-1">
                                                 @foreach($period->maidAssignments as $assignedMaid)
-                                                    <div class="service-request-assignee">
+                                                    <div class="service-request-assignee border-sky-300/30 bg-sky-100 text-sky-800">
                                                         {{ $assignedMaid->maid?->name }} / {{ $assignedMaid->status }}
                                                     </div>
                                                 @endforeach
@@ -193,7 +195,7 @@
                                                 Edit
                                             </button>
                                             <button
-                                                class="inline-flex items-center rounded-full border border-sky-300/24 bg-white px-3 py-1.5 text-xs font-semibold text-sky-800 transition hover:bg-sky-100"
+                                                class="inline-flex items-center rounded-full border border-sky-300/24 bg-sky-100 px-3 py-1.5 text-xs font-semibold text-sky-800 transition hover:bg-sky-200"
                                                 wire:click="deletePeriod({{ $period->id }})"
                                                 wire:loading.attr="disabled"
                                                 wire:confirm="Are you sure you want to delete this service period?"
@@ -209,7 +211,7 @@
                 </div>
             </div>
         @else
-            <div class="service-request-empty border-sky-200/70 bg-white/80 text-sky-800 shadow-sm">
+            <div class="service-request-empty border-sky-200/70 bg-sky-100/84 text-sky-800 shadow-sm">
                 <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">No Periods Yet</p>
                 <p class="mt-3 text-lg font-semibold text-sky-950">No service periods found for this request.</p>
                 <p class="mt-2 text-sm text-sky-700/85">Create a schedule to populate this page with working periods and cleaner assignments.</p>

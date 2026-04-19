@@ -24,11 +24,11 @@
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <div class="ops-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-            <p class="ops-stat-label">Total Requests</p>
+            <p class="ops-stat-label text-sky-700">Total Requests</p>
             <p class="ops-stat-value text-sky-950">{{ $serviceRequests->count() }}</p>
         </div>
         <div class="ops-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-            <p class="ops-stat-label">Total Service Hours</p>
+            <p class="ops-stat-label text-sky-700">Total Service Hours</p>
             <p class="ops-stat-value text-sky-950">{{ number_format($serviceRequests->pluck('serviceRequestPeriods')->flatten()->sum('duration_hours'), 1) }}</p>
         </div>
         <div class="ops-stat-card-accent border-sky-200/70 bg-sky-100/88 shadow-sm">
@@ -36,11 +36,11 @@
             <p class="ops-stat-value text-sky-950">{{ $serviceRequests->where('status', 'completed')->count() }}</p>
         </div>
         <div class="ops-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-            <p class="ops-stat-label">In Progress</p>
+            <p class="ops-stat-label text-sky-700">In Progress</p>
             <p class="ops-stat-value text-sky-950">{{ $serviceRequests->where('status', 'in_progress')->count() }}</p>
         </div>
         <div class="ops-stat-card border-sky-200/70 bg-white/78 shadow-sm">
-            <p class="ops-stat-label">Pending + Cancelled</p>
+            <p class="ops-stat-label text-sky-700">Pending + Cancelled</p>
             <p class="ops-stat-value text-sky-950">{{ $serviceRequests->whereIn('status', ['pending', 'cancelled'])->count() }}</p>
         </div>
     </section>
