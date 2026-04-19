@@ -17,7 +17,7 @@ class NewClient extends Component
 
     public function mount()
     {
-        $this->locations = ['Doha', 'Al Saad', 'West Bay', 'Lusail', 'Najma', 'Al Waaba', 'Bin Mahmood', 'Al Hilal', 'West Bay', 'City Center'];   // Initialize any default values if needed
+        $this->locations = ['Doha', 'Al Saad', 'West Bay', 'Lusail', 'Najma', 'Al Waaba', 'Bin Mahmood', 'Al Hilal', 'West Bay', 'City Center', 'Pearl', 'Airport'];   // Initialize any default values if needed
     }
 
 
