@@ -62,16 +62,30 @@
 
             {{-- service charge --}}
             @if($serviceRequest->serviceCharge)
-                <div class="mt-4 rounded-lg border border-green-200 bg-green-50 p-3">
+                <div class="mt-4 rounded-lg border border-green-200 bg-green-50 p-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p class="text-xs font-semibold uppercase tracking-wide text-green-500">Service Charge</p>
-                    <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharge->amount ?? 'N/A' }}</p>
-                </div>
+                    <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharge->amount ? 'QR ' . number_format($serviceRequest->serviceCharge->amount, 0) : 'N/A' }}</p>
+
 
                 {{-- receipt no --}}
 
-                <div>
+
                     <p class="text-xs font-semibold uppercase tracking-wide text-green-500">Receipt No.</p>
                     <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharge->receipt_no ?? 'N/A' }}</p>
+
+                {{-- payment method --}}
+
+                    <p class="text-xs font-semibold uppercase tracking-wide text-green-500">Payment Method</p>
+                    <p class="mt-1 text-sm font-medium text-green-900">{{ $serviceRequest->serviceCharge->payment_method ?? 'N/A' }}</p>
+
+
+
+                </div>
+
+            @else
+                <div class="mt-4 rounded-lg border border-yellow-200 bg-yellow-50 p-3">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-yellow-500">No Service Charge</p>
+                    <p class="mt-1 text-sm text-yellow-700">This service request does not have an associated service charge yet.</p>
                 </div>
 
             @endif

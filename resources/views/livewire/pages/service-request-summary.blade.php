@@ -56,10 +56,12 @@
                 <table class="w-full min-w-225 text-sm">
                     <thead>
                         <tr class="border-b border-zinc-700 text-left">
+                            <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">#</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Request</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Requested</th>
                              <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Frequency</th>
-                            <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Hours</th>
+                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Hours</th>
+                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Service Charge</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Completion Status</th>
                             <th class="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">Assigned Maid </span></th>
 
@@ -72,10 +74,16 @@
                                 $isCompleted = $status === 'completed';
                                 $isOpen = in_array($status, ['in progress', 'pending']);
                             @endphp
+
+
                             <tr
                                 x-show="tab === 'all' || (tab === 'completed' && {{ $isCompleted ? 'true' : 'false' }}) || (tab === 'open' && {{ $isOpen ? 'true' : 'false' }})"
                                 class="align-top hover:bg-zinc-800/40"
                             >
+
+                                <td class="px-5 py-4">
+                                    <p class="font-semibold text-zinc-100">{{ $request->id }}</p>
+                                </td>
                                 <td class="px-5 py-4">
                                     {{-- <p class="font-semibold text-zinc-900">{{ $request['code'] }}</p> --}}
                                     <p class="mt-1 text-xs text-zinc-500">
@@ -91,12 +99,29 @@
                                     {{ $request->frequency ? ucfirst($request->frequency) : 'N/A' }}
                                 </td>
 
+
+
                                 <td class="px-5 py-4">
-                                     <p class="font-semibold text-zinc-100">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 1) }} hrs</p>
+                                     <p class="font-semibold text-zinc-100">{{ number_format($request->serviceRequestPeriods?->sum('duration_hours') ?? 0, 0) }} hrs</p>
                                      <div class="mt-2 h-1.5 w-24 rounded-full bg-zinc-800">
                                          <div class="h-1.5 rounded-full bg-cyan-500" style="width: {{ min(100, ($request->serviceRequestPeriods?->sum('duration_hours') ?? 0) * 20) }}%"></div>
                                     </div>
                                 </td>
+
+                                {{-- service charge --}}
+
+                                @if ($request->serviceCharge)
+                                    <td class="px-5 py-4">
+                                        <p class="font-semibold text-zinc-100">{{ $request->serviceCharge?->first()?->amount ? 'QR ' . number_format($request->serviceCharge->first()->amount, 0) : 'N/A' }}</p>
+                                        <p class="mt-1 text-xs text-zinc-500">{{ $request->serviceCharge?->first()?->invoice_date ? \Carbon\Carbon::parse($request->serviceCharge->first()->invoice_date)->toDateString() : 'N/A' }}</p>
+                                    </td>
+
+                                @else
+
+                                    <td class="px-5 py-4">
+                                        <span class="text-xs text-zinc-500">N/A</span>
+                                    </td>
+                                @endif
 
                                 <td class="px-5 py-4">
                                     @if ($request->status === 'completed')
