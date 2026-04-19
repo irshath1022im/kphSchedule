@@ -24,13 +24,13 @@
         };
     @endphp
 
-    <div class="service-request-shell">
-        <div class="service-request-hero">
+    <div class="service-request-shell border-sky-200/70 bg-white/72 text-sky-900 shadow-[0_24px_80px_-36px_rgba(59,130,246,0.24)]">
+        <div class="service-request-hero border-sky-200/80 bg-linear-to-br from-sky-100 via-blue-100 to-cyan-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
             <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                    <p class="service-request-section-title">Request Overview</p>
-                    <h2 class="service-request-heading">Service Request Details</h2>
-                    <p class="service-request-subheading">Review schedule periods, cleaner assignments, and quotation values in a cleaner blue interface with a sharper typographic hierarchy.</p>
+                    <p class="service-request-section-title text-sky-700">Request Overview</p>
+                    <h2 class="service-request-heading text-sky-950">Service Request Details</h2>
+                    <p class="service-request-subheading text-sky-800/85">Review schedule periods, cleaner assignments, and quotation values in a cleaner blue interface with a sharper typographic hierarchy.</p>
                 </div>
 
                 <div class="service-request-action-row lg:max-w-xl lg:justify-end">
@@ -57,99 +57,63 @@
             </div>
 
             <div class="service-request-stat-grid">
-                <div class="service-request-stat-card">
+                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
                     <p class="service-request-stat-label">Client</p>
-                    <p class="service-request-stat-value">{{ $serviceRequest->client?->name ?? 'N/A' }}</p>
-                    <p class="service-request-stat-note">Primary request owner</p>
+                    <p class="service-request-stat-value text-sky-950">{{ $serviceRequest->client?->name ?? 'N/A' }}</p>
+                    <p class="service-request-stat-note text-sky-700/85">Primary request owner</p>
                 </div>
-                <div class="service-request-stat-card">
+                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
                     <p class="service-request-stat-label">Requested Date</p>
-                    <p class="service-request-stat-value">{{ $serviceRequest->service_request_date ?? 'N/A' }}</p>
-                    <p class="service-request-stat-note">Initial service request date</p>
+                    <p class="service-request-stat-value text-sky-950">{{ $serviceRequest->service_request_date ?? 'N/A' }}</p>
+                    <p class="service-request-stat-note text-sky-700/85">Initial service request date</p>
                 </div>
-                <div class="service-request-stat-card">
+                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
                     <p class="service-request-stat-label">Status</p>
                     <p class="mt-2"><span class="service-request-status-pill {{ $requestStatusClass }}">{{ $serviceRequest->status ?? 'N/A' }}</span></p>
-                    <p class="service-request-stat-note">Live request state</p>
+                    <p class="service-request-stat-note text-sky-700/85">Live request state</p>
                 </div>
-                <div class="service-request-stat-card">
+                <div class="service-request-stat-card border-sky-200/70 bg-white/78 shadow-sm">
                     <p class="service-request-stat-label">Service Charge</p>
-                    <p class="service-request-stat-value">{{ $serviceRequest->serviceCharge?->amount ? 'QR ' . number_format($serviceRequest->serviceCharge->amount, 0) : 'Pending' }}</p>
-                    <p class="service-request-stat-note">Quotation and payment status</p>
+                    <p class="service-request-stat-value text-sky-950">{{ $serviceRequest->serviceCharge?->amount ? 'QR ' . number_format($serviceRequest->serviceCharge->amount, 0) : 'Pending' }}</p>
+                    <p class="service-request-stat-note text-sky-700/85">Quotation and payment status</p>
                 </div>
             </div>
 
             <div class="service-request-info-grid">
-                <div class="service-request-info-item">
+                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
                     <p class="service-request-info-label">Frequency</p>
-                    <p class="service-request-info-value">{{ $serviceRequest->frequency ?? 'N/A' }}</p>
+                    <p class="service-request-info-value text-sky-950">{{ $serviceRequest->frequency ?? 'N/A' }}</p>
                 </div>
-                <div class="service-request-info-item">
+                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
                     <p class="service-request-info-label">Periods</p>
-                    <p class="service-request-info-value">{{ $totalPeriods }}</p>
+                    <p class="service-request-info-value text-sky-950">{{ $totalPeriods }}</p>
                 </div>
-                <div class="service-request-info-item">
+                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
                     <p class="service-request-info-label">Assigned Cleaners</p>
-                    <p class="service-request-info-value">{{ $assignedCleanerCount }}</p>
+                    <p class="service-request-info-value text-sky-950">{{ $assignedCleanerCount }}</p>
                 </div>
-                <div class="service-request-info-item">
+                <div class="service-request-info-item border-sky-200/70 bg-white/76 shadow-sm">
                     <p class="service-request-info-label">Receipt No.</p>
-                    <p class="service-request-info-value">{{ $serviceRequest->serviceCharge?->receipt_no ?? 'N/A' }}</p>
+                    <p class="service-request-info-value text-sky-950">{{ $serviceRequest->serviceCharge?->receipt_no ?? 'N/A' }}</p>
                 </div>
             </div>
 
-            <div class="service-request-note-card">
+            <div class="service-request-note-card border-sky-200/70 bg-white/76 shadow-sm">
                 <p class="service-request-info-label">Notes</p>
-                <p class="mt-2 text-sm leading-6 text-slate-200">{{ $serviceRequest->notes ?: 'No notes provided.' }}</p>
+                <p class="mt-2 text-sm leading-6 text-sky-800">{{ $serviceRequest->notes ?: 'No notes provided.' }}</p>
             </div>
-
-            {{-- service charge --}}
-            @if($serviceRequest->serviceCharge)
-                <div class="service-request-highlight">
-                    <div>
-                        <p class="service-request-highlight-label">Service Charge</p>
-                        <p class="service-request-highlight-value">{{ $serviceRequest->serviceCharge->amount ? 'QR ' . number_format($serviceRequest->serviceCharge->amount, 0) : 'N/A' }}</p>
-                    </div>
-
-
-                {{-- receipt no --}}
-
-
-                    <div>
-                        <p class="service-request-highlight-label">Receipt No.</p>
-                        <p class="service-request-highlight-value">{{ $serviceRequest->serviceCharge->receipt_no ?? 'N/A' }}</p>
-                    </div>
-
-                {{-- payment method --}}
-
-                    <div>
-                        <p class="service-request-highlight-label">Payment Method</p>
-                        <p class="service-request-highlight-value">{{ $serviceRequest->serviceCharge->payment_method ?? 'N/A' }}</p>
-                    </div>
-
-
-
-                </div>
-
-            @else
-                <div class="service-request-warning">
-                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-amber-100/80">No Service Charge</p>
-                    <p class="mt-2 text-sm text-amber-100/88">This service request does not have an associated service charge yet.</p>
-                </div>
-
-            @endif
-
+        
 
         </div>
 
         <x-success></x-success>
 
         @if ($serviceRequest->serviceRequestPeriods->isNotEmpty())
-            <div class="service-request-table-shell">
-                <div class="service-request-table-header">
+            <div class="service-request-table-shell border-sky-200/70 bg-white/84 shadow-[0_24px_60px_-36px_rgba(59,130,246,0.18)]">
+                <div class="service-request-table-header border-sky-200/70 bg-sky-100/72">
                     <div>
-                        <h3 class="service-request-table-title">Service Periods</h3>
-                        <p class="service-request-table-subtitle">A blue-toned operational view of each scheduled period and its assigned cleaner.</p>
+                        <h3 class="service-request-table-title text-sky-950">Service Periods</h3>
+                        <p class="service-request-table-subtitle text-sky-700/85">A blue-toned operational view of each scheduled period and its assigned cleaner.</p>
                     </div>
                     <button
                         class="service-request-primary-btn"
@@ -162,7 +126,7 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
-                            <tr class="service-request-table-head">
+                            <tr class="service-request-table-head border-sky-200/70 text-sky-700">
                                 <th class="px-4 py-3 text-left">#</th>
                                 <th class="px-4 py-3 text-left">Service Type</th>
                                 <th class="px-4 py-3 text-left">Start Date</th>
@@ -176,7 +140,7 @@
                                 <th class="px-4 py-3 text-left">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-sky-300/10">
+                        <tbody class="divide-y divide-sky-200/70">
                             @foreach($serviceRequest->serviceRequestPeriods as $period)
                                 @php
                                     $periodStatusClass = match (strtolower((string) $period->status)) {
@@ -188,15 +152,15 @@
                                         default => 'service-request-status-default',
                                     };
                                 @endphp
-                                <tr class="service-request-table-row">
-                                    <td class="px-4 py-3 text-slate-300">{{ $period->id }}</td>
-                                    <td class="px-4 py-3 font-semibold text-slate-50">{{ $period->service?->name ?? 'N/A' }}</td>
-                                    <td class="px-4 py-3 text-slate-300">{{ $period->start_date }}</td>
-                                    <td class="px-4 py-3 text-slate-300">{{ \Carbon\Carbon::parse($period->start_time)->format('g:i A') }}</td>
-                                    <td class="px-4 py-3 text-slate-300">{{ \Carbon\Carbon::parse($period->start_time)->addHours(intval($period->duration_hours))->format('g:i A') }}</td>
-                                    <td class="px-4 py-3 text-slate-300">{{ \Carbon\Carbon::parse($period->end_date)->format('Y-m-d') }}</td>
-                                    <td class="px-4 py-3 text-slate-300">{{ \Carbon\Carbon::parse($period->start_date)->format('l') }}</td>
-                                    <td class="px-4 py-3 text-slate-300">{{ number_format($period->duration_hours, 1) }} hrs</td>
+                                <tr class="service-request-table-row hover:bg-sky-100/70">
+                                    <td class="px-4 py-3 text-sky-800">{{ $period->id }}</td>
+                                    <td class="px-4 py-3 font-semibold text-sky-950">{{ $period->service?->name ?? 'N/A' }}</td>
+                                    <td class="px-4 py-3 text-sky-800">{{ $period->start_date }}</td>
+                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->start_time)->format('g:i A') }}</td>
+                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->start_time)->addHours(intval($period->duration_hours))->format('g:i A') }}</td>
+                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->end_date)->format('Y-m-d') }}</td>
+                                    <td class="px-4 py-3 text-sky-800">{{ \Carbon\Carbon::parse($period->start_date)->format('l') }}</td>
+                                    <td class="px-4 py-3 text-sky-800">{{ number_format($period->duration_hours, 1) }} hrs</td>
                                     <td class="px-4 py-3"><span class="service-request-status-pill {{ $periodStatusClass }}">{{ $period->status }}</span></td>
                                     <td class="px-4 py-3">
                                         @if($period->maidAssignments?->isNotEmpty())
@@ -208,12 +172,12 @@
                                                 @endforeach
                                             </div>
                                         @else
-                                            <span class="text-xs text-slate-400">No cleaner assigned</span>
+                                            <span class="text-xs text-sky-600/85">No cleaner assigned</span>
                                         @endif
 
                                         <button
                                             wire:click.prevent="assignCleaner({{ $period->id }})"
-                                            class="mt-3 inline-flex items-center rounded-full border border-sky-300/18 bg-sky-400/10 px-3 py-1.5 text-xs font-semibold text-sky-100 transition hover:bg-sky-400/18"
+                                            class="mt-3 inline-flex items-center rounded-full border border-sky-300/30 bg-sky-100 px-3 py-1.5 text-xs font-semibold text-sky-800 transition hover:bg-sky-200"
                                         >
                                             + Assign
                                         </button>
@@ -229,7 +193,7 @@
                                                 Edit
                                             </button>
                                             <button
-                                                class="inline-flex items-center rounded-full border border-slate-300/18 bg-slate-100/10 px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:bg-slate-100/16"
+                                                class="inline-flex items-center rounded-full border border-sky-300/24 bg-white px-3 py-1.5 text-xs font-semibold text-sky-800 transition hover:bg-sky-100"
                                                 wire:click="deletePeriod({{ $period->id }})"
                                                 wire:loading.attr="disabled"
                                                 wire:confirm="Are you sure you want to delete this service period?"
@@ -245,10 +209,10 @@
                 </div>
             </div>
         @else
-            <div class="service-request-empty">
-                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-100/55">No Periods Yet</p>
-                <p class="mt-3 text-lg font-semibold text-slate-50">No service periods found for this request.</p>
-                <p class="mt-2 text-sm text-slate-300/72">Create a schedule to populate this page with working periods and cleaner assignments.</p>
+            <div class="service-request-empty border-sky-200/70 bg-white/80 text-sky-800 shadow-sm">
+                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">No Periods Yet</p>
+                <p class="mt-3 text-lg font-semibold text-sky-950">No service periods found for this request.</p>
+                <p class="mt-2 text-sm text-sky-700/85">Create a schedule to populate this page with working periods and cleaner assignments.</p>
             </div>
         @endif
     </div>
@@ -267,7 +231,7 @@
         aria-modal="true"
     >
         <div
-            class="absolute inset-0 bg-black/50"
+            class="absolute inset-0 bg-sky-950/30 backdrop-blur-sm"
             aria-hidden="true"
         ></div>
 

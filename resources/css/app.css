@@ -345,7 +345,7 @@ select:focus[data-flux-control] {
     }
 
     .ops-status-busy {
-        @apply border-cyan-300/22 bg-cyan-400/12 text-cyan-100;
+        @apply border-sky-300/28 bg-sky-300/20 text-sky-100;
     }
 
     .ops-status-available {
@@ -353,11 +353,11 @@ select:focus[data-flux-control] {
     }
 
     .ops-status-scheduled {
-        @apply border-indigo-300/22 bg-indigo-400/12 text-indigo-100;
+        @apply border-sky-200/26 bg-sky-200/16 text-sky-50;
     }
 
     .ops-status-off {
-        @apply border-slate-300/18 bg-slate-300/10 text-slate-200;
+        @apply border-sky-100/24 bg-sky-100/12 text-sky-100;
     }
 
     .ops-table-action {
