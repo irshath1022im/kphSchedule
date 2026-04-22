@@ -14,6 +14,13 @@
         </div>
     </div>
 
+     {{--filter by Last Month, Upcoming Month  --}}
+
+    @livewire('filter')
+
+
+
+
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <div class="ops-stat-card border-sky-200/70 bg-white/78 shadow-sm">
             <p class="ops-stat-label text-sky-700">Total Requests</p>
