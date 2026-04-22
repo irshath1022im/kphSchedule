@@ -12,9 +12,13 @@ class ServiceRequestSummary extends Component
         $query = ServiceRequest::query()
                     ->with('serviceRequestPeriods', 'assignedMaids', 'serviceCharge', 'client')
                     ->get()
-                    ->sortByDesc('id');
+                    ->sortByDesc('id')
+                    ->groupBy('frequency')
+                    ;
+
+        $lastTransections = clone $query->map(fn($requests) => $requests->take(5));
 
         return view('livewire.pages.service-request-summary',
-        ['serviceRequests' => $query])->layout('components.dash-board');
+        ['serviceRequests' => $lastTransections, 'grouped' => $query])->layout('components.dash-board');
     }
 }
