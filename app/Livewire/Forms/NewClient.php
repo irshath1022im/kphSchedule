@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Forms;
 
+use Illuminate\Http\Request;
 use Livewire\Component;
 
 class NewClient extends Component
 {
 
+    public $clientId;
     public $name;
     public $email;
     public $phone;
@@ -15,9 +17,25 @@ class NewClient extends Component
     public $location;
     public $locations = [];
 
-    public function mount()
+    public function mount(Request $request)
     {
         $this->locations = ['Doha', 'Al Saad', 'West Bay', 'Lusail', 'Najma', 'Al Waaba', 'Bin Mahmood', 'Al Hilal', 'West Bay', 'City Center', 'Pearl', 'Airport'];   // Initialize any default values if needed
+
+        if ($request->has('client_id')) {
+            $client = \App\Models\Client::find($request->query('client_id'));
+
+            if ($client) {
+                $this->clientId = $client->id;
+                $this->name = $client->name;
+                $this->email = $client->email;
+                $this->phone = $client->phone;
+                $this->address = $client->address;
+                $this->city = $client->city;
+                $this->location = $client->location;
+            }
+        }
+
+
     }
 
 
@@ -26,7 +44,7 @@ class NewClient extends Component
         // Validate the input data
         $validatedData = $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:clients,email',
+            'email' => 'nullable|email|max:255',
             'phone' => 'required|string|max:20',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:100',
@@ -34,7 +52,7 @@ class NewClient extends Component
         ]);
 
         // Create a new client record in the database
-        \App\Models\Client::create($validatedData);
+        \App\Models\Client::updateOrCreate(['id' => $this->clientId], $validatedData);
 
         // Optionally, you can reset the form fields after submission
 

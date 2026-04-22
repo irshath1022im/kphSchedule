@@ -101,7 +101,13 @@
                     </div>
 
                     <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-cyan-500 px-6 py-3 text-sm font-bold uppercase tracking-wide text-zinc-950 shadow-md transition hover:-translate-y-0.5 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-zinc-900 disabled:cursor-not-allowed disabled:opacity-70" wire:loading.attr="disabled" wire:target="submit">
-                        <span wire:loading.remove wire:target="submit">Add Client</span>
+                        <span wire:loading.remove wire:target="submit">
+                            @if ($clientId)
+                                Update Client
+                            @else
+                                Add Client
+                            @endif
+                           </span>
                         <span wire:loading wire:target="submit">Saving...</span>
                     </button>
                 </div>
